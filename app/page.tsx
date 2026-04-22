@@ -110,9 +110,13 @@ const REVIEWERS = [
 ];
 
 // FAQ / CTA
-const FAQ_OPEN = '/assets/318ecfed-37ab-4e53-8c81-4e39aa469df5.svg';
-const FAQ_SHUT = '/assets/35ac22b3-934f-45d7-8e76-60cfdca371cd.svg';
-const CTA_BG   = '/assets/b5cddfeb-0c27-48fd-82b3-51892007dec5.jpg';
+const FAQ_OPEN  = '/assets/318ecfed-37ab-4e53-8c81-4e39aa469df5.svg';
+const FAQ_SHUT  = '/assets/35ac22b3-934f-45d7-8e76-60cfdca371cd.svg';
+const CTA_BG    = '/assets/b5cddfeb-0c27-48fd-82b3-51892007dec5.jpg';
+const INS_BTN_IC = '/assets/d9606794-a866-4c8e-adc7-017a9e865ffb.svg';
+
+// Location section — exterior house photo (from Figma Seccion 10 imgImage20)
+const LOCATION_PHOTO = '/assets/1b1d5a28-3422-45a4-994d-25f3377fd21e.jpg';
 
 /* ── Design tokens ──────────────────────────────────────────────────────── */
 const N  = '#0D3442';
@@ -419,6 +423,7 @@ function Header() {
    PAGE
 ══════════════════════════════════════════════════════════════════════════ */
 export default function Page() {
+  const [showInsModal, setShowInsModal] = useState(false);
 
   const AMENITIES = [
     { label: 'Outdoor Activities & Beach Access',    icon: AMEN_1 },
@@ -895,7 +900,7 @@ export default function Page() {
             <FadeUp delay={0.1}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div style={{ borderRadius: 8, overflow: 'hidden', height: 240 }}>
-                  <img src={FACILITY[0]} alt="Facility" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ background: '#fff', borderRadius: 8, padding: '20px 24px' }}>
                   <p style={{ fontWeight: 700, color: N, marginBottom: 6, fontSize: 16 }}>Healthy Living Residential Program</p>
@@ -956,12 +961,12 @@ export default function Page() {
                 style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
                 <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call Now — (661) 762-5668
               </motion.a>
-              <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
+              <motion.button onClick={() => setShowInsModal(true)}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-                <img src={CHECK_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+                style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                <img src={INS_BTN_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                 Verify Insurance
-              </motion.a>
+              </motion.button>
             </div>
           </FadeUp>
         </div>
@@ -971,6 +976,27 @@ export default function Page() {
       <footer style={{ background: N, padding: '20px 24px', textAlign: 'center' }}>
         <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>© Copyright 2026 Healthy Living Residential Program | All Rights Reserved</p>
       </footer>
+
+      {/* ════ INSURANCE MODAL ════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {showInsModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => setShowInsModal(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
+              onClick={e => e.stopPropagation()}
+              style={{ background: BG, borderRadius: 12, padding: '36px 32px', width: '100%', maxWidth: 580, boxShadow: '0 20px 60px rgba(0,0,0,0.35)', position: 'relative' }}>
+              <button onClick={() => setShowInsModal(false)}
+                style={{ position: 'absolute', top: 16, right: 16, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer', fontSize: 18, color: N, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 24 }}>
+                <span style={{ color: N, fontWeight: 500, fontSize: 18 }}>Get Instant Insurance Verification</span>
+                <img src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
+              </div>
+              <InsuranceForm />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
