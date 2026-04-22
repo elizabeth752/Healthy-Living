@@ -150,32 +150,92 @@ function InsuranceForm() {
   );
 }
 
-/* ── Carousel ───────────────────────────────────────────── */
+/* ── Facility Carousel (auto-advances every 4s) ─────────── */
 function Carousel() {
   const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
   const prev = () => setI(a => (a - 1 + FACILITY.length) % FACILITY.length);
   const next = () => setI(a => (a + 1) % FACILITY.length);
-  const gi   = (o: number) => (i + o) % FACILITY.length;
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => setI(a => (a + 1) % FACILITY.length), 4000);
+    return () => clearInterval(t);
+  }, [paused]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', height: 320 }}>
-        <div style={{ display: 'flex', height: '100%', gap: 20 }}>
-          <img src={FACILITY[gi(0)]} alt="" style={{ flex: 1, minWidth: 0, objectFit: 'cover', borderRadius: 4 }} />
-          <img src={FACILITY[gi(1)]} alt="" style={{ flex: 1, minWidth: 0, objectFit: 'cover', borderRadius: 4, display: 'none' }} className="lg:block" />
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.img key={i} src={FACILITY[i]} alt=""
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }} />
+        </AnimatePresence>
         {[{ fn: prev, side: 'left', rot: 'rotate(180deg)' }, { fn: next, side: 'right', rot: 'none' }].map(({ fn, side, rot }) => (
           <button key={side} onClick={fn} style={{ position: 'absolute', [side]: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', zIndex: 2 }}>
             <img src={CAR_ARR} alt="" style={{ width: 20, height: 20, transform: rot }} />
           </button>
         ))}
+        <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
+          {FACILITY.slice(0, 12).map((_, di) => (
+            <button key={di} onClick={() => setI(di)}
+              style={{ width: di === i ? 18 : 6, height: 6, borderRadius: 3, background: di === i ? '#fff' : 'rgba(255,255,255,0.45)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
+          ))}
+        </div>
       </div>
-      <div style={{ display: 'flex', gap: 14, overflowX: 'auto' }}>
+      <div style={{ display: 'flex', gap: 10, overflowX: 'auto' }}>
         {FACILITY.slice(0, 6).map((src, idx) => (
           <button key={idx} onClick={() => setI(idx)} style={{ flexShrink: 0, padding: 0, background: 'none', border: 'none', cursor: 'pointer', position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
             <img src={src} alt="" style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
             {idx !== i && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.65)', borderRadius: 4 }} />}
           </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Conditions Carousel (auto-advances every 3.5s) ─────── */
+function ConditionsCarousel({ conditions }: { conditions: { icon: string; title: string; desc: string }[] }) {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const total = conditions.length;
+  const next = () => setIdx(a => (a + 1) % total);
+  const prev = () => setIdx(a => (a - 1 + total) % total);
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(next, 3500);
+    return () => clearInterval(t);
+  }, [paused]);
+
+  const getSlice = () => Array.from({ length: 3 }, (_, o) => conditions[(idx + o) % total]);
+
+  return (
+    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <p style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 16 }}>Common Conditions:</p>
+      <AnimatePresence mode="wait">
+        <motion.div key={idx} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
+          transition={{ duration: 0.35 }}
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          {getSlice().map((c, o) => (
+            <motion.div key={o} whileHover={{ y: -4, boxShadow: '0 10px 28px rgba(0,0,0,0.18)' }}
+              style={{ background: '#fff', borderRadius: 10, padding: '28px 20px', boxShadow: '0 4px 4px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, textAlign: 'center' }}>
+              <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={c.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+              </div>
+              <p style={{ fontSize: 17, fontWeight: 600, color: N, lineHeight: 1.3 }}>{c.title}</p>
+              <p style={{ fontSize: 13, color: '#444', lineHeight: 1.65 }}>{c.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 22 }}>
+        {conditions.map((_, di) => (
+          <button key={di} onClick={() => setIdx(di)}
+            style={{ width: di === idx ? 20 : 8, height: 8, borderRadius: 4, background: di === idx ? O : 'rgba(255,255,255,0.35)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
     </div>
@@ -274,10 +334,10 @@ export default function Page() {
   ];
 
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: FACILITY[12] },
-    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: FACILITY[13] },
-    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: FACILITY[14] },
-    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: FACILITY[15] },
+    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: 'https://ui-avatars.com/api/?name=Narine+Arutyounian&background=0D3442&color=ffffff&size=400&bold=true' },
+    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: 'https://ui-avatars.com/api/?name=Harout+Mesrobian&background=174154&color=ffffff&size=400&bold=true' },
+    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: 'https://ui-avatars.com/api/?name=Ritsa+Fistes&background=386376&color=ffffff&size=400&bold=true' },
+    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: 'https://ui-avatars.com/api/?name=Julie+Tatian&background=56B5B7&color=ffffff&size=400&bold=true' },
   ];
 
   const INSURERS = ['Aetna','Anthem','Cigna','Humana','United','BlueCross','Magellan','Beacon','Optum','ComPsych','MHN','Molina','MultiPlan','Ambetter'];
@@ -473,21 +533,7 @@ export default function Page() {
               Addiction doesn't look the same for everyone — and neither does our care. Whatever you're facing, we have the experience and the compassion to help.
             </p>
           </FadeUp>
-          <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
-            <div style={{ display: 'flex', gap: 16, width: 'max-content' }}>
-              {CONDITIONS.map((c, idx) => (
-                <FadeUp key={c.title} delay={idx * 0.06}>
-                  <div style={{ background: '#fff', borderRadius: 10, padding: '24px 20px', width: 280, boxShadow: '0 4px 4px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, textAlign: 'center' }}>
-                    <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <img src={c.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
-                    </div>
-                    <p style={{ fontSize: 17, fontWeight: 600, color: N, lineHeight: 1.3 }}>{c.title}</p>
-                    <p style={{ fontSize: 13, color: '#444', lineHeight: 1.65 }}>{c.desc}</p>
-                  </div>
-                </FadeUp>
-              ))}
-            </div>
-          </div>
+          <ConditionsCarousel conditions={CONDITIONS} />
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
             <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 600, fontSize: 17, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
@@ -504,7 +550,7 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 700, margin: '0 auto' }}>We know what addiction does to the brain, body, and spirit. You don't need more willpower — you need the right medical team.</p>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 310px))', gap: 24, justifyContent: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
             {TEAM.map((m, idx) => (
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
@@ -549,11 +595,11 @@ export default function Page() {
       </section>
 
       {/* ════ HOW IT WORKS ══════════════════════════════════ */}
-      <section style={{ background: BG, padding: '80px 0' }}>
+      <section style={{ background: N, padding: '80px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ marginBottom: 48 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
-            <p style={{ color: '#555', fontSize: 16, maxWidth: 700 }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment the same day.</p>
+            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 16, maxWidth: 700 }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment the same day.</p>
           </FadeUp>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
             {[
@@ -562,12 +608,12 @@ export default function Page() {
               { title: 'Step 3: Review Insurance and Payment Options',       body: 'Our team will verify your insurance benefits and clearly explain coverage and costs so you can make an informed decision without pressure.' },
             ].map((s, idx) => (
               <FadeUp key={s.title} delay={idx * 0.1}>
-                <div style={{ background: '#fff', borderRadius: 8, padding: '40px 28px', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', height: '100%' }}>
-                  <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: 28, fontWeight: 800, color: T }}>{idx + 1}</span>
+                <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '40px 28px', textAlign: 'center', height: '100%' }}>
+                  <div style={{ width: 70, height: 70, borderRadius: '50%', background: T, margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>{idx + 1}</span>
                   </div>
-                  <h3 style={{ fontWeight: 700, color: N, fontSize: 16, marginBottom: 12, lineHeight: 1.4 }}>{s.title}</h3>
-                  <p style={{ color: '#666', fontSize: 14, lineHeight: 1.75 }}>{s.body}</p>
+                  <h3 style={{ fontWeight: 700, color: '#fff', fontSize: 16, marginBottom: 12, lineHeight: 1.4 }}>{s.title}</h3>
+                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.75 }}>{s.body}</p>
                 </div>
               </FadeUp>
             ))}
@@ -605,10 +651,10 @@ export default function Page() {
       </section>
 
       {/* ════ STATS ════════════════════════════════════════ */}
-      <section style={{ background: '#fff', padding: '80px 0' }}>
+      <section style={{ background: 'linear-gradient(135deg, #174154 0%, #0D3442 100%)', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 52 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N }}>Thousands Served — Decades of Trust</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 32, textAlign: 'center' }}>
             {[
@@ -618,10 +664,10 @@ export default function Page() {
               { val: 93,  suffix: '%', label: 'Completion rate for residential treatment' },
             ].map((s, idx) => (
               <FadeUp key={s.label} delay={idx * 0.08}>
-                <div style={{ fontSize: 52, fontWeight: 800, color: N, marginBottom: 12 }}>
+                <div style={{ fontSize: 52, fontWeight: 800, color: O, marginBottom: 12 }}>
                   <CountUp target={s.val} suffix={s.suffix} />
                 </div>
-                <p style={{ color: '#666', fontSize: 14, lineHeight: 1.55 }}>{s.label}</p>
+                <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, lineHeight: 1.55 }}>{s.label}</p>
               </FadeUp>
             ))}
           </div>
