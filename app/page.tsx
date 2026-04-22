@@ -212,7 +212,7 @@ function Carousel() {
         {[{ fn: prev, side: 'left' as const, rot: 'rotate(180deg)' }, { fn: next, side: 'right' as const, rot: 'none' }].map(({ fn, side, rot }) => (
           <button key={side} onClick={fn}
             style={{ position: 'absolute', [side]: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', zIndex: 2 }}>
-            <img src={CAR_ARR} alt="" style={{ width: 20, height: 20, transform: rot }} />
+            <img src={CAR_ARR} alt="" style={{ width: 20, height: 20, objectFit: 'contain', transform: rot }} />
           </button>
         ))}
         <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
@@ -299,7 +299,7 @@ function FAQ() {
           <button onClick={() => setOpen(open === idx ? null : idx)}
             style={{ width: '100%', background: open === idx ? '#386376' : N, border: 'none', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
             <span style={{ color: '#fff', fontSize: 17, fontWeight: 500, textAlign: 'left', lineHeight: 1.35 }}>{item.q}</span>
-            <img src={open === idx ? FAQ_OPEN : FAQ_SHUT} alt="" style={{ width: 26, height: 26, flexShrink: 0 }} />
+            <img src={open === idx ? FAQ_OPEN : FAQ_SHUT} alt="" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
           </button>
           <AnimatePresence>
             {open === idx && (
@@ -435,7 +435,7 @@ export default function Page() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {['Same-Day Admissions 24/7', 'Comfort-Focused Detox & MAT'].map(t => (
                     <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <img src={CHECK_IC} alt="" style={{ width: 22, height: 22, flexShrink: 0 }} />
+                      <img src={CHECK_IC} alt="" style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
                       <span style={{ fontSize: 16, color: N }}>{t}</span>
                     </div>
                   ))}
@@ -443,7 +443,7 @@ export default function Page() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {['Couples Are Welcome', 'Pet-Friendly'].map(t => (
                     <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <img src={CHECK_IC} alt="" style={{ width: 22, height: 22, flexShrink: 0 }} />
+                      <img src={CHECK_IC} alt="" style={{ width: 22, height: 22, objectFit: 'contain', flexShrink: 0 }} />
                       <span style={{ fontSize: 16, color: N }}>{t}</span>
                     </div>
                   ))}
@@ -454,15 +454,15 @@ export default function Page() {
               <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
                 <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />
+                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                   Speak with Admissions 24/7
                 </motion.a>
                 <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'nowrap' }}>
-                  <img src={BADGE_G}  alt="" style={{ width: 42, height: 42,  objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={BADGE_B}  alt="" style={{ width: 37, height: 40,  objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={DHCS}     alt="" style={{ width: 105, height: 22, objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={PSYCH}    alt="" style={{ width: 98,  height: 28, objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={SAMHSA}   alt="" style={{ width: 83,  height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={BADGE_G}  alt="" style={{ height: 42, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={BADGE_B}  alt="" style={{ height: 40, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={DHCS}     alt="" style={{ height: 22, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={PSYCH}    alt="" style={{ height: 28, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={SAMHSA}   alt="" style={{ height: 28, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
                 </div>
               </div>
             </motion.div>
@@ -473,7 +473,7 @@ export default function Page() {
               style={{ width: 530, flexShrink: 0, backdropFilter: 'blur(5px)', background: 'rgba(237,244,244,0.8)', border: '1px solid rgba(237,244,244,0.04)', borderRadius: 6, boxShadow: '0 4px 8px rgba(0,0,0,0.2)', padding: '30px 20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
                 <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
-                <img src={FORM_IC} alt="" style={{ width: 43, height: 24, flexShrink: 0 }} />
+                <img src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
               </div>
               <InsuranceForm />
             </motion.div>
@@ -522,7 +522,7 @@ export default function Page() {
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
             <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />Call (661) 762-5668
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call (661) 762-5668
             </motion.a>
           </FadeUp>
         </div>
@@ -576,7 +576,7 @@ export default function Page() {
                 </p>
                 <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, textDecoration: 'none' }}>
-                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />
+                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                   Call Today (661) 762-5668
                 </motion.a>
               </FadeUp>
@@ -669,7 +669,7 @@ export default function Page() {
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
             <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />Start Your Recovery Today
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Start Your Recovery Today
             </motion.a>
           </FadeUp>
         </div>
@@ -688,7 +688,7 @@ export default function Page() {
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
             <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />We're Here to Support
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />We're Here to Support
             </motion.a>
           </FadeUp>
         </div>
@@ -786,7 +786,7 @@ export default function Page() {
                       <p style={{ fontWeight: 700, fontSize: 14, color: '#000' }}>{r.name}</p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3 }}>
                         <img src={STARS} alt="5 stars" style={{ height: 14, width: 76, objectFit: 'contain' }} />
-                        <img src={GOOGLE_IC} alt="Google" style={{ width: 12, height: 12 }} />
+                        <img src={GOOGLE_IC} alt="Google" style={{ width: 14, height: 14, objectFit: 'contain' }} />
                       </div>
                     </div>
                   </div>
@@ -877,7 +877,7 @@ export default function Page() {
         <div style={{ maxWidth: 440, margin: '0 auto', background: '#fff', borderRadius: 12, padding: '28px 24px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
             <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
-            <img src={FORM_IC} alt="" style={{ width: 43, height: 24, flexShrink: 0 }} />
+            <img src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
           </div>
           <InsuranceForm />
         </div>
@@ -898,7 +898,7 @@ export default function Page() {
             <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
               <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                 style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />Call Now — (661) 762-5668
+                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call Now — (661) 762-5668
               </motion.a>
               <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
