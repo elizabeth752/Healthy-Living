@@ -322,17 +322,17 @@ export default function Page() {
                 ))}
               </motion.div>
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-                style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16 }}>
                 <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 17, padding: '14px 20px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   <PhoneIcon />Speak with Admissions 24/7
                 </motion.a>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                  <img src={BADGE_G}  alt="Badge" style={{ height: 40, objectFit: 'contain' }} />
-                  <img src={BADGE_B}  alt="Badge" style={{ height: 38, objectFit: 'contain' }} />
-                  <img src={DHCS}     alt="DHCS" style={{ height: 22, objectFit: 'contain' }} />
-                  <img src={PSYCH}    alt="Psychology Today" style={{ height: 26, objectFit: 'contain' }} />
-                  <img src={SAMHSA}   alt="SAMHSA" style={{ height: 26, objectFit: 'contain' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'nowrap' }}>
+                  <img src={BADGE_G}  alt="Badge" style={{ height: 38, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={BADGE_B}  alt="Badge" style={{ height: 36, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={DHCS}     alt="DHCS"  style={{ height: 20, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={PSYCH}    alt="Psychology Today" style={{ height: 24, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={SAMHSA}   alt="SAMHSA" style={{ height: 24, objectFit: 'contain', flexShrink: 0 }} />
                 </div>
               </motion.div>
             </div>
