@@ -310,13 +310,13 @@ function Header() {
       </AnimatePresence>
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.35)' : 'none' }}>
         <div className="lp-wide header-inner" style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, objectFit: 'contain' }} />
+          <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, objectFit: 'contain', maxWidth: '50%' }} />
           <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
-            style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
             <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
-            <span className="header-cta-label">Call Us &nbsp;(661) 762-5668</span>
-            <span style={{ display: 'none' }} className="header-cta-mobile">(661) 762-5668</span>
+            <span className="header-cta-full">Call Us &nbsp;(661) 762-5668</span>
+            <span className="header-cta-short">(661) 762-5668</span>
           </motion.a>
         </div>
       </div>
