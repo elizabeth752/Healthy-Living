@@ -792,8 +792,8 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
-          <FadeUp delay={0.1} style={{ marginBottom: 36, overflow: 'hidden' }}>
-            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
+            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block' }} />
           </FadeUp>
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
             <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
