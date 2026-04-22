@@ -4,84 +4,83 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 
 /* ── All assets pulled directly from Figma MCP ─────────────────────────── */
-const f = (id: string) => `https://www.figma.com/api/mcp/asset/${id}`;
 
 // Header
-const LOGO     = f('d07d3847-d242-45af-812f-44c5dca2a12a');
-const PHONE_IC = f('b21093ed-0f8e-41b4-b20e-8983f39c116a');
+const LOGO     = '/assets/d07d3847-d242-45af-812f-44c5dca2a12a.svg';
+const PHONE_IC = '/assets/b21093ed-0f8e-41b4-b20e-8983f39c116a.svg';
 
 // Hero/Banner (node 3574:2753)
-const HERO_BG  = f('b98d49b5-9f35-465b-88d4-d034211e775a');
-const CHECK_IC = f('1dfb5845-c530-4f9d-918f-fd25e200aa50');
-const BADGE_G  = f('7531f52f-8434-4e7e-a3ea-40dd900f73ad');
-const BADGE_B  = f('e86764f0-b6a7-4558-bb7d-7eee1d297c87');
-const DHCS     = f('7f8a9c03-dca4-4f31-81a1-e5f13eba1139');
-const PSYCH    = f('ce846d8b-9e2a-4e94-95c0-7407931a7cd7');
-const SAMHSA   = f('1ee1d93b-ec86-4022-ad83-705dca16313b');
-const FORM_IC  = f('4841cde0-bceb-4fba-bb18-908740aad935');
+const HERO_BG  = '/assets/b98d49b5-9f35-465b-88d4-d034211e775a.jpg';
+const CHECK_IC = '/assets/1dfb5845-c530-4f9d-918f-fd25e200aa50.svg';
+const BADGE_G  = '/assets/7531f52f-8434-4e7e-a3ea-40dd900f73ad.png';
+const BADGE_B  = '/assets/e86764f0-b6a7-4558-bb7d-7eee1d297c87.png';
+const DHCS     = '/assets/7f8a9c03-dca4-4f31-81a1-e5f13eba1139.png';
+const PSYCH    = '/assets/ce846d8b-9e2a-4e94-95c0-7407931a7cd7.svg';
+const SAMHSA   = '/assets/1ee1d93b-ec86-4022-ad83-705dca16313b.svg';
+const FORM_IC  = '/assets/4841cde0-bceb-4fba-bb18-908740aad935.svg';
 
 // Carousel arrow
-const CAR_ARR  = f('a22864e4-c981-403e-a2e6-4827de9e9761');
+const CAR_ARR  = '/assets/a22864e4-c981-403e-a2e6-4827de9e9761.svg';
 
 // Facility photos (node 6041:3105 — Seccion 1)
 const FACILITY = [
-  f('5c6ecc85-d659-4f9f-8385-7c2f680faf70'),
-  f('358929a5-95fd-44f4-ba70-54754635bdc7'),
-  f('99a773b4-b8d1-4be2-a231-038ae9f874f1'),
-  f('1c7c93db-8d50-4fde-9db2-eb25ebf61eed'),
-  f('3f53217c-b4c1-453a-980f-17f81a56c281'),
-  f('988c538c-85dc-4c04-8b8c-e5d251c0412a'),
-  f('aa92df69-2f4a-428c-9426-8ca742b16d76'),
-  f('bd90d69f-3f77-4f34-b4c5-647c89c1f0ab'),
-  f('924693b0-5a19-4e5a-b7c8-47cd33538f87'),
-  f('7474da6c-6e63-4d2d-b103-7c67da882b92'),
-  f('c6b56340-07cd-41c8-965d-5d79215b5a0a'),
-  f('246e6c2c-3428-42db-ad1c-ba9a6023668d'),
-  f('aedb0a73-ea7d-409e-a044-11f4dc061bcc'),
-  f('dd0ac0f6-9636-4139-b832-c5512b76ca53'),
-  f('cc361b6e-f352-475a-9afc-89c1831e5cc9'),
-  f('9ed7f966-0050-4183-ab48-ecbe978662dd'),
+  '/assets/5c6ecc85-d659-4f9f-8385-7c2f680faf70.jpg',
+  '/assets/358929a5-95fd-44f4-ba70-54754635bdc7.jpg',
+  '/assets/99a773b4-b8d1-4be2-a231-038ae9f874f1.jpg',
+  '/assets/1c7c93db-8d50-4fde-9db2-eb25ebf61eed.jpg',
+  '/assets/3f53217c-b4c1-453a-980f-17f81a56c281.jpg',
+  '/assets/988c538c-85dc-4c04-8b8c-e5d251c0412a.jpg',
+  '/assets/aa92df69-2f4a-428c-9426-8ca742b16d76.jpg',
+  '/assets/bd90d69f-3f77-4f34-b4c5-647c89c1f0ab.jpg',
+  '/assets/924693b0-5a19-4e5a-b7c8-47cd33538f87.jpg',
+  '/assets/7474da6c-6e63-4d2d-b103-7c67da882b92.jpg',
+  '/assets/c6b56340-07cd-41c8-965d-5d79215b5a0a.jpg',
+  '/assets/246e6c2c-3428-42db-ad1c-ba9a6023668d.jpg',
+  '/assets/aedb0a73-ea7d-409e-a044-11f4dc061bcc.jpg',
+  '/assets/dd0ac0f6-9636-4139-b832-c5512b76ca53.jpg',
+  '/assets/cc361b6e-f352-475a-9afc-89c1831e5cc9.jpg',
+  '/assets/9ed7f966-0050-4183-ab48-ecbe978662dd.jpg',
 ];
 
 // Amenity icons
-const AMEN_1 = f('af4e30dc-f24c-4589-86b8-fa57aae5ef55');
-const AMEN_2 = f('809aa185-9d20-43f5-bd45-0bab4a25ca1b');
-const AMEN_3 = f('2baaa94b-5cbc-4666-8e73-d76dd145698b');
-const AMEN_4 = f('b006e088-8294-412e-a99c-19afc09a900b');
-const AMEN_5 = f('e043a9de-af0d-4392-ba0d-b91701480d9e');
+const AMEN_1 = '/assets/af4e30dc-f24c-4589-86b8-fa57aae5ef55.svg';
+const AMEN_2 = '/assets/809aa185-9d20-43f5-bd45-0bab4a25ca1b.svg';
+const AMEN_3 = '/assets/2baaa94b-5cbc-4666-8e73-d76dd145698b.svg';
+const AMEN_4 = '/assets/b006e088-8294-412e-a99c-19afc09a900b.svg';
+const AMEN_5 = '/assets/e043a9de-af0d-4392-ba0d-b91701480d9e.svg';
 
 // Condition icons
-const IC_ALCOHOL  = f('7b436f39-0056-4b72-b656-1ac9065f51c3');
-const IC_OPIOID   = f('a228c9f5-dd18-422d-af88-72c069c37822');
-const IC_BENZO    = f('91942f7a-e33c-412d-ac2e-56b9f2605701');
-const IC_COCAINE  = f('6ce1dd58-85f8-4783-8bc5-90fb03d26e9f');
-const IC_FENTANYL = f('5282761b-1072-4bc1-a2a7-43c1077fee69');
-const IC_HEROIN   = f('4a9aa952-3a3b-49cd-9d69-8f52fc2f45e8');
-const IC_DUAL     = f('46bf0366-8192-4901-8a31-4be2193272f6');
+const IC_ALCOHOL  = '/assets/7b436f39-0056-4b72-b656-1ac9065f51c3.svg';
+const IC_OPIOID   = '/assets/a228c9f5-dd18-422d-af88-72c069c37822.svg';
+const IC_BENZO    = '/assets/91942f7a-e33c-412d-ac2e-56b9f2605701.svg';
+const IC_COCAINE  = '/assets/6ce1dd58-85f8-4783-8bc5-90fb03d26e9f.svg';
+const IC_FENTANYL = '/assets/5282761b-1072-4bc1-a2a7-43c1077fee69.svg';
+const IC_HEROIN   = '/assets/4a9aa952-3a3b-49cd-9d69-8f52fc2f45e8.svg';
+const IC_DUAL     = '/assets/46bf0366-8192-4901-8a31-4be2193272f6.svg';
 
 // Team headshots (fresh from full-page pull)
-const TEAM_NARINE = f('47c14a8c-1861-456e-8f45-d6224e83109e');
-const TEAM_HAROUT = f('0f004f6c-58af-4090-92ba-91df9de1c458');
-const TEAM_RITSA  = f('637effc5-6e18-4e2e-a252-bed4a074b696');
-const TEAM_JULIE  = f('c02dcd51-ff0e-4efb-a10d-2ce09270748b');
+const TEAM_NARINE = '/assets/47c14a8c-1861-456e-8f45-d6224e83109e.jpg';
+const TEAM_HAROUT = '/assets/0f004f6c-58af-4090-92ba-91df9de1c458.jpg';
+const TEAM_RITSA  = '/assets/637effc5-6e18-4e2e-a252-bed4a074b696.jpg';
+const TEAM_JULIE  = '/assets/c02dcd51-ff0e-4efb-a10d-2ce09270748b.jpg';
 
 // Reviews
-const STARS     = f('6d0d84c4-5abf-4e0c-b267-1051986a3f8e');
-const GOOGLE_IC = f('3f47f82b-a218-4854-a023-584579dd8955');
+const STARS     = '/assets/6d0d84c4-5abf-4e0c-b267-1051986a3f8e.svg';
+const GOOGLE_IC = '/assets/3f47f82b-a218-4854-a023-584579dd8955.png';
 const REVIEWERS = [
-  { photo: f('83127b99-39f2-43fc-b3a9-e05a78fa8046'), name: 'Jose Martinez',    text: "Well first off the staff are all about assisting the clients with their needs — they go above and beyond. The food is beyond great. The medical attention is on point. I've been to a few programs and this is the best one hands down." },
-  { photo: f('01fd596c-5475-41ba-a47e-62c21b16814a'), name: 'Melissa Jenkins',  text: "This was my first experience at a treatment program. I was very nervous but the staff were unbelievable! I ended up staying the full 30 days and I'm so glad I did. I can't recommend Healthy Living enough." },
-  { photo: f('758779c3-d3a0-4c04-8122-9ffe4aa02913'), name: 'Gilbert Pimienta', text: "Healthy Living truly exceeded my expectations. The staff is highly professional and incredibly compassionate. The facility is clean and comfortable. Thanks to Healthy Living, I've made meaningful progress." },
-  { photo: f('cfc93faa-711c-4f7f-8543-08991d40fcbe'), name: 'Jordan',           text: "The staff here really care about you and your wellbeing. During detox they made it as smooth and comfortable as possible. The food is amazing. The counseling and therapy is top notch. 10 out of 10." },
-  { photo: f('e19e5a4d-5ea0-41e4-8627-4e7b8302721c'), name: 'Nicolas Arp',      text: "I had a really good experience here. We did a lot of really cool activities like hiking, time by the fireplace, outings to the movies and going thrifting. I would highly recommend!" },
-  { photo: f('13dda1b7-ca89-44b0-a6a3-54d45a5f8a9a'), name: 'C Los',            text: "Healthy Living is the best detox and residential program around, hands down. They picked up as soon as I called, I was in treatment the following day. You get to keep your phone, therapy every week, I had my own room and private bathroom." },
-  { photo: f('78190423-3e6e-423a-a256-30242a43bf9b'), name: 'Rachel Vassell',   text: "This treatment center was a great experience. It's like living at a five-star hotel — they cater to your every need mentally and physically and go above and beyond. Thank you so much Healthy Living." },
+  { photo: '/assets/83127b99-39f2-43fc-b3a9-e05a78fa8046.png', name: 'Jose Martinez',    text: "Well first off the staff are all about assisting the clients with their needs — they go above and beyond. The food is beyond great. The medical attention is on point. I've been to a few programs and this is the best one hands down." },
+  { photo: '/assets/01fd596c-5475-41ba-a47e-62c21b16814a.png', name: 'Melissa Jenkins',  text: "This was my first experience at a treatment program. I was very nervous but the staff were unbelievable! I ended up staying the full 30 days and I'm so glad I did. I can't recommend Healthy Living enough." },
+  { photo: '/assets/758779c3-d3a0-4c04-8122-9ffe4aa02913.png', name: 'Gilbert Pimienta', text: "Healthy Living truly exceeded my expectations. The staff is highly professional and incredibly compassionate. The facility is clean and comfortable. Thanks to Healthy Living, I've made meaningful progress." },
+  { photo: '/assets/cfc93faa-711c-4f7f-8543-08991d40fcbe.png', name: 'Jordan',           text: "The staff here really care about you and your wellbeing. During detox they made it as smooth and comfortable as possible. The food is amazing. The counseling and therapy is top notch. 10 out of 10." },
+  { photo: '/assets/e19e5a4d-5ea0-41e4-8627-4e7b8302721c.png', name: 'Nicolas Arp',      text: "I had a really good experience here. We did a lot of really cool activities like hiking, time by the fireplace, outings to the movies and going thrifting. I would highly recommend!" },
+  { photo: '/assets/13dda1b7-ca89-44b0-a6a3-54d45a5f8a9a.png', name: 'C Los',            text: "Healthy Living is the best detox and residential program around, hands down. They picked up as soon as I called, I was in treatment the following day. You get to keep your phone, therapy every week, I had my own room and private bathroom." },
+  { photo: '/assets/78190423-3e6e-423a-a256-30242a43bf9b.png', name: 'Rachel Vassell',   text: "This treatment center was a great experience. It's like living at a five-star hotel — they cater to your every need mentally and physically and go above and beyond. Thank you so much Healthy Living." },
 ];
 
 // FAQ / CTA
-const FAQ_OPEN = f('318ecfed-37ab-4e53-8c81-4e39aa469df5');
-const FAQ_SHUT = f('35ac22b3-934f-45d7-8e76-60cfdca371cd');
-const CTA_BG   = f('b5cddfeb-0c27-48fd-82b3-51892007dec5');
+const FAQ_OPEN = '/assets/318ecfed-37ab-4e53-8c81-4e39aa469df5.svg';
+const FAQ_SHUT = '/assets/35ac22b3-934f-45d7-8e76-60cfdca371cd.svg';
+const CTA_BG   = '/assets/b5cddfeb-0c27-48fd-82b3-51892007dec5.jpg';
 
 /* ── Design tokens ──────────────────────────────────────────────────────── */
 const N  = '#0D3442';
