@@ -59,7 +59,8 @@ body {
 
 /* ── Responsive grids ────────────────────────────────────── */
 .recovery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 60px; }
-@media (max-width: 768px) { .recovery-grid { grid-template-columns: 1fr; } }
+.recovery-grid > * { min-width: 0; }
+@media (max-width: 768px) { .recovery-grid { grid-template-columns: 1fr !important; gap: 0 !important; } }
 
 /* ── Animations ─────────────────────────────────────────── */
 @keyframes marquee {

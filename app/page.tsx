@@ -405,7 +405,7 @@ function Header() {
       </AnimatePresence>
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.35)' : 'none' }}>
         <div className="lp-wide header-inner" style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', maxWidth: '50%' }} />
+          <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', objectFit: 'contain', flexShrink: 1, minWidth: 0 }} />
           <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
             style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -798,7 +798,7 @@ export default function Page() {
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
-            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block' }} />
+            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
           </FadeUp>
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
             <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
