@@ -227,12 +227,13 @@ function Carousel() {
             <img src={CAR_ARR} alt="" style={{ width: 20, height: 20, objectFit: 'contain', transform: rot }} />
           </button>
         ))}
-        <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
-          {FACILITY.slice(0, 12).map((_, di) => (
-            <button key={di} onClick={() => setI(di)}
-              style={{ width: di === i ? 18 : 6, height: 6, borderRadius: 3, background: di === i ? '#fff' : 'rgba(255,255,255,0.45)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
-          ))}
-        </div>
+      </div>
+      {/* Dots below photos, not overlaid */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+        {FACILITY.slice(0, 12).map((_, di) => (
+          <button key={di} onClick={() => setI(di)}
+            style={{ width: di === i ? 18 : 6, height: 6, borderRadius: 3, background: di === i ? '#fff' : 'rgba(255,255,255,0.45)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
+        ))}
       </div>
       <div style={{ display: 'flex', gap: 10, overflowX: 'auto' }}>
         {FACILITY.slice(0, 6).map((src, idx) => (
