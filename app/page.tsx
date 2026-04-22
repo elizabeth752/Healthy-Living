@@ -58,6 +58,24 @@ const IC_FENTANYL = '/assets/5282761b-1072-4bc1-a2a7-43c1077fee69.svg';
 const IC_HEROIN   = '/assets/4a9aa952-3a3b-49cd-9d69-8f52fc2f45e8.svg';
 const IC_DUAL     = '/assets/46bf0366-8192-4901-8a31-4be2193272f6.svg';
 
+// Recovery icons (Seccion 2)
+const REC_COUPLES   = '/assets/f715e92e-860c-492a-9bbd-7879967cb741.svg';
+const REC_DOG       = '/assets/8c2864b2-e458-4de6-a2c8-da09af8ac0a3.svg';
+const REC_HOLISTIC  = '/assets/4e9b1d43-3c96-4ecf-970b-9106d3e97dcd.svg';
+const REC_DETOX     = '/assets/0d0ca17b-d792-4093-8376-61aaf80f1848.svg';
+const REC_MEDICAL   = '/assets/7ee8b202-7c9f-45f5-bf37-076e00dcc8af.svg';
+const REC_PROF      = '/assets/1231f0b5-9f99-422b-8d9f-a07881950ff7.svg';
+const REC_MEALS     = '/assets/bf078a69-8127-4664-961a-6818d73bf62c.svg';
+const REC_TECH      = '/assets/423dfe45-62c3-4bb9-96b5-da3da0dbb427.svg';
+
+// Trust Banner photo
+const TRUST_PHOTO   = '/assets/802d3aa1-7759-49f9-9b36-c9287b6f81fb.jpg';
+
+// Seccion 3 — Treatment Path photos
+const SEC3_DETOX    = '/assets/ea0ad611-966a-4eb4-8e0d-9f0d9baf5525.jpg';
+const SEC3_RESID    = '/assets/2b87a38f-43ff-4ab7-ab8f-8c1bbdec93a2.jpg';
+const SEC3_AFTER    = '/assets/d8abe6f4-76a5-4536-aa20-a3c3de0a65ad.jpg';
+
 // Team headshots (fresh from full-page pull)
 const TEAM_NARINE = '/assets/47c14a8c-1861-456e-8f45-d6224e83109e.jpg';
 const TEAM_HAROUT = '/assets/0f004f6c-58af-4090-92ba-91df9de1c458.jpg';
@@ -355,14 +373,14 @@ export default function Page() {
   ];
 
   const RECOVERY_ITEMS = [
-    { icon: '👫', title: 'Couples Welcome',        desc: "We're one of the few centers that allows couples to heal together, side by side." },
-    { icon: '🐕', title: 'Dog-Friendly',            desc: 'Comfort and connection are part of healing, and sometimes that comes on four legs.' },
-    { icon: '🌿', title: 'Holistic Care',           desc: 'Music, art, movement, sound, animals, and time in nature treats the whole person, not just the addiction.' },
-    { icon: '🛡️', title: 'Comfort-First Detox',    desc: "Detox doesn't have to feel like punishment. Our medical team & MAT protocols keeps you safe and comfortable." },
-    { icon: '⚕️', title: 'Medical Leadership',      desc: 'Founded and overseen by two board-certified addiction physicians, clinical excellence isn\'t a feature, it\'s the foundation.' },
-    { icon: '💼', title: 'Professional Pathways',   desc: "Built for people who can't step away from everything, our program offers the structure and discretion that professionals need." },
-    { icon: '🍽️', title: 'Chef-Prepared Meals',    desc: "In-house chef prepares nourishing meals daily, because a body that's well-fed heals faster and feels more like itself again." },
-    { icon: '📱', title: 'Flexible Tech Policies',  desc: "Phones and technology are allowed (with limits), because isolation isn't part of our approach to recovery." },
+    { icon: REC_COUPLES,  title: 'Couples Welcome',        desc: "We're one of the few centers that allows couples to heal together, side by side." },
+    { icon: REC_DOG,      title: 'Dog-Friendly',            desc: 'Comfort and connection are part of healing, and sometimes that comes on four legs.' },
+    { icon: REC_HOLISTIC, title: 'Holistic Care',           desc: 'Music, art, movement, sound, animals, and time in nature treats the whole person, not just the addiction.' },
+    { icon: REC_DETOX,    title: 'Comfort-First Detox',     desc: "Detox doesn't have to feel like punishment. Our medical team & MAT protocols keeps you safe and comfortable." },
+    { icon: REC_MEDICAL,  title: 'Medical Leadership',      desc: "Founded and overseen by two board-certified addiction physicians, clinical excellence isn't a feature, it's the foundation." },
+    { icon: REC_PROF,     title: 'Professional Pathways',   desc: "Built for people who can't step away from everything, our program offers the structure and discretion that professionals need." },
+    { icon: REC_MEALS,    title: 'Chef-Prepared Meals',     desc: "In-house chef prepares nourishing meals daily, because a body that's well-fed heals faster and feels more like itself again." },
+    { icon: REC_TECH,     title: 'Flexible Tech Policies',  desc: "Phones and technology are allowed (with limits), because isolation isn't part of our approach to recovery." },
   ];
 
   const INSURERS = ['Aetna','Anthem','Cigna','Humana','United','BlueCross','Magellan','Beacon','Optum','ComPsych','MHN','Molina','MultiPlan','Ambetter'];
@@ -515,8 +533,8 @@ export default function Page() {
             {RECOVERY_ITEMS.map((item, idx) => (
               <FadeUp key={item.title} delay={idx * 0.07}>
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', padding: '24px 0', borderBottom: idx < 6 ? '1px solid #f0f0f0' : 'none' }}>
-                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 24 }}>
-                    {item.icon}
+                  <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <img src={item.icon} alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
                   </div>
                   <div>
                     <p style={{ fontWeight: 700, fontSize: 16, color: N, marginBottom: 6 }}>{item.title}</p>
@@ -530,6 +548,120 @@ export default function Page() {
             <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
               Connect with Treatment
+            </motion.a>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ════ TRUST BANNER ═══════════════════════════════════════════════ */}
+      <section style={{ background: DT, padding: '50px 0' }}>
+        <div className="lp-inner">
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+            {/* Left — text + CTA */}
+            <div style={{ flex: '1 1 0', minWidth: 0 }}>
+              <FadeUp>
+                <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
+                  Addiction Rarely Tells The Whole Story. Trauma Does.
+                </h2>
+                <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.65, marginBottom: 28, maxWidth: 640 }}>
+                  Our team is also trained to recognize and gently address the trauma that drives addiction — including EMDR therapy for those who are ready to go deeper and end the cycle of trauma.
+                </p>
+                <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, textDecoration: 'none' }}>
+                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />
+                  Call Today (661) 762-5668
+                </motion.a>
+              </FadeUp>
+            </div>
+            {/* Right — photo card */}
+            <FadeUp delay={0.1} style={{ flexShrink: 0, position: 'relative', width: 310 }}>
+              {/* BG tab behind photo */}
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20 }} />
+              <div style={{ position: 'relative', width: 310, height: 351, borderRadius: 10, overflow: 'hidden' }}>
+                <img src={TRUST_PHOTO} alt="" style={{ width: '111.88%', height: '167%', position: 'absolute', left: '-8.84%', top: '-4.44%', objectFit: 'cover', maxWidth: 'none' }} />
+              </div>
+            </FadeUp>
+          </div>
+        </div>
+      </section>
+
+      {/* ════ TREATMENT PATH (Seccion 3) ═════════════════════════════════ */}
+      <section style={{ background: '#fff', padding: '70px 0' }}>
+        <div className="lp-inner">
+          <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Your Recovery Path to Healthy Living</h2>
+            <p style={{ color: '#222', fontSize: 16, lineHeight: 1.65, maxWidth: 900, margin: '0 auto' }}>
+              Whether you're seeking intensive support or looking to balance treatment with daily life, we offer a full continuum of care that meets you where you are in life.
+            </p>
+          </FadeUp>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {/* Row 1 — photo left, text right */}
+            <FadeUp>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: '1px solid #e8f0f0' }}>
+                <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                  <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ flex: 1, paddingLeft: 20 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Medical Detox & Medication-Assisted Treatment (MAT)</h3>
+                  <p style={{ color: '#222', fontSize: 16, lineHeight: 1.7 }}>
+                    When you arrive, one of our physicians will sit down with you for a thorough medical evaluation — not just to check boxes, but to truly understand where you are and what you need.
+                    <br /><br />
+                    If Medication-Assisted Treatment (MAT) can make withdrawal more manageable, we'll talk through it together and decide what's right for you.
+                    <br /><br />
+                    Throughout your stay, our care team is with you around the clock — watching, adjusting, and making sure you're never navigating this alone.
+                    <br /><br />
+                    Most people stay between 5 and 14 days, though we tailor that entirely to your health, your history, and how your body responds.
+                  </p>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Row 2 — text left, photo right */}
+            <FadeUp delay={0.1}>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: '1px solid #e8f0f0' }}>
+                <div style={{ flex: 1, paddingRight: 20 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Inpatient Residential Treatment Program</h3>
+                  <p style={{ color: '#222', fontSize: 16, lineHeight: 1.7 }}>
+                    Once you're stable, our team of therapists, counselors, and experiential instructors work with you to build a recovery plan that's truly yours.
+                    <br /><br />
+                    Our residential program focuses on healing the mind, body, and spirit through a structured daily schedule that includes clinical therapy, experiential work, and consistent support.
+                    <br /><br />
+                    Located in the hills of Santa Clarita, our residential setting provides a calm, private environment where clients can focus fully on treatment.
+                    <br /><br />
+                    Most residential stays range from 1 to 3 months, depending on individual progress and treatment needs.
+                  </p>
+                </div>
+                <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                  <img src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Row 3 — photo left, text right */}
+            <FadeUp delay={0.15}>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0' }}>
+                <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                  <img src={SEC3_AFTER} alt="Aftercare" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ flex: 1, paddingLeft: 20 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Aftercare Planning, Ongoing Care, & Alumni</h3>
+                  <p style={{ color: '#222', fontSize: 16, lineHeight: 1.7 }}>
+                    Recovery is a lifelong journey, and the work doesn't stop after completing residential treatment. We ensure you have the resources and support to maintain sobriety and continue healing.
+                    <br /><br />
+                    We connect you with outpatient and sober living services in Santa Clarita and Los Angeles to provide ongoing care and prevent relapse as you transition back to daily life.
+                    <br /><br />
+                    Our alumni program provides both online support groups and monthly in-person meetings, creating a community of people who understand your journey and can support you through it.
+                  </p>
+                </div>
+              </div>
+            </FadeUp>
+          </div>
+
+          <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
+            <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20 }} />Start Your Recovery Today
             </motion.a>
           </FadeUp>
         </div>
