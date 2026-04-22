@@ -68,6 +68,14 @@ const REC_PROF      = '/assets/1231f0b5-9f99-422b-8d9f-a07881950ff7.svg';
 const REC_MEALS     = '/assets/bf078a69-8127-4664-961a-6818d73bf62c.svg';
 const REC_TECH      = '/assets/423dfe45-62c3-4bb9-96b5-da3da0dbb427.svg';
 
+// Section 6 — Insurance logos strip
+const INS_STRIP     = '/assets/71b8be5b-8604-4f95-9711-50214dab403c.svg';
+
+// Section 7 — Step icons
+const STEP1_IC      = '/assets/620f93c9-2fc3-4252-8a66-29b3a8552aaa.svg';
+const STEP2_IC      = '/assets/8a55c9d4-62cb-4120-87cb-cb50b62a098d.svg';
+const STEP3_IC      = '/assets/08f52511-8481-46d2-9a64-747c321ab447.svg';
+
 // Trust Banner photo
 const TRUST_PHOTO   = '/assets/802d3aa1-7759-49f9-9b36-c9287b6f81fb.jpg';
 
@@ -328,7 +336,7 @@ function Header() {
       </AnimatePresence>
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.35)' : 'none' }}>
         <div className="lp-wide header-inner" style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, objectFit: 'contain', maxWidth: '50%' }} />
+          <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', maxWidth: '50%' }} />
           <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
             style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -716,22 +724,16 @@ export default function Page() {
       <section id="programs" style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
-            <p style={{ color: '#555', fontSize: 16, maxWidth: 800, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
+            <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
-          <FadeUp delay={0.1} style={{ overflow: 'hidden', marginBottom: 36 }}>
-            <div className="marquee-track">
-              {[...INSURERS, ...INSURERS].map((name, idx) => (
-                <div key={idx} style={{ flexShrink: 0, background: BG, borderRadius: 8, padding: '12px 24px', border: '1px solid #dde8e8', color: N, fontWeight: 600, fontSize: 14 }}>
-                  {name}
-                </div>
-              ))}
-            </div>
+          <FadeUp delay={0.1} style={{ marginBottom: 36, overflow: 'hidden' }}>
+            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 'auto', display: 'block' }} />
           </FadeUp>
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
             <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
               whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
+              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
               Verify Insurance Coverage
             </motion.a>
           </FadeUp>
@@ -739,25 +741,27 @@ export default function Page() {
       </section>
 
       {/* ════ HOW IT WORKS ═══════════════════════════════════════════════ */}
-      <section style={{ background: N, padding: '80px 0' }}>
+      <section style={{ background: '#386376', padding: '70px 0' }}>
         <div className="lp-wide">
-          <FadeUp style={{ marginBottom: 48 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
-            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 16, maxWidth: 700 }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment the same day.</p>
+          <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, maxWidth: 860, margin: '0 auto' }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment on the same day.</p>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {[
-              { title: 'Step 1: Call & Speak With a Care Specialist',      body: 'Our team is available 24/7 to answer your questions, understand your situation, and help you determine the next right step.' },
-              { title: 'Step 2: Complete a Brief Pre-Admission Screening',  body: "We'll walk you through a short, structured screening to better understand your needs, clinical history, and what level of care is right." },
-              { title: 'Step 3: Review Insurance and Payment Options',      body: 'Our team will verify your insurance benefits and clearly explain coverage and costs so you can make an informed decision without pressure.' },
+              { icon: STEP1_IC, title: 'Step 1: Call & Speak With a\nCare Specialist',        body: 'Our team is available 24/7 to answer your questions, understand your situation, and help you determine the next right step.' },
+              { icon: STEP2_IC, title: 'Step 2: Complete a Brief\nPre-Admission Screening',   body: "We'll walk you through a short, structured screening to better understand your needs, clinical history, and what level of care is right." },
+              { icon: STEP3_IC, title: 'Step 3: Review Insurance\nand Payment Options',        body: 'Our team will verify your insurance benefits and clearly explain coverage and costs so you can make an informed decision without pressure.' },
             ].map((s, idx) => (
-              <FadeUp key={s.title} delay={idx * 0.1}>
-                <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '40px 28px', textAlign: 'center', height: '100%' }}>
-                  <div style={{ width: 70, height: 70, borderRadius: '50%', background: T, margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>{idx + 1}</span>
+              <FadeUp key={idx} delay={idx * 0.1}>
+                <div style={{ background: '#fff', borderRadius: 14, padding: '24px 22px', textAlign: 'center', height: '100%', boxShadow: '0 4px 4px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+                  <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <img src={s.icon} alt="" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                   </div>
-                  <h3 style={{ fontWeight: 700, color: '#fff', fontSize: 16, marginBottom: 12, lineHeight: 1.4 }}>{s.title}</h3>
-                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.75 }}>{s.body}</p>
+                  <div>
+                    <h3 style={{ fontWeight: 500, color: N, fontSize: 20, marginBottom: 12, lineHeight: 1.3, whiteSpace: 'pre-line' }}>{s.title}</h3>
+                    <p style={{ color: '#222', fontSize: 16, lineHeight: 1.65 }}>{s.body}</p>
+                  </div>
                 </div>
               </FadeUp>
             ))}
@@ -781,7 +785,7 @@ export default function Page() {
                     <div>
                       <p style={{ fontWeight: 700, fontSize: 14, color: '#000' }}>{r.name}</p>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3 }}>
-                        <img src={STARS} alt="5 stars" style={{ height: 14, width: 78 }} />
+                        <img src={STARS} alt="5 stars" style={{ height: 14, width: 76, objectFit: 'contain' }} />
                         <img src={GOOGLE_IC} alt="Google" style={{ width: 12, height: 12 }} />
                       </div>
                     </div>
