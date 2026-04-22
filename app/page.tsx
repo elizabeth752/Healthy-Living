@@ -353,8 +353,18 @@ export default function Page() {
       {/* ════ SUB-NAV ══════════════════════════════════════ */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
         <div className="lp-inner" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
-          {[{ label: 'Our Center', active: true }, { label: 'Conditions We Treat' }, { label: 'Programs' }].map(({ label, active }) => (
-            <button key={label} style={{ padding: '12px 0', fontSize: 15, color: active ? G : N, fontWeight: active ? 700 : 400, borderBottom: `2px solid ${active ? G : 'transparent'}`, background: 'none', cursor: 'pointer' }}>
+          {[
+            { label: 'Our Center',          href: 'our-center' },
+            { label: 'Conditions We Treat', href: 'conditions' },
+            { label: 'Programs',            href: 'programs'   },
+          ].map(({ label, href }) => (
+            <button key={label} onClick={() => {
+              const el = document.getElementById(href);
+              if (!el) return;
+              const offset = 110 + 48; // sticky header + subnav height
+              const top = el.getBoundingClientRect().top + window.scrollY - offset;
+              window.scrollTo({ top, behavior: 'smooth' });
+            }} style={{ padding: '12px 0', fontSize: 15, color: N, fontWeight: 400, borderBottom: `2px solid transparent`, background: 'none', cursor: 'pointer' }}>
               {label}
             </button>
           ))}
@@ -362,7 +372,7 @@ export default function Page() {
       </div>
 
       {/* ════ FACILITY ════════════════════════════════════ */}
-      <section style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0' }}>
+      <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
@@ -455,7 +465,7 @@ export default function Page() {
       </section>
 
       {/* ════ CONDITIONS ═══════════════════════════════════ */}
-      <section style={{ background: DT, padding: '70px 0' }}>
+      <section id="conditions" style={{ background: DT, padding: '70px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 32 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Care for Every Type of Addiction</h2>
@@ -513,7 +523,7 @@ export default function Page() {
       </section>
 
       {/* ════ INSURANCE ════════════════════════════════════ */}
-      <section style={{ background: '#fff', padding: '80px 0' }}>
+      <section id="programs" style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
