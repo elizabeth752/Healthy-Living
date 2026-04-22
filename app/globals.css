@@ -118,11 +118,21 @@ body {
   .conditions-grid > div:nth-child(2),
   .conditions-grid > div:nth-child(3) { display: none !important; }
 
-  /* Team grid: 2 columns */
+  /* Team grid: 2 columns, faces use cover not percentage dims */
   .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .team-photo-img {
+    position: absolute !important; inset: 0 !important;
+    width: 100% !important; height: 100% !important;
+    left: 0 !important; top: 0 !important;
+    object-fit: cover !important; object-position: center top !important;
+    max-width: 100% !important;
+  }
 
-  /* Stats grid: 2 columns */
-  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  /* Stats grid: single column */
+  .stats-grid { grid-template-columns: 1fr !important; }
+
+  /* Trust banner: hide decorative BG tab */
+  .trust-bg-tab { display: none !important; }
 
   /* How it works: 1 column */
   .steps-grid { grid-template-columns: 1fr !important; }

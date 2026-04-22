@@ -217,10 +217,10 @@ function Carousel() {
       <div className="carousel-photos-wrap" style={{ position: 'relative', display: 'flex', gap: 20, height: 320 }}>
         {[0, 1].map(offset => (
           <div key={offset} className={`carousel-photo-item${offset === 1 ? ' carousel-second-photo' : ''}`} style={{ flex: 1, borderRadius: 4, overflow: 'hidden', position: 'relative', height: 320 }}>
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               <motion.img key={`${i}-${offset}`} src={FACILITY[(i + offset) % total]} alt=""
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
             </AnimatePresence>
           </div>
@@ -653,8 +653,8 @@ export default function Page() {
             </div>
             {/* Right — photo card */}
             <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310 }}>
-              {/* BG tab behind photo */}
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20 }} />
+              {/* BG tab behind photo — desktop only */}
+              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20 }} />
               <div className="trust-photo-box" style={{ position: 'relative', width: 310, height: 351, borderRadius: 10, overflow: 'hidden' }}>
                 <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '111.88%', height: '167%', position: 'absolute', left: '-8.84%', top: '-4.44%', objectFit: 'cover', maxWidth: 'none' }} />
               </div>
@@ -776,7 +776,7 @@ export default function Page() {
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
                   <div style={{ width: '100%', height: 310, borderRadius: 10, overflow: 'hidden', position: 'relative' }}>
-                    <img src={m.img} alt={m.name}
+                    <img src={m.img} alt={m.name} className="team-photo-img"
                       style={{ position: 'absolute', width: m.size.split(' ')[0], height: m.size.split(' ')[1], left: m.pos.split(' ')[0], top: m.pos.split(' ')[1], maxWidth: 'none' }} />
                   </div>
                   <div style={{ padding: '14px 10px 0' }}>
