@@ -354,7 +354,7 @@ export default function Page() {
       <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
         <div className="lp-inner" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
           {[{ label: 'Our Center', active: true }, { label: 'Conditions We Treat' }, { label: 'Programs' }].map(({ label, active }) => (
-            <button key={label} style={{ padding: '12px 0', fontSize: 15, color: active ? G : N, fontWeight: active ? 700 : 400, borderBottom: `2px solid ${active ? G : 'transparent'}`, background: 'none', border: 'none', borderBottom: `2px solid ${active ? G : 'transparent'}`, cursor: 'pointer' }}>
+            <button key={label} style={{ padding: '12px 0', fontSize: 15, color: active ? G : N, fontWeight: active ? 700 : 400, borderBottom: `2px solid ${active ? G : 'transparent'}`, background: 'none', cursor: 'pointer' }}>
               {label}
             </button>
           ))}
