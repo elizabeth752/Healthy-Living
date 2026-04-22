@@ -465,7 +465,7 @@ export default function Page() {
               style={{ width: 530, flexShrink: 0, backdropFilter: 'blur(5px)', background: 'rgba(237,244,244,0.8)', border: '1px solid rgba(237,244,244,0.04)', borderRadius: 6, boxShadow: '0 4px 8px rgba(0,0,0,0.2)', padding: '30px 20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
                 <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
-                <img src={FORM_IC} alt="" style={{ height: 24, objectFit: 'contain' }} />
+                <img src={FORM_IC} alt="" style={{ height: 22, width: 'auto', maxWidth: 100, flexShrink: 0 }} />
               </div>
               <InsuranceForm />
             </motion.div>
@@ -873,7 +873,7 @@ export default function Page() {
         <div style={{ maxWidth: 440, margin: '0 auto', background: '#fff', borderRadius: 12, padding: '28px 24px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
             <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
-            <img src={FORM_IC} alt="" style={{ height: 24, objectFit: 'contain' }} />
+            <img src={FORM_IC} alt="" style={{ height: 22, width: 'auto', maxWidth: 100, flexShrink: 0 }} />
           </div>
           <InsuranceForm />
         </div>
