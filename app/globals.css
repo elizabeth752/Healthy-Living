@@ -49,6 +49,10 @@ body {
 @media (max-width: 640px) {
   .header-inner { height: 72px !important; }
   .hero-section { padding-top: 122px !important; }
+  .header-logo { height: 32px !important; }
+  .header-cta  { font-size: 14px !important; padding: 10px 12px !important; }
+  .header-cta-label { display: none !important; }
+  .header-cta-mobile { display: inline !important; }
 }
 
 /* ── Responsive grids ────────────────────────────────────── */
