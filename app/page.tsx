@@ -334,10 +334,10 @@ export default function Page() {
   ];
 
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: 'https://ui-avatars.com/api/?name=Narine+Arutyounian&background=0D3442&color=ffffff&size=400&bold=true' },
-    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: 'https://ui-avatars.com/api/?name=Harout+Mesrobian&background=174154&color=ffffff&size=400&bold=true' },
-    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: 'https://ui-avatars.com/api/?name=Ritsa+Fistes&background=386376&color=ffffff&size=400&bold=true' },
-    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: 'https://ui-avatars.com/api/?name=Julie+Tatian&background=56B5B7&color=ffffff&size=400&bold=true' },
+    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: 'https://www.figma.com/api/mcp/asset/1432219b-6001-4c1c-a00b-622e4a20eb79' },
+    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: 'https://www.figma.com/api/mcp/asset/44608dac-be6f-4e77-99d1-22fca21e2080' },
+    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: 'https://www.figma.com/api/mcp/asset/0b000bb6-f333-4821-af9a-fd606badaab9' },
+    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: 'https://www.figma.com/api/mcp/asset/d0f26f81-5f32-470f-ad9a-e06997fd668f' },
   ];
 
   const INSURERS = ['Aetna','Anthem','Cigna','Humana','United','BlueCross','Magellan','Beacon','Optum','ComPsych','MHN','Molina','MultiPlan','Ambetter'];
@@ -559,7 +559,7 @@ export default function Page() {
                   </div>
                   <div style={{ paddingTop: 14 }}>
                     <p style={{ fontWeight: 700, color: N, fontSize: 15 }}>{m.name}</p>
-                    <p style={{ color: '#666', fontSize: 13, marginTop: 3 }}>{m.role}</p>
+                    <p style={{ color: T, fontSize: 13, marginTop: 3 }}>{m.role}</p>
                   </div>
                 </motion.div>
               </FadeUp>
