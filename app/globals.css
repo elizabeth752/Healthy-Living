@@ -132,6 +132,14 @@ body {
   .reviews-row > div:nth-child(2),
   .reviews-row > div:nth-child(3) { display: none !important; }
 
+  /* Testimonials outer layout: stack title above carousel */
+  .reviews-layout { flex-direction: column !important; }
+  .reviews-title-col { width: 100% !important; }
+
+  /* Sub-nav: compress gap so 3 tabs fit on 390px */
+  .subnav-links { gap: 14px !important; }
+  .subnav-links button { font-size: 13px !important; }
+
   /* Location: single column */
   .location-grid { grid-template-columns: 1fr !important; }
 

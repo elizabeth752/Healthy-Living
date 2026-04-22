@@ -552,7 +552,7 @@ export default function Page() {
 
         {/* Sub-nav — white bar */}
         <div className="subnav" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
-          <div className="lp-inner" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
+          <div className="lp-inner subnav-links" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
             {[
               { label: 'Our Center',          id: 'our-center' },
               { label: 'Conditions We Treat', id: 'conditions' },
@@ -841,8 +841,8 @@ export default function Page() {
 
       {/* ════ TESTIMONIALS ═══════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0' }}>
-        <div className="lp-inner" style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <FadeUp style={{ width: 280, flexShrink: 0 }}>
+        <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+          <FadeUp className="reviews-title-col" style={{ width: 280, flexShrink: 0 }}>
             <h2 style={{ fontSize: 38, fontWeight: 500, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People.<br />Real Recovery.</h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
           </FadeUp>
