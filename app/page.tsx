@@ -243,7 +243,7 @@ function Header() {
         )}
       </AnimatePresence>
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 16px rgba(0,0,0,0.3)' : 'none' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '28px 70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '28px clamp(16px, 4.5vw, 70px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <img src={LOGO} alt="Healthy Living Residential Program" style={{ height: 44, objectFit: 'contain', display: 'block' }} />
           <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
@@ -289,17 +289,17 @@ export default function Page() {
       <Header />
 
       {/* ═══ HERO ═══ */}
-      <section style={{ position: 'relative', minHeight: 527, paddingTop: 160 }}>
+      <section style={{ position: 'relative', paddingTop: 160, overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <img src={HERO_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(237,244,244,0.95) 0%, rgba(237,244,244,0.92) 35%, rgba(237,244,244,0.55) 55%, rgba(237,244,244,0.05) 75%, rgba(237,244,244,0) 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(237,244,244,0.97) 0%, rgba(237,244,244,0.94) 40%, rgba(237,244,244,0.6) 60%, rgba(237,244,244,0.05) 80%, rgba(237,244,244,0) 100%)' }} />
         </div>
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1440, margin: '0 auto', padding: '50px 70px 60px' }}>
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+        <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: 1440, margin: '0 auto', boxSizing: 'border-box', padding: '50px clamp(16px, 4.5vw, 70px) 60px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 20, alignItems: 'center' }}>
             {/* LEFT col */}
-            <div style={{ flex: 1, maxWidth: 750 }}>
+            <div style={{ minWidth: 0 }}>
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-                style={{ fontSize: 50, fontWeight: 800, lineHeight: '60px', color: N, marginBottom: 16 }}>
+                style={{ fontSize: 'clamp(32px, 3.5vw, 50px)', fontWeight: 800, lineHeight: 1.2, color: N, marginBottom: 16 }}>
                 Physician-Owned Detox &<br />Residential Treatment
               </motion.h1>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
@@ -307,24 +307,24 @@ export default function Page() {
                 ⭐️⭐️⭐️⭐️⭐ 4.9/5 on Google from 78+ Reviews
               </motion.p>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
-                style={{ color: N, fontSize: 18, lineHeight: '22px', marginBottom: 24, maxWidth: 728 }}>
+                style={{ color: N, fontSize: 18, lineHeight: '22px', marginBottom: 24 }}>
                 Founded by two board-certified addiction physicians and built around the whole person, we offer a comfortable, medically guided path to lasting change in the hills of Santa Clarita.
               </motion.p>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-                style={{ display: 'flex', gap: '16px 60px', marginBottom: 28, flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                style={{ display: 'flex', gap: '12px 48px', marginBottom: 28, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   {['Same-Day Admissions 24/7', 'Comfort-Focused Detox & MAT'].map(t => (
                     <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <img src={CHECK_IC} alt="" style={{ width: 22, height: 22, flexShrink: 0 }} />
-                      <span style={{ fontSize: 16, color: N }}>{t}</span>
+                      <span style={{ fontSize: 16, color: N, whiteSpace: 'nowrap' }}>{t}</span>
                     </div>
                   ))}
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   {['Couples Are Welcome', 'Pet-Friendly'].map(t => (
                     <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <img src={CHECK_IC} alt="" style={{ width: 22, height: 22, flexShrink: 0 }} />
-                      <span style={{ fontSize: 16, color: N }}>{t}</span>
+                      <span style={{ fontSize: 16, color: N, whiteSpace: 'nowrap' }}>{t}</span>
                     </div>
                   ))}
                 </div>
@@ -332,26 +332,26 @@ export default function Page() {
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
                 style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16 }}>
                 <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                  style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+                  style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
                   <PhoneInline />Speak with Admissions 24/7
                 </motion.a>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                   <img src={BADGE_G}  alt="" style={{ height: 42, objectFit: 'contain' }} />
                   <img src={BADGE_B}  alt="" style={{ height: 40, objectFit: 'contain' }} />
-                  <img src={DHCS}     alt="DHCS" style={{ height: 22, width: 105, objectFit: 'contain' }} />
-                  <img src={PSYCH}    alt="Psychology Today" style={{ height: 28, width: 98, objectFit: 'contain' }} />
-                  <img src={SAMHSA}   alt="SAMHSA" style={{ height: 28, width: 83, objectFit: 'contain' }} />
+                  <img src={DHCS}     alt="DHCS" style={{ height: 22, objectFit: 'contain' }} />
+                  <img src={PSYCH}    alt="Psychology Today" style={{ height: 28, objectFit: 'contain' }} />
+                  <img src={SAMHSA}   alt="SAMHSA" style={{ height: 28, objectFit: 'contain' }} />
                 </div>
               </motion.div>
             </div>
 
-            {/* RIGHT — form card (desktop only) */}
+            {/* RIGHT — form card (≥1200px only) */}
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-              className="hidden lg:flex"
-              style={{ width: 530, flexShrink: 0, background: 'rgba(237,244,244,0.8)', backdropFilter: 'blur(5px)', border: '1px solid rgba(237,244,244,0.04)', borderRadius: 6, boxShadow: '0 4px 8px rgba(0,0,0,0.2)', padding: '30px 20px', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+              className="hidden xl:flex"
+              style={{ width: 530, flexShrink: 0, background: 'rgba(237,244,244,0.85)', backdropFilter: 'blur(6px)', border: '1px solid rgba(86,181,183,0.15)', borderRadius: 6, boxShadow: '0 4px 8px rgba(0,0,0,0.2)', padding: '30px 20px', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                 <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
-                <img src={FORM_IC} alt="" style={{ height: 24, width: 43, objectFit: 'contain' }} />
+                <img src={FORM_IC} alt="" style={{ height: 24, objectFit: 'contain' }} />
               </div>
               <InsuranceForm />
             </motion.div>
@@ -361,7 +361,7 @@ export default function Page() {
 
       {/* ═══ SUB-NAV ═══ */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px', display: 'flex', justifyContent: 'center', gap: 48 }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)', display: 'flex', justifyContent: 'center', gap: 48 }}>
           {[{ label: 'Our Center', active: true }, { label: 'Conditions We Treat' }, { label: 'Programs' }].map(({ label, active }) => (
             <button key={label} style={{ padding: '10px 0', fontSize: 16, color: active ? G : N, fontWeight: active ? 700 : 400, borderBottom: `2px solid ${active ? G : 'transparent'}`, background: 'none', border: 'none', borderBottom: `2px solid ${active ? G : 'transparent'}`, cursor: 'pointer', outline: 'none' }}>
               {label}
@@ -372,7 +372,7 @@ export default function Page() {
 
       {/* ═══ FACILITY SECTION ═══ */}
       <section style={{ background: '#fff', padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 32 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 8 }}>Healthy Living Isn't Just Our Name</h2>
             <p style={{ color: '#555', fontSize: 16 }}>It's what we help you achieve.</p>
@@ -415,7 +415,7 @@ export default function Page() {
 
       {/* ═══ TRAUMA SECTION ═══ */}
       <section style={{ background: N, padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px', display: 'flex', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)', display: 'flex', gap: 40, alignItems: 'center', flexWrap: 'wrap' }}>
           <FadeUp style={{ flex: 1, minWidth: 280 }}>
             <h2 style={{ color: '#fff', fontSize: 36, fontWeight: 700, lineHeight: '1.25', marginBottom: 20 }}>
               Addiction Rarely Tells The Whole Story. Trauma Does.
@@ -438,7 +438,7 @@ export default function Page() {
 
       {/* ═══ TREATMENT PATH ═══ */}
       <section style={{ background: '#fff', padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
           <FadeUp style={{ marginBottom: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 12 }}>Your Recovery Path to Healthy Living</h2>
             <p style={{ color: '#555', fontSize: 16, lineHeight: 1.65, maxWidth: 860 }}>Whether you're seeking intensive support or looking to balance treatment with daily life, we offer a full continuum of care that meets you where you are in life.</p>
@@ -477,7 +477,7 @@ export default function Page() {
 
       {/* ═══ CONDITIONS ═══ */}
       <section style={{ background: DT, padding: '70px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 70px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 4.5vw, 70px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 24 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Care for Every Type of Addiction</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.6 }}>
@@ -513,7 +513,7 @@ export default function Page() {
 
       {/* ═══ TEAM ═══ */}
       <section style={{ background: BG, padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 70px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 4.5vw, 70px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 12 }}>The Medical Team Behind Your Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 860, margin: '0 auto' }}>We know what addiction does to the brain, body, and spirit. You don't need more willpower — you need the right medical team.</p>
@@ -538,7 +538,7 @@ export default function Page() {
 
       {/* ═══ INSURANCE ═══ */}
       <section style={{ background: '#fff', padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 12 }}>Care Backed by Major Insurance</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
@@ -564,7 +564,7 @@ export default function Page() {
 
       {/* ═══ HOW IT WORKS ═══ */}
       <section style={{ background: BG, padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 70px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 4.5vw, 70px)' }}>
           <FadeUp style={{ marginBottom: 48 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 12 }}>You Call. We Handle The Rest.</h2>
             <p style={{ color: '#555', fontSize: 16 }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment on the same day.</p>
@@ -591,7 +591,7 @@ export default function Page() {
 
       {/* ═══ TESTIMONIALS ═══ */}
       <section style={{ background: BG, padding: '70px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px', display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)', display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <FadeUp style={{ width: 310, flexShrink: 0, paddingRight: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People.<br />Real Recovery.</h2>
             <p style={{ color: '#333', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
@@ -622,7 +622,7 @@ export default function Page() {
 
       {/* ═══ STATS ═══ */}
       <section style={{ background: '#fff', padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 48 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
@@ -646,7 +646,7 @@ export default function Page() {
 
       {/* ═══ LOCATION ═══ */}
       <section style={{ background: BG, padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 12 }}>California's Hidden Gem for Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>Tucked into the hills of Santa Clarita, our center draws people from across California and beyond — because when the care is right, it's worth the drive.</p>
@@ -682,7 +682,7 @@ export default function Page() {
 
       {/* ═══ FAQ ═══ */}
       <section style={{ background: BG, padding: '80px 0' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: N }}>Frequently Asked Questions</h2>
           </FadeUp>
@@ -706,7 +706,7 @@ export default function Page() {
       </section>
 
       {/* ═══ CTA ═══ */}
-      <section style={{ position: 'relative', padding: '70px 180px', textAlign: 'center', overflow: 'hidden' }}>
+      <section style={{ position: 'relative', padding: '70px clamp(16px, 5vw, 180px)', textAlign: 'center', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0 }}>
           <img src={CTA_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', mixBlendMode: 'multiply' }} />
