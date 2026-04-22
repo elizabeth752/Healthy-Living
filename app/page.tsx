@@ -309,7 +309,7 @@ function Header() {
         )}
       </AnimatePresence>
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.35)' : 'none' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 70px', height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="lp-wide header-inner" style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <img src={LOGO} alt="Healthy Living Residential Program" style={{ height: 44, objectFit: 'contain' }} />
           <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
@@ -377,7 +377,7 @@ export default function Page() {
       <Header />
 
       {/* ════ HERO / BANNER (node 3574:2753) ═════════════════════════════ */}
-      <section style={{ position: 'relative', paddingTop: 160 }}>
+      <section className="hero-section" style={{ position: 'relative', paddingTop: 160 }}>
         {/* full-bleed background */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <img src={HERO_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center right' }} />
@@ -385,14 +385,14 @@ export default function Page() {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(237,244,244,0) 5.208%, rgba(237,244,244,0.9) 41.855%)' }} />
         </div>
 
-        {/* Hero content — px-70 matches Figma lp-wide, 1300px inner width */}
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1440, margin: '0 auto', padding: '50px 70px 40px' }}>
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center', width: 1300 }}>
+        {/* Hero content — lp-wide handles responsive side padding */}
+        <div className="lp-wide" style={{ position: 'relative', zIndex: 1, paddingTop: 50, paddingBottom: 40 }}>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
 
-            {/* LEFT — 750px */}
+            {/* LEFT — fills available space up to 750px */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              style={{ width: 750, flexShrink: 0 }}>
-              <h1 style={{ fontSize: 50, fontWeight: 700, lineHeight: '60px', color: N, marginBottom: 20 }}>
+              style={{ flex: '1 1 0', minWidth: 0 }}>
+              <h1 style={{ fontSize: 'clamp(28px, 4vw, 50px)', fontWeight: 700, lineHeight: 1.2, color: N, marginBottom: 20 }}>
                 Physician-Owned Detox &<br />Residential Treatment
               </h1>
               <p style={{ color: '#386376', fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
@@ -402,8 +402,8 @@ export default function Page() {
                 Founded by two board-certified addiction physicians and built around the whole person, we offer a comfortable, medically guided path to lasting change in the hills of Santa Clarita.
               </p>
 
-              {/* Bullet grid — 2 cols, gap-60 between cols */}
-              <div style={{ display: 'flex', gap: 60, marginBottom: 30 }}>
+              {/* Bullet grid — 2 cols on desktop, stacks on mobile */}
+              <div className="hero-bullets">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {['Same-Day Admissions 24/7', 'Comfort-Focused Detox & MAT'].map(t => (
                     <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -452,9 +452,9 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Sub-nav — white bar, px-180 matches Figma */}
+        {/* Sub-nav — white bar */}
         <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
-          <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 180px', display: 'flex', justifyContent: 'center', gap: 48 }}>
+          <div className="lp-inner" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
             {[
               { label: 'Our Center',          id: 'our-center' },
               { label: 'Conditions We Treat', id: 'conditions' },
@@ -509,7 +509,7 @@ export default function Page() {
               We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities.
             </p>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 60px' }}>
+          <div className="recovery-grid">
             {RECOVERY_ITEMS.map((item, idx) => (
               <FadeUp key={item.title} delay={idx * 0.07}>
                 <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', padding: '24px 0', borderBottom: idx < 6 ? '1px solid #f0f0f0' : 'none' }}>

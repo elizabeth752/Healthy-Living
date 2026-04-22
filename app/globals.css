@@ -41,6 +41,20 @@ body {
 .hero-form { display: flex; flex-direction: column; gap: 20px; align-items: center; }
 @media (max-width: 1279px) { .hero-form { display: none; } }
 
+/* ── Hero bullet grid – stack on mobile ─────────────────── */
+.hero-bullets { display: flex; gap: 60px; margin-bottom: 30px; }
+@media (max-width: 640px) { .hero-bullets { flex-direction: column; gap: 12px; } }
+
+/* ── Header height on mobile ─────────────────────────────── */
+@media (max-width: 640px) {
+  .header-inner { height: 72px !important; }
+  .hero-section { padding-top: 122px !important; }
+}
+
+/* ── Responsive grids ────────────────────────────────────── */
+.recovery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 60px; }
+@media (max-width: 768px) { .recovery-grid { grid-template-columns: 1fr; } }
+
 /* ── Animations ─────────────────────────────────────────── */
 @keyframes marquee {
   0%   { transform: translateX(0); }
