@@ -80,3 +80,60 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(249,162,28,0); }
 }
 .pulse { animation: pulse-ring 2.4s ease infinite; }
+
+/* ── Mobile layout overrides (≤ 768px) ─────────────────── */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero-badges-row { flex-wrap: wrap !important; gap: 10px !important; }
+
+  /* Sub-nav */
+  .subnav { top: 72px !important; }
+
+  /* Facility carousel: single photo */
+  .carousel-photos-wrap  { height: 260px !important; }
+  .carousel-photo-item   { height: 260px !important; }
+  .carousel-second-photo { display: none !important; }
+
+  /* Amenities: vertical list (icon left, text right) */
+  .amenities-wrap { flex-direction: column !important; align-items: stretch !important; gap: 0 !important; }
+  .amenity-item   { flex-direction: row !important; width: 100% !important; text-align: left !important;
+                    gap: 16px !important; align-items: center !important; padding: 12px 0 !important;
+                    border-bottom: 1px solid rgba(255,255,255,0.12) !important; }
+  .amenity-item:last-child { border-bottom: none !important; }
+
+  /* Trust banner: text top, photo bottom */
+  .trust-inner    { flex-direction: column !important; }
+  .trust-photo-col { width: 100% !important; flex-shrink: 1 !important; }
+  .trust-photo-box { width: 100% !important; height: 300px !important; }
+  .trust-photo-img { width: 100% !important; height: 100% !important; left: 0 !important; top: 0 !important;
+                     max-width: 100% !important; object-position: center 15% !important; }
+
+  /* Treatment path rows: stack vertically */
+  .treatment-row  { flex-direction: column !important; }
+  .treatment-photo { width: 100% !important; height: 220px !important; flex-shrink: 1 !important; }
+
+  /* Conditions carousel: single card */
+  .conditions-grid { grid-template-columns: 1fr !important; }
+  .conditions-grid > div:nth-child(2),
+  .conditions-grid > div:nth-child(3) { display: none !important; }
+
+  /* Team grid: 2 columns */
+  .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Stats grid: 2 columns */
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* How it works: 1 column */
+  .steps-grid { grid-template-columns: 1fr !important; }
+
+  /* Reviews: single card */
+  .reviews-row { flex-direction: column !important; }
+  .reviews-row > div:nth-child(2),
+  .reviews-row > div:nth-child(3) { display: none !important; }
+
+  /* Location: single column */
+  .location-grid { grid-template-columns: 1fr !important; }
+
+  /* Section padding */
+  .section-pad { padding: 48px 0 !important; }
+}

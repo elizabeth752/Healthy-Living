@@ -126,11 +126,11 @@ const BG = '#EDF4F4';
 const DT = '#174154';
 
 /* ── Utilities ──────────────────────────────────────────────────────────── */
-function FadeUp({ children, delay = 0, style = {} }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
+function FadeUp({ children, delay = 0, style = {}, className = '' }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties; className?: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
   return (
-    <motion.div ref={ref} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+    <motion.div ref={ref} className={className} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }} style={style}>
       {children}
     </motion.div>
@@ -213,10 +213,10 @@ function Carousel() {
   return (
     <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      {/* Two photos side by side */}
-      <div style={{ position: 'relative', display: 'flex', gap: 20, height: 320 }}>
+      {/* Two photos side by side (mobile: first only) */}
+      <div className="carousel-photos-wrap" style={{ position: 'relative', display: 'flex', gap: 20, height: 320 }}>
         {[0, 1].map(offset => (
-          <div key={offset} style={{ flex: 1, borderRadius: 4, overflow: 'hidden', position: 'relative', height: 320 }}>
+          <div key={offset} className={`carousel-photo-item${offset === 1 ? ' carousel-second-photo' : ''}`} style={{ flex: 1, borderRadius: 4, overflow: 'hidden', position: 'relative', height: 320 }}>
             <AnimatePresence mode="wait">
               <motion.img key={`${i}-${offset}`} src={FACILITY[(i + offset) % total]} alt=""
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -273,7 +273,7 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
       <AnimatePresence mode="wait">
         <motion.div key={idx} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
           transition={{ duration: 0.35 }}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          className="conditions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
           {getSlice().map((c, o) => (
             <motion.div key={o} whileHover={{ y: -4, boxShadow: '0 10px 28px rgba(0,0,0,0.18)' }}
               style={{ background: '#fff', borderRadius: 10, padding: '28px 20px', boxShadow: '0 4px 4px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, textAlign: 'center' }}>
@@ -316,7 +316,7 @@ function ReviewsCarousel() {
         <motion.div key={idx}
           initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.4 }}
-          style={{ display: 'flex', gap: 16 }}>
+          className="reviews-row" style={{ display: 'flex', gap: 16 }}>
           {slice.map(({ r, key }) => (
             <div key={key} style={{ background: '#fff', padding: 20, boxShadow: '0 4px 4px rgba(0,0,0,0.15)', flex: 1, display: 'flex', flexDirection: 'column', gap: 10, borderRadius: 4, minWidth: 0 }}>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -527,7 +527,7 @@ export default function Page() {
                   <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                   Speak with Admissions 24/7
                 </motion.a>
-                <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'nowrap' }}>
+                <div className="hero-badges-row" style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'nowrap' }}>
                   <img src={BADGE_G}  alt="" style={{ width: 42, height: 42, objectFit: 'contain', flexShrink: 0 }} />
                   <img src={BADGE_B}  alt="" style={{ width: 37, height: 40, objectFit: 'contain', flexShrink: 0 }} />
                   <img src={DHCS}     alt="" style={{ width: 103, height: 22, objectFit: 'contain', flexShrink: 0 }} />
@@ -551,7 +551,7 @@ export default function Page() {
         </div>
 
         {/* Sub-nav — white bar */}
-        <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
+        <div className="subnav" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
           <div className="lp-inner" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
             {[
               { label: 'Our Center',          id: 'our-center' },
@@ -577,9 +577,9 @@ export default function Page() {
           <FadeUp delay={0.1}><Carousel /></FadeUp>
           <FadeUp delay={0.15} style={{ marginTop: 22 }}>
             <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '30px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 20 }}>
+              <div className="amenities-wrap" style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: 20 }}>
                 {AMENITIES.map(a => (
-                  <div key={a.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, width: 150 }}>
+                  <div key={a.label} className="amenity-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, width: 150 }}>
                     <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <img src={a.icon} alt="" style={{ width: 20, height: 20, objectFit: 'contain' }} />
                     </div>
@@ -634,7 +634,7 @@ export default function Page() {
       {/* ════ TRUST BANNER ═══════════════════════════════════════════════ */}
       <section style={{ background: DT, padding: '50px 0' }}>
         <div className="lp-inner">
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+          <div className="trust-inner" style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
             {/* Left — text + CTA */}
             <div style={{ flex: '1 1 0', minWidth: 0 }}>
               <FadeUp>
@@ -652,11 +652,11 @@ export default function Page() {
               </FadeUp>
             </div>
             {/* Right — photo card */}
-            <FadeUp delay={0.1} style={{ flexShrink: 0, position: 'relative', width: 310 }}>
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310 }}>
               {/* BG tab behind photo */}
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20 }} />
-              <div style={{ position: 'relative', width: 310, height: 351, borderRadius: 10, overflow: 'hidden' }}>
-                <img src={TRUST_PHOTO} alt="" style={{ width: '111.88%', height: '167%', position: 'absolute', left: '-8.84%', top: '-4.44%', objectFit: 'cover', maxWidth: 'none' }} />
+              <div className="trust-photo-box" style={{ position: 'relative', width: 310, height: 351, borderRadius: 10, overflow: 'hidden' }}>
+                <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '111.88%', height: '167%', position: 'absolute', left: '-8.84%', top: '-4.44%', objectFit: 'cover', maxWidth: 'none' }} />
               </div>
             </FadeUp>
           </div>
@@ -676,8 +676,8 @@ export default function Page() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             {/* Row 1 — photo left (mirrored per Figma), text right */}
             <FadeUp>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
-                <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+              <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
                   <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
@@ -697,7 +697,7 @@ export default function Page() {
 
             {/* Row 2 — text left, photo right */}
             <FadeUp delay={0.1}>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
+              <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
                 <div style={{ flex: 1, paddingRight: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Inpatient Residential Treatment Program</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
@@ -710,7 +710,7 @@ export default function Page() {
                     Most residential stays range from 1 to 3 months, depending on individual progress and treatment needs.
                   </p>
                 </div>
-                <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
                   <img src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
               </div>
@@ -718,8 +718,8 @@ export default function Page() {
 
             {/* Row 3 — photo left, text right */}
             <FadeUp delay={0.15}>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0' }}>
-                <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+              <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0' }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
                   <img src={SEC3_AFTER} alt="Aftercare" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
@@ -771,7 +771,7 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 700, margin: '0 auto' }}>We know what addiction does to the brain, body, and spirit. You don't need more willpower — you need the right medical team.</p>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
             {TEAM.map((m, idx) => (
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
@@ -817,7 +817,7 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, maxWidth: 860, margin: '0 auto' }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment on the same day.</p>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          <div className="steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {[
               { icon: STEP1_IC, title: 'Step 1: Call & Speak With a\nCare Specialist',        body: 'Our team is available 24/7 to answer your questions, understand your situation, and help you determine the next right step.' },
               { icon: STEP2_IC, title: 'Step 2: Complete a Brief\nPre-Admission Screening',   body: "We'll walk you through a short, structured screening to better understand your needs, clinical history, and what level of care is right." },
@@ -856,7 +856,7 @@ export default function Page() {
           <FadeUp style={{ textAlign: 'center', marginBottom: 72 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+          <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
             {[
               { val: 90,  suffix: '%', label: 'Client satisfaction based on post-treatment surveys', icon: STAT1_IC },
               { val: 175, suffix: '+', label: 'Years of combined experience across our clinical team', icon: STAT2_IC },
@@ -890,7 +890,7 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>California's Hidden Gem for Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 800, margin: '0 auto', lineHeight: 1.65 }}>Tucked into the hills of Santa Clarita, our center draws people from across California and beyond — because when the care is right, it's worth the drive.</p>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,530px) 1fr', gap: 24, alignItems: 'start' }}>
+          <div className="location-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,530px) 1fr', gap: 24, alignItems: 'start' }}>
             <FadeUp>
               <div style={{ borderRadius: 8, overflow: 'hidden', height: 398 }}>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d826!2d-118.5479!3d34.4284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29a4e3d4b9a2b%3A0x0!2s22512+Garzota+Dr%2C+Santa+Clarita%2C+CA+91350!5e0!3m2!1sen!2sus!4v1"
