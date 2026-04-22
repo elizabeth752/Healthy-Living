@@ -19,6 +19,14 @@ const GOOGLE_IC= 'https://www.figma.com/api/mcp/asset/3f47f82b-a218-4854-a023-58
 const FAQ_OPEN = 'https://www.figma.com/api/mcp/asset/318ecfed-37ab-4e53-8c81-4e39aa469df5';
 const FAQ_SHUT = 'https://www.figma.com/api/mcp/asset/35ac22b3-934f-45d7-8e76-60cfdca371cd';
 
+/* ─── Amenity icons (from Figma section 1) ─── */
+const AMEN_1 = 'https://www.figma.com/api/mcp/asset/af4e30dc-f24c-4589-86b8-fa57aae5ef55';
+const AMEN_2 = 'https://www.figma.com/api/mcp/asset/809aa185-9d20-43f5-bd45-0bab4a25ca1b';
+const AMEN_3 = 'https://www.figma.com/api/mcp/asset/2baaa94b-5cbc-4666-8e73-d76dd145698b';
+const AMEN_4 = 'https://www.figma.com/api/mcp/asset/b006e088-8294-412e-a99c-19afc09a900b';
+const AMEN_5 = 'https://www.figma.com/api/mcp/asset/e043a9de-af0d-4392-ba0d-b91701480d9e';
+const CAROUSEL_ARR = 'https://www.figma.com/api/mcp/asset/a22864e4-c981-403e-a2e6-4827de9e9761';
+
 /* ─── Condition icons ─── */
 const IC_ALCOHOL = 'https://www.figma.com/api/mcp/asset/7b436f39-0056-4b72-b656-1ac9065f51c3';
 const IC_OPIOID  = 'https://www.figma.com/api/mcp/asset/a228c9f5-dd18-422d-af88-72c069c37822';
@@ -159,23 +167,24 @@ function Carousel() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, height: 320 }}>
+      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 4, height: 320 }}>
         <div style={{ display: 'flex', height: '100%', gap: 20 }}>
-          <img src={FACILITY[gi(0)]} alt="" style={{ flex: 1, minWidth: 0, objectFit: 'cover', borderRadius: 8, display: 'block' }} />
-          <img src={FACILITY[gi(1)]} alt="" className="hidden lg:block" style={{ width: 530, flexShrink: 0, objectFit: 'cover', borderRadius: 8, display: 'block' }} />
+          <img src={FACILITY[gi(0)]} alt="" style={{ flex: 1, minWidth: 0, objectFit: 'cover', borderRadius: 4, display: 'block' }} />
+          <img src={FACILITY[gi(1)]} alt="" className="hidden lg:block" style={{ flex: 1, minWidth: 0, objectFit: 'cover', borderRadius: 4, display: 'block' }} />
         </div>
-        <button onClick={prev} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.92)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
-          <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M7 1L1 7l6 6" stroke={N} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <button onClick={prev} style={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.92)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+          <img src={CAROUSEL_ARR} alt="prev" style={{ width: 20, height: 20, transform: 'rotate(180deg)' }} />
         </button>
-        <button onClick={next} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.92)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
-          <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M1 1l6 6-6 6" stroke={N} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <button onClick={next} style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.92)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+          <img src={CAROUSEL_ARR} alt="next" style={{ width: 20, height: 20 }} />
         </button>
       </div>
-      <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4 }}>
+      <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 4 }}>
         {FACILITY.slice(0, 6).map((src, idx) => (
           <button key={idx} onClick={() => setI(idx)}
-            style={{ flexShrink: 0, borderRadius: 6, overflow: 'hidden', padding: 0, background: 'none', cursor: 'pointer', border: `2px solid ${idx === i ? T : 'transparent'}`, opacity: idx === i ? 1 : 0.6, transition: 'all 0.2s' }}>
-            <img src={src} alt="" style={{ width: 168, height: 80, objectFit: 'cover', display: 'block' }} />
+            style={{ flexShrink: 0, borderRadius: 4, overflow: 'hidden', padding: 0, background: 'none', cursor: 'pointer', border: 'none', position: 'relative' }}>
+            <img src={src} alt="" style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
+            {idx !== i && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.7)', borderRadius: 4 }} />}
           </button>
         ))}
       </div>
@@ -258,11 +267,11 @@ function Header() {
 /* ─── Page ─── */
 export default function Page() {
   const AMENITIES = [
-    { label: 'Outdoor Activities & Beach Access' },
-    { label: 'Nature Immersion & Gardening' },
-    { label: 'Music, Art & Movement Therapy' },
-    { label: 'Chef-Prepared Meals & Nutrition Plans' },
-    { label: 'Cellphones Allowed & Wifi Available' },
+    { label: 'Outdoor Activities & Beach Access', icon: AMEN_1 },
+    { label: 'Nature Immersion & Gardening',       icon: AMEN_2 },
+    { label: 'Music, Art & Movementt Therapy',     icon: AMEN_3 },
+    { label: 'Chef-Prepared Meals & Nutrition Plans', icon: AMEN_4 },
+    { label: 'Cellphones Allowed & Wifi Available', icon: AMEN_5 },
   ];
 
   const CONDITIONS = [
@@ -371,23 +380,23 @@ export default function Page() {
       </div>
 
       {/* ═══ FACILITY SECTION ═══ */}
-      <section style={{ background: '#fff', padding: '80px 0' }}>
+      <section style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0' }}>
         <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 clamp(16px, 5vw, 180px)' }}>
-          <FadeUp style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 8 }}>Healthy Living Isn't Just Our Name</h2>
-            <p style={{ color: '#555', fontSize: 16 }}>It's what we help you achieve.</p>
+          <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 20 }}>Healthy Living Isn't Just Our Name</h2>
+            <p style={{ color: '#fff', fontSize: 16 }}>It's what we help you achieve.</p>
           </FadeUp>
           <FadeUp delay={0.1}><Carousel /></FadeUp>
-          <FadeUp delay={0.15} style={{ marginTop: 32 }}>
-            <div style={{ background: BG, borderRadius: 8, padding: '28px 30px' }}>
+          <FadeUp delay={0.15} style={{ marginTop: 22 }}>
+            <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(5.3px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, boxShadow: '0 4px 4px rgba(0,0,0,0.25)', padding: '30px' }}>
               {/* Desktop: 5 columns */}
-              <div className="hidden lg:flex" style={{ justifyContent: 'space-between' }}>
+              <div className="hidden lg:flex" style={{ justifyContent: 'center', gap: 30 }}>
                 {AMENITIES.map(a => (
-                  <div key={a.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 10, maxWidth: 180 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="11" fill={T} opacity="0.2"/><circle cx="11" cy="11" r="6" fill={T}/></svg>
+                  <div key={a.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 20, width: 180 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 10, boxSizing: 'border-box' }}>
+                      <img src={a.icon} alt="" style={{ width: 20, height: 20, objectFit: 'contain', display: 'block' }} />
                     </div>
-                    <span style={{ fontSize: 13, color: N, lineHeight: 1.35, fontWeight: 500 }}>{a.label}</span>
+                    <span style={{ fontSize: 16, color: '#fff', lineHeight: 1.3 }}>{a.label}</span>
                   </div>
                 ))}
               </div>
@@ -395,18 +404,18 @@ export default function Page() {
               <div className="flex lg:hidden" style={{ flexDirection: 'column', gap: 16 }}>
                 {AMENITIES.map(a => (
                   <div key={a.label} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="11" fill={T} opacity="0.2"/><circle cx="11" cy="11" r="6" fill={T}/></svg>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, boxSizing: 'border-box' }}>
+                      <img src={a.icon} alt="" style={{ width: 20, height: 20, objectFit: 'contain', display: 'block' }} />
                     </div>
-                    <span style={{ fontSize: 14, color: N, lineHeight: 1.4 }}>{a.label}</span>
+                    <span style={{ fontSize: 14, color: '#fff', lineHeight: 1.4 }}>{a.label}</span>
                   </div>
                 ))}
               </div>
             </div>
           </FadeUp>
-          <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
             <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
               <PhoneInline />Call (661) 762-5668
             </motion.a>
           </FadeUp>
