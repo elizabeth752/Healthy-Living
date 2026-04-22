@@ -76,6 +76,12 @@ const STEP1_IC      = '/assets/620f93c9-2fc3-4252-8a66-29b3a8552aaa.svg';
 const STEP2_IC      = '/assets/8a55c9d4-62cb-4120-87cb-cb50b62a098d.svg';
 const STEP3_IC      = '/assets/08f52511-8481-46d2-9a64-747c321ab447.svg';
 
+// Section 9 — Stats icons
+const STAT1_IC      = '/assets/7bb23f50-b405-4b9a-b6aa-0174ea6e6bae.svg';
+const STAT2_IC      = '/assets/e3d24105-99f3-408e-8e0f-f02e295fb34f.svg';
+const STAT3_IC      = '/assets/91a31f23-28ff-4171-9676-5fa39be97100.svg';
+const STAT4_IC      = '/assets/60a7657d-4bc5-4fdc-8acb-ffe9709fd824.svg';
+
 // Trust Banner photo
 const TRUST_PHOTO   = '/assets/802d3aa1-7759-49f9-9b36-c9287b6f81fb.jpg';
 
@@ -190,25 +196,31 @@ function InsuranceForm() {
 function Carousel() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
-  const prev = () => setI(a => (a - 1 + FACILITY.length) % FACILITY.length);
-  const next = () => setI(a => (a + 1) % FACILITY.length);
+  const total = FACILITY.length;
+  const prev = () => setI(a => (a - 1 + total) % total);
+  const next = () => setI(a => (a + 1) % total);
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setI(a => (a + 1) % FACILITY.length), 4000);
+    const t = setInterval(next, 4000);
     return () => clearInterval(t);
   }, [paused]);
 
   return (
     <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      <div style={{ position: 'relative', borderRadius: 4, overflow: 'hidden', height: 320 }}>
-        <AnimatePresence mode="wait">
-          <motion.img key={i} src={FACILITY[i]} alt=""
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }} />
-        </AnimatePresence>
+      {/* Two photos side by side */}
+      <div style={{ position: 'relative', display: 'flex', gap: 20, height: 320 }}>
+        {[0, 1].map(offset => (
+          <div key={offset} style={{ flex: 1, borderRadius: 4, overflow: 'hidden', position: 'relative', height: 320 }}>
+            <AnimatePresence mode="wait">
+              <motion.img key={`${i}-${offset}`} src={FACILITY[(i + offset) % total]} alt=""
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            </AnimatePresence>
+          </div>
+        ))}
         {[{ fn: prev, side: 'left' as const, rot: 'rotate(180deg)' }, { fn: next, side: 'right' as const, rot: 'none' }].map(({ fn, side, rot }) => (
           <button key={side} onClick={fn}
             style={{ position: 'absolute', [side]: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', zIndex: 2 }}>
@@ -244,7 +256,7 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(next, 3500);
+    const t = setInterval(next, 2000);
     return () => clearInterval(t);
   }, [paused]);
 
@@ -279,6 +291,54 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
   );
 }
 
+/* ── Reviews Carousel ───────────────────────────────────────────────────── */
+function ReviewsCarousel() {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const total = REVIEWERS.length;
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => setIdx(a => (a + 1) % total), 4000);
+    return () => clearInterval(t);
+  }, [paused]);
+
+  const slice = Array.from({ length: 3 }, (_, o) => ({ r: REVIEWERS[(idx + o) % total], key: (idx + o) % total }));
+
+  return (
+    <div style={{ flex: 1, minWidth: 0 }} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <AnimatePresence mode="wait">
+        <motion.div key={idx}
+          initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
+          transition={{ duration: 0.4 }}
+          style={{ display: 'flex', gap: 16 }}>
+          {slice.map(({ r, key }) => (
+            <div key={key} style={{ background: '#fff', padding: 20, boxShadow: '0 4px 4px rgba(0,0,0,0.15)', flex: 1, display: 'flex', flexDirection: 'column', gap: 10, borderRadius: 4, minWidth: 0 }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                <img src={r.photo} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                <div>
+                  <p style={{ fontWeight: 700, fontSize: 14, color: '#000' }}>{r.name}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3 }}>
+                    <img src={STARS} alt="5 stars" style={{ height: 14, width: 76, objectFit: 'contain' }} />
+                    <img src={GOOGLE_IC} alt="Google" style={{ width: 14, height: 14, objectFit: 'contain' }} />
+                  </div>
+                </div>
+              </div>
+              <p style={{ fontSize: 13, color: '#222', lineHeight: 1.65, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical' } as any}>{r.text}</p>
+            </div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+      <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+        {REVIEWERS.map((_, di) => (
+          <button key={di} onClick={() => setIdx(di)}
+            style={{ width: di === idx ? 20 : 8, height: 8, borderRadius: 4, background: di === idx ? N : 'rgba(0,0,0,0.2)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── FAQ ────────────────────────────────────────────────────────────────── */
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
@@ -303,8 +363,12 @@ function FAQ() {
           </button>
           <AnimatePresence>
             {open === idx && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} style={{ overflow: 'hidden', background: '#fff' }}>
-                <p style={{ padding: '16px 20px', color: '#333', fontSize: 15, lineHeight: 1.7 }}>{item.a}</p>
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} style={{ overflow: 'hidden', background: '#386376' }}>
+                <div style={{ padding: '8px 12px 14px' }}>
+                  <div style={{ background: '#fff', borderRadius: 10, boxShadow: '0 4px 4px rgba(0,0,0,0.25)', padding: '16px 20px' }}>
+                    <p style={{ color: '#333', fontSize: 15, lineHeight: 1.7 }}>{item.a}</p>
+                  </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -458,11 +522,11 @@ export default function Page() {
                   Speak with Admissions 24/7
                 </motion.a>
                 <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'nowrap' }}>
-                  <img src={BADGE_G}  alt="" style={{ height: 42, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={BADGE_B}  alt="" style={{ height: 40, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={DHCS}     alt="" style={{ height: 22, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={PSYCH}    alt="" style={{ height: 28, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={SAMHSA}   alt="" style={{ height: 28, width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={BADGE_G}  alt="" style={{ width: 42, height: 42, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={BADGE_B}  alt="" style={{ width: 37, height: 40, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={DHCS}     alt="" style={{ width: 103, height: 22, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={PSYCH}    alt="" style={{ width: 98, height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={SAMHSA}   alt="" style={{ width: 83, height: 28, objectFit: 'contain', flexShrink: 0 }} />
                 </div>
               </div>
             </motion.div>
@@ -604,15 +668,15 @@ export default function Page() {
           </FadeUp>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            {/* Row 1 — photo left, text right */}
+            {/* Row 1 — photo left (mirrored per Figma), text right */}
             <FadeUp>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: '1px solid #e8f0f0' }}>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
                 <div style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
-                  <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Medical Detox & Medication-Assisted Treatment (MAT)</h3>
-                  <p style={{ color: '#222', fontSize: 16, lineHeight: 1.7 }}>
+                  <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     When you arrive, one of our physicians will sit down with you for a thorough medical evaluation — not just to check boxes, but to truly understand where you are and what you need.
                     <br /><br />
                     If Medication-Assisted Treatment (MAT) can make withdrawal more manageable, we'll talk through it together and decide what's right for you.
@@ -627,10 +691,10 @@ export default function Page() {
 
             {/* Row 2 — text left, photo right */}
             <FadeUp delay={0.1}>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: '1px solid #e8f0f0' }}>
+              <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
                 <div style={{ flex: 1, paddingRight: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Inpatient Residential Treatment Program</h3>
-                  <p style={{ color: '#222', fontSize: 16, lineHeight: 1.7 }}>
+                  <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     Once you're stable, our team of therapists, counselors, and experiential instructors work with you to build a recovery plan that's truly yours.
                     <br /><br />
                     Our residential program focuses on healing the mind, body, and spirit through a structured daily schedule that includes clinical therapy, experiential work, and consistent support.
@@ -654,7 +718,7 @@ export default function Page() {
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Aftercare Planning, Ongoing Care, & Alumni</h3>
-                  <p style={{ color: '#222', fontSize: 16, lineHeight: 1.7 }}>
+                  <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     Recovery is a lifelong journey, and the work doesn't stop after completing residential treatment. We ensure you have the resources and support to maintain sobriety and continue healing.
                     <br /><br />
                     We connect you with outpatient and sober living services in Santa Clarita and Los Angeles to provide ongoing care and prevent relapse as you transition back to daily life.
@@ -776,46 +840,37 @@ export default function Page() {
             <h2 style={{ fontSize: 38, fontWeight: 500, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People.<br />Real Recovery.</h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
           </FadeUp>
-          <div style={{ flex: 1, overflowX: 'auto', minWidth: 0 }}>
-            <div style={{ display: 'flex', gap: 16, padding: '10px 0' }}>
-              {REVIEWERS.map((r, idx) => (
-                <div key={idx} style={{ background: '#fff', padding: 20, boxShadow: '0 4px 4px rgba(0,0,0,0.15)', width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10, borderRadius: 4 }}>
-                  <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <img src={r.photo} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
-                    <div>
-                      <p style={{ fontWeight: 700, fontSize: 14, color: '#000' }}>{r.name}</p>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3 }}>
-                        <img src={STARS} alt="5 stars" style={{ height: 14, width: 76, objectFit: 'contain' }} />
-                        <img src={GOOGLE_IC} alt="Google" style={{ width: 14, height: 14, objectFit: 'contain' }} />
-                      </div>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: 13, color: '#222', lineHeight: 1.65, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical' } as any}>{r.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ReviewsCarousel />
         </div>
       </section>
 
       {/* ════ STATS ══════════════════════════════════════════════════════ */}
-      <section style={{ background: 'linear-gradient(135deg, #174154 0%, #0D3442 100%)', padding: '80px 0' }}>
+      <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '80px 0 100px' }}>
         <div className="lp-inner">
-          <FadeUp style={{ textAlign: 'center', marginBottom: 52 }}>
+          <FadeUp style={{ textAlign: 'center', marginBottom: 72 }}>
             <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 32, textAlign: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
             {[
-              { val: 90,  suffix: '%', label: 'Client satisfaction based on post-treatment surveys' },
-              { val: 175, suffix: '+', label: 'Years of combined experience across our clinical team' },
-              { val: 30,  suffix: '+', label: 'Evidence-based and holistic treatment modalities' },
-              { val: 93,  suffix: '%', label: 'Completion rate for residential treatment' },
+              { val: 90,  suffix: '%', label: 'Client satisfaction based on post-treatment surveys', icon: STAT1_IC },
+              { val: 175, suffix: '+', label: 'Years of combined experience across our clinical team', icon: STAT2_IC },
+              { val: 30,  suffix: '+', label: 'Evidence-based and holistic treatment modalities',     icon: STAT3_IC },
+              { val: 93,  suffix: '%', label: 'Completion rate for residential treatment',             icon: STAT4_IC },
             ].map((s, idx) => (
               <FadeUp key={s.label} delay={idx * 0.08}>
-                <div style={{ fontSize: 52, fontWeight: 800, color: O, marginBottom: 12 }}>
-                  <CountUp target={s.val} suffix={s.suffix} />
+                <div style={{ position: 'relative', paddingTop: 35 }}>
+                  {/* Icon circle floating above card */}
+                  <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 70, height: 70, borderRadius: '50%', background: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+                    <img src={s.icon} alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+                  </div>
+                  {/* Card */}
+                  <div style={{ background: BG, borderRadius: 10, padding: '52px 20px 28px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}>
+                    <div style={{ fontSize: 52, fontWeight: 800, color: N, marginBottom: 12 }}>
+                      <CountUp target={s.val} suffix={s.suffix} />
+                    </div>
+                    <p style={{ color: '#555', fontSize: 14, lineHeight: 1.55 }}>{s.label}</p>
+                  </div>
                 </div>
-                <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, lineHeight: 1.55 }}>{s.label}</p>
               </FadeUp>
             ))}
           </div>
@@ -903,6 +958,7 @@ export default function Page() {
               <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                 style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+                <img src={CHECK_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                 Verify Insurance
               </motion.a>
             </div>
