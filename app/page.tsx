@@ -356,8 +356,8 @@ export default function Page() {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(237,244,244,0.98) 0%, rgba(237,244,244,0.95) 35%, rgba(237,244,244,0.7) 60%, rgba(237,244,244,0.1) 80%, rgba(237,244,244,0) 100%)' }} />
         </div>
         {/* content */}
-        <div className="lp-inner" style={{ position: 'relative', zIndex: 1, paddingTop: 50, paddingBottom: 60 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+        <div className="lp-wide" style={{ position: 'relative', zIndex: 1, paddingTop: 50, paddingBottom: 60 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 60 }}>
             {/* LEFT */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
