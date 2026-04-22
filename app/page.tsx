@@ -334,10 +334,10 @@ export default function Page() {
   ];
 
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: 'https://www.figma.com/api/mcp/asset/1432219b-6001-4c1c-a00b-622e4a20eb79' },
-    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: 'https://www.figma.com/api/mcp/asset/44608dac-be6f-4e77-99d1-22fca21e2080' },
-    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: 'https://www.figma.com/api/mcp/asset/0b000bb6-f333-4821-af9a-fd606badaab9' },
-    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: 'https://www.figma.com/api/mcp/asset/d0f26f81-5f32-470f-ad9a-e06997fd668f' },
+    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: 'https://www.figma.com/api/mcp/asset/2ab251a4-1e40-41c4-a3a6-ba122504222f', pos: '-5.48% -5.29%',  size: '110.97% 148%'   },
+    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: 'https://www.figma.com/api/mcp/asset/1cbd292b-e60b-4f47-b1ce-4a573dab3710', pos: '-18.23% -5.19%', size: '136.46% 182%'  },
+    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: 'https://www.figma.com/api/mcp/asset/a3fa0c5c-e5da-44fa-91dc-be7ff9109a94', pos: '-9.92% -24.76%', size: '123.72% 165%'  },
+    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: 'https://www.figma.com/api/mcp/asset/aeb2155e-0442-4d65-a499-fd5948f96a0a', pos: '0% -9.57%',      size: '100% 124.95%'  },
   ];
 
   const INSURERS = ['Aetna','Anthem','Cigna','Humana','United','BlueCross','Magellan','Beacon','Optum','ComPsych','MHN','Molina','MultiPlan','Ambetter'];
@@ -554,12 +554,13 @@ export default function Page() {
             {TEAM.map((m, idx) => (
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
-                  <div style={{ width: '100%', aspectRatio: '1', borderRadius: 4, overflow: 'hidden' }}>
-                    <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{ width: '100%', height: 310, borderRadius: 10, overflow: 'hidden', position: 'relative' }}>
+                    <img src={m.img} alt={m.name}
+                      style={{ position: 'absolute', width: m.size.split(' ')[0], height: m.size.split(' ')[1], left: m.pos.split(' ')[0], top: m.pos.split(' ')[1], maxWidth: 'none' }} />
                   </div>
-                  <div style={{ paddingTop: 14 }}>
-                    <p style={{ fontWeight: 700, color: N, fontSize: 15 }}>{m.name}</p>
-                    <p style={{ color: T, fontSize: 13, marginTop: 3 }}>{m.role}</p>
+                  <div style={{ padding: '14px 10px 0' }}>
+                    <p style={{ fontWeight: 700, color: N, fontSize: 18, lineHeight: '22px' }}>{m.name}</p>
+                    <p style={{ color: T, fontSize: 12, marginTop: 2 }}>{m.role}</p>
                   </div>
                 </motion.div>
               </FadeUp>
