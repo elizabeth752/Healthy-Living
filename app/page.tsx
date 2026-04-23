@@ -200,14 +200,21 @@ function DecorativeBg({
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 function InsuranceForm({ height = 720 }: { height?: number }) {
+  const [h, setH] = useState(height);
+  useEffect(() => {
+    const fit = () => setH(window.innerWidth <= 768 ? Math.min(height, window.innerHeight - 180) : height);
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [height]);
   return (
     <div style={{ width: '100%' }}>
       <iframe
         className="ctm-call-widget"
         src="https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html"
-        style={{ width: '100%', height, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
+        style={{ width: '100%', height: h, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
         title="Verify Insurance Coverage"
-        scrolling="no"
+        scrolling="yes"
         sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
         allow="clipboard-write"
       />
@@ -624,19 +631,19 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* CTA + trust badges */}
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
+              {/* CTA + trust badges (Figma: inline on one line at desktop) */}
+              <div className="hero-cta-row" style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'nowrap' }}>
                 <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                  style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+                  style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 17, padding: '13px 14px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                  <img src={PHONE_IC} alt="" style={{ width: 18, height: 18, objectFit: 'contain', flexShrink: 0 }} />
                   Speak with Admissions 24/7
                 </motion.a>
-                <div className="hero-badges-row" style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'nowrap' }}>
-                  <img src={BADGE_G}  alt="" style={{ width: 42, height: 42, objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={BADGE_B}  alt="" style={{ width: 37, height: 40, objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={DHCS}     alt="" style={{ width: 103, height: 22, objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={PSYCH}    alt="" style={{ width: 98, height: 28, objectFit: 'contain', flexShrink: 0 }} />
-                  <img src={SAMHSA}   alt="" style={{ width: 83, height: 28, objectFit: 'contain', flexShrink: 0 }} />
+                <div className="hero-badges-row" style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'nowrap', flexShrink: 1, minWidth: 0 }}>
+                  <img src={BADGE_G}  alt="" style={{ width: 36, height: 36, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={BADGE_B}  alt="" style={{ width: 32, height: 35, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={DHCS}     alt="" style={{ width: 88, height: 19, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={PSYCH}    alt="" style={{ width: 84, height: 24, objectFit: 'contain', flexShrink: 0 }} />
+                  <img src={SAMHSA}   alt="" style={{ width: 70, height: 24, objectFit: 'contain', flexShrink: 0 }} />
                 </div>
               </div>
             </motion.div>
@@ -665,6 +672,8 @@ export default function Page() {
               const isActive = activeSection === id;
               return (
                 <button key={id} onClick={() => scrollTo(id)}
+                  className="subnav-link"
+                  data-active={isActive ? 'true' : 'false'}
                   style={{
                     padding: '10px 0 6px',
                     fontSize: 16,
@@ -926,11 +935,11 @@ export default function Page() {
             <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
           </FadeUp>
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
-            <motion.a href="#form" onClick={e => { e.preventDefault(); document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' }); }}
+            <motion.button onClick={() => setShowInsModal(true)}
               whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
+              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
               Verify Insurance Coverage
-            </motion.a>
+            </motion.button>
           </FadeUp>
         </div>
       </section>
@@ -968,9 +977,11 @@ export default function Page() {
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
         <DecorativeBg position="top-right" tone="dark" opacity={0.06} size={500} />
         <DecorativeBg position="bottom-left" tone="dark" opacity={0.04} size={400} />
-        <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 24, alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
-          <FadeUp className="reviews-title-col" style={{ width: 280, flexShrink: 0 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People. Real Recovery.</h2>
+        <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 32, alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
+          <FadeUp className="reviews-title-col" style={{ width: 360, flexShrink: 0 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, lineHeight: 1.15, marginBottom: 18, letterSpacing: '-0.01em' }}>
+              Real People.<br />Real Recovery.
+            </h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
           </FadeUp>
           <ReviewsCarousel />

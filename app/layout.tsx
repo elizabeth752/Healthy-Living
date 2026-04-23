@@ -49,6 +49,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           src="https://206076.tctm.co/formreactor.js"
           strategy="afterInteractive"
         />
+        {/* Bridge CTM iframe form submissions → GTM dataLayer for Google Ads conversion */}
+        <Script id="ctm-gtm-bridge" strategy="afterInteractive">{`
+(function(){
+  if (typeof window === 'undefined') return;
+  window.dataLayer = window.dataLayer || [];
+  window.addEventListener('message', function(e){
+    var origin = e.origin || '';
+    if (origin.indexOf('tctm.co') === -1 && origin.indexOf('calltrackingmetrics') === -1) return;
+    var data = e.data || {};
+    var type = (typeof data === 'string' ? data : (data.type || data.event || '')) + '';
+    if (/submit|conversion|formsubmit|form_submit|leadcaptured/i.test(type)) {
+      window.dataLayer.push({
+        event: 'ctm_form_submit',
+        form_id: 'FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C',
+        form_name: 'insurance_verification',
+        ctm_origin: origin,
+        ctm_payload: data
+      });
+    }
+  });
+})();
+        `}</Script>
       </head>
       <body>
         <noscript>
