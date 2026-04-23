@@ -628,13 +628,13 @@ export default function Page() {
     { icon: IC_DUAL,     title: 'Co-Occurring Disorders',   desc: 'When addiction and mental health challenges exist together, we address both at the same time.' },
   ];
 
-  // top offset chosen per-photo so ALL eyes align at ~30% of card height
-  // (computed from native eye Y in photo: Narine 26%, Harout 16%, Ritsa 22%, Julie 26%)
+  // Per-person photo framing: zoom (width %) + top + left so all faces are similar size & eyes aligned at ~30% of card
+  // Harout's head sits high in his original photo + lots of background, so he needs zoom (width > 100%) to fill the frame
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, top: '-5%' },
-    { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, top: '9%'  },
-    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  top: '-10%'  },
-    { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  top: '-5%' },
+    { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, width: '100%', top: '-5%', left: '0%'   },
+    { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, width: '130%', top: '0%',  left: '-15%' },
+    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  width: '100%', top: '-10%', left: '0%'   },
+    { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  width: '100%', top: '-5%',  left: '0%'   },
   ];
 
   const RECOVERY_ITEMS = [
@@ -989,10 +989,10 @@ export default function Page() {
             {TEAM.map((m, idx) => (
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
-                  {/* Photo: aspect-preserving (width 100%, height auto) with per-person top offset to align eyes */}
+                  {/* Photo: aspect-preserving (width %, height auto) with per-person zoom + top + left for face framing */}
                   <div style={{ width: '100%', aspectRatio: '1', borderRadius: 10, overflow: 'hidden', position: 'relative', background: '#fff' }}>
                     <img src={m.img} alt={m.name} className="team-photo-img"
-                      style={{ position: 'absolute', left: 0, top: m.top, width: '100%', height: 'auto', maxWidth: 'none', display: 'block' }} />
+                      style={{ position: 'absolute', left: m.left, top: m.top, width: m.width, height: 'auto', maxWidth: 'none', display: 'block' }} />
                   </div>
                   <div style={{ padding: '14px 10px 0', minHeight: 64 }}>
                     <p style={{ fontWeight: 700, color: N, fontSize: 17, lineHeight: 1.25, minHeight: 42 }}>{m.name}</p>
