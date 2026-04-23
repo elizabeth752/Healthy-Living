@@ -625,7 +625,7 @@ export default function Page() {
   const TEAM = [
     { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, top: '-5%' },
     { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, top: '9%'  },
-    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  top: '0%'  },
+    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  top: '-10%'  },
     { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  top: '-5%' },
   ];
 
