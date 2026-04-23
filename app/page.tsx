@@ -195,9 +195,10 @@ function DecorativeBg({
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 const CTM_FORM_URL = 'https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html';
-function InsuranceForm({ height = 320 }: { height?: number }) {
-  // CTM form renders at ~280px tall at every viewport width (always 2-column, doesn't restack).
-  // 320px gives ~40px buffer for safety.
+function InsuranceForm({ height = 500 }: { height?: number }) {
+  // CTM form base height is ~280px, but the Insurance Carrier <select> dropdown
+  // expands downward ~200px when opened. 500px fits the dropdown without clipping
+  // while still being tighter than the original 720.
   return (
     <div style={{ width: '100%' }}>
       {/* Reassurance ABOVE the form — always visible on every viewport, sets expectation before filling */}
