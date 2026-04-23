@@ -1019,7 +1019,7 @@ export default function Page() {
                   </div>
                   <div style={{ padding: '14px 10px 0', minHeight: 64 }}>
                     <p style={{ fontWeight: 700, color: N, fontSize: 17, lineHeight: 1.25, minHeight: 42 }}>{m.name}</p>
-                    <p style={{ color: T, fontSize: 12, marginTop: 4 }}>{m.role}</p>
+                    <p style={{ color: '#2A7A7C', fontSize: 14, fontWeight: 600, marginTop: 6, lineHeight: 1.3 }}>{m.role}</p>
                   </div>
                 </motion.div>
               </FadeUp>
