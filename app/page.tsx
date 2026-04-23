@@ -257,7 +257,7 @@ function Carousel() {
         {[0, 1].map(offset => (
           <div key={offset} className={`carousel-photo-item${offset === 1 ? ' carousel-second-photo' : ''}`} style={{ flex: 1, borderRadius: 4, overflow: 'hidden', position: 'relative', height: 320 }}>
             <AnimatePresence>
-              <motion.img key={`${i}-${offset}`} src={FACILITY[(i + offset) % total]} alt=""
+              <motion.img loading="lazy" key={`${i}-${offset}`} src={FACILITY[(i + offset) % total]} alt=""
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -267,7 +267,7 @@ function Carousel() {
         {[{ fn: prev, side: 'left' as const, rot: 'rotate(180deg)' }, { fn: next, side: 'right' as const, rot: 'none' }].map(({ fn, side, rot }) => (
           <button key={side} onClick={fn}
             style={{ position: 'absolute', [side]: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', zIndex: 2 }}>
-            <img src={CAR_ARR} alt="" style={{ width: 20, height: 20, objectFit: 'contain', transform: rot }} />
+            <img loading="lazy" src={CAR_ARR} alt="" style={{ width: 20, height: 20, objectFit: 'contain', transform: rot }} />
           </button>
         ))}
       </div>
@@ -282,7 +282,7 @@ function Carousel() {
         {FACILITY.slice(0, 6).map((src, idx) => (
           <button key={idx} onClick={() => setI(idx)}
             style={{ flexShrink: 0, padding: 0, background: 'none', border: 'none', cursor: 'pointer', position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
-            <img src={src} alt="" style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
+            <img loading="lazy" src={src} alt="" style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
             {idx !== i && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.65)', borderRadius: 4 }} />}
           </button>
         ))}
@@ -451,7 +451,7 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
               textAlign: 'center',
             }}>
             <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <img src={c.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+              <img loading="lazy" src={c.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
               <p style={{ fontSize: 18, fontWeight: 500, color: N, lineHeight: '22px' }}>{c.title}</p>
@@ -516,12 +516,12 @@ function ReviewsCarousel() {
           {slice.map(({ r, key }) => (
             <div key={key} style={{ background: '#fff', padding: 20, boxShadow: '0 4px 4px rgba(0,0,0,0.25)', flex: 1, display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                <img src={r.photo} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                <img loading="lazy" src={r.photo} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                 <div>
                   <p style={{ fontWeight: 700, fontSize: 14, color: '#000' }}>{r.name}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3 }}>
-                    <img src={STARS} alt="5 stars" style={{ height: 14, width: 76, objectFit: 'contain' }} />
-                    <img src={GOOGLE_IC} alt="Google" style={{ width: 14, height: 14, objectFit: 'contain' }} />
+                    <img loading="lazy" src={STARS} alt="5 stars" style={{ height: 14, width: 76, objectFit: 'contain' }} />
+                    <img loading="lazy" src={GOOGLE_IC} alt="Google" style={{ width: 14, height: 14, objectFit: 'contain' }} />
                   </div>
                 </div>
               </div>
@@ -560,7 +560,7 @@ function FAQ() {
           <button onClick={() => setOpen(open === idx ? null : idx)}
             style={{ width: '100%', background: open === idx ? '#386376' : N, border: 'none', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
             <span style={{ color: '#fff', fontSize: 17, fontWeight: 700, textAlign: 'left', lineHeight: 1.35 }}>{item.q}</span>
-            <img src={open === idx ? FAQ_OPEN : FAQ_SHUT} alt="" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
+            <img loading="lazy" src={open === idx ? FAQ_OPEN : FAQ_SHUT} alt="" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
           </button>
           <AnimatePresence>
             {open === idx && (
@@ -808,7 +808,7 @@ export default function Page() {
                 {AMENITIES.map(a => (
                   <div key={a.label} className="amenity-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, width: 150 }}>
                     <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <img src={a.icon} alt="" style={{ width: 20, height: 20, objectFit: 'contain' }} />
+                      <img loading="lazy" src={a.icon} alt="" style={{ width: 20, height: 20, objectFit: 'contain' }} />
                     </div>
                     <span style={{ fontSize: 14, color: '#fff', lineHeight: 1.4 }}>{a.label}</span>
                   </div>
@@ -819,7 +819,7 @@ export default function Page() {
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', lineHeight: 1 }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+              <img loading="lazy" src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
               <span>Call (661) 794-6992</span>
             </motion.a>
           </FadeUp>
@@ -844,7 +844,7 @@ export default function Page() {
                   <FadeUp key={item.title} delay={(gi * 4 + idx) * 0.07}>
                     <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '10px' }}>
                       <div style={{ width: 70, height: 70, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <img src={item.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+                        <img loading="lazy" src={item.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0, padding: '10px 0' }}>
                         <p style={{ fontWeight: 500, fontSize: 18, color: N, marginBottom: 6, lineHeight: '22px' }}>{item.title}</p>
@@ -880,7 +880,7 @@ export default function Page() {
                 </p>
                 <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, textDecoration: 'none', lineHeight: 1 }}>
-                  <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+                  <img loading="lazy" src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                   <span>Call Today (661) 794-6992</span>
                 </motion.a>
               </FadeUp>
@@ -891,7 +891,7 @@ export default function Page() {
               <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 100, background: '#EDF4F4', borderTopLeftRadius: 20, borderTopRightRadius: 20, zIndex: 0 }} />
               {/* Photo container — Figma node 6059:3890: 310x351 with overflow hidden */}
               <div className="trust-photo-box" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden', zIndex: 1 }}>
-                <img className="trust-photo-img" src={TRUST_PHOTO} alt="Care team member"
+                <img className="trust-photo-img" loading="lazy" src={TRUST_PHOTO} alt="Care team member"
                   style={{ position: 'absolute', height: '167%', top: '-4.44%', left: '-8.84%', width: '111.88%', maxWidth: 'none', display: 'block' }} />
               </div>
             </FadeUp>
@@ -914,7 +914,7 @@ export default function Page() {
             <FadeUp>
               <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
                 <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
-                  <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }} />
+                  <img loading="lazy" src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Medical Detox & Medication-Assisted Treatment (MAT)</h3>
@@ -935,7 +935,7 @@ export default function Page() {
             <FadeUp delay={0.1}>
               <div className="treatment-row treatment-row-reverse" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
                 <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
-                  <img src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img loading="lazy" src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Inpatient Residential Treatment Program</h3>
@@ -956,7 +956,7 @@ export default function Page() {
             <FadeUp delay={0.15}>
               <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0' }}>
                 <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
-                  <img src={SEC3_AFTER} alt="Aftercare" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img loading="lazy" src={SEC3_AFTER} alt="Aftercare" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Aftercare Planning, Ongoing Care, & Alumni</h3>
@@ -994,7 +994,7 @@ export default function Page() {
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', lineHeight: 1 }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+              <img loading="lazy" src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
               <span>We're Here to Support</span>
             </motion.a>
           </FadeUp>
@@ -1014,7 +1014,7 @@ export default function Page() {
                 <motion.div whileHover={{ y: -4 }}>
                   {/* Photo: aspect-preserving (width %, height auto) with per-person zoom + top + left for face framing */}
                   <div style={{ width: '100%', aspectRatio: '1', borderRadius: 10, overflow: 'hidden', position: 'relative', background: '#fff' }}>
-                    <img src={m.img} alt={m.name} className="team-photo-img"
+                    <img loading="lazy" src={m.img} alt={m.name} className="team-photo-img"
                       style={{ position: 'absolute', left: m.left, top: m.top, width: m.width, height: 'auto', maxWidth: 'none', display: 'block' }} />
                   </div>
                   <div style={{ padding: '14px 10px 0', minHeight: 64 }}>
@@ -1040,7 +1040,7 @@ export default function Page() {
             <div className="ins-logos-desktop" aria-label="Insurance logos">
               <div className="marquee-track">
                 {[...INS_LOGOS, ...INS_LOGOS].map((logo, idx) => (
-                  <img key={idx} src={logo.src} alt={idx < INS_LOGOS.length ? logo.alt : ''}
+                  <img loading="lazy" key={idx} src={logo.src} alt={idx < INS_LOGOS.length ? logo.alt : ''}
                     aria-hidden={idx >= INS_LOGOS.length}
                     style={{ height: 50, width: 'auto', flexShrink: 0, objectFit: 'contain' }} />
                 ))}
@@ -1049,8 +1049,8 @@ export default function Page() {
             {/* Mobile: original composite marquee — unchanged */}
             <div className="ins-logos-mobile" aria-hidden="true">
               <div className="marquee-track">
-                <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
-                <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
+                <img loading="lazy" src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
+                <img loading="lazy" src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
               </div>
             </div>
           </FadeUp>
@@ -1080,7 +1080,7 @@ export default function Page() {
               <FadeUp key={idx} delay={idx * 0.1}>
                 <div style={{ background: '#fff', borderRadius: 14, padding: '24px 22px', textAlign: 'center', height: '100%', boxShadow: '0 4px 4px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
                   <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <img src={s.icon} alt="" style={{ width: 38, height: 38, objectFit: 'contain' }} />
+                    <img loading="lazy" src={s.icon} alt="" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                   </div>
                   <div>
                     <h3 style={{ fontWeight: 500, color: N, fontSize: 20, marginBottom: 12, lineHeight: '22px', whiteSpace: 'pre-line' }}>{s.title}</h3>
@@ -1123,7 +1123,7 @@ export default function Page() {
                 <div style={{ position: 'relative', paddingTop: 28 }}>
                   {/* Icon circle floating above card */}
                   <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 56, height: 56, borderRadius: '50%', background: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
-                    <img src={s.icon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+                    <img loading="lazy" src={s.icon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
                   </div>
                   {/* Card — rectangular per Figma 255x127 inner */}
                   <div style={{ background: BG, borderRadius: 8, padding: '36px 14px 18px', textAlign: 'center', minHeight: 127 }}>
@@ -1157,7 +1157,7 @@ export default function Page() {
               {/* Joined photo + card — desktop 398 fixed (matches map height), mobile auto so text never clips */}
               <div className="location-card" style={{ borderRadius: 8, overflow: 'hidden', height: 398, display: 'flex', flexDirection: 'column', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
                 <div style={{ height: 240, flexShrink: 0 }}>
-                  <img src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <img loading="lazy" src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div className="location-text" style={{ background: '#fff', flex: 1, padding: '20px 30px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <p style={{ fontWeight: 600, color: N, fontSize: 18, lineHeight: 1.2 }}>Healthy Living Residential Program</p>
@@ -1196,7 +1196,7 @@ export default function Page() {
         <div style={{ maxWidth: 440, margin: '0 auto', background: '#fff', borderRadius: 12, padding: '28px 24px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
             <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
-            <img src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
+            <img loading="lazy" src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
           </div>
           <InsuranceForm />
         </div>
@@ -1205,7 +1205,7 @@ export default function Page() {
       {/* ════ CTA ════════════════════════════════════════════════════════ */}
       <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', padding: '50px 0' }}>
         <div style={{ position: 'absolute', inset: 0 }}>
-          <img src={CTA_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img loading="lazy" src={CTA_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.68)' }} />
         </div>
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
@@ -1217,13 +1217,13 @@ export default function Page() {
             <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
               <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                 style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', lineHeight: 1 }}>
-                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0, filter: 'brightness(0) invert(1)' }} />
+                <img loading="lazy" src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0, filter: 'brightness(0) invert(1)' }} />
                 <span>Call Now — (661) 794-6992</span>
               </motion.a>
               <motion.button onClick={() => setShowInsModal(true)}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                 style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit', lineHeight: 1 }}>
-                <img src={INS_BTN_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+                <img loading="lazy" src={INS_BTN_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                 <span>Verify Insurance</span>
               </motion.button>
             </div>
@@ -1252,7 +1252,7 @@ export default function Page() {
                 style={{ position: 'absolute', top: 14, right: 14, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer', fontSize: 18, color: N, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>✕</button>
               <div id="ins-modal-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
                 <span style={{ color: N, fontWeight: 600, fontSize: 18 }}>Get Instant Insurance Verification</span>
-                <img src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
+                <img loading="lazy" src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
               </div>
               <InsuranceForm />
             </motion.div>
