@@ -398,16 +398,12 @@ function Header() {
   }, []);
   return (
     <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
-      <AnimatePresence>
-        {!scrolled && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 50, opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-            style={{ background: T, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <p style={{ color: '#fff', fontSize: 15, fontWeight: 700, textAlign: 'center', padding: '0 16px' }}>
-              Support Available 24/7 — ⚠️ We do not accept Medicare or Medicaid
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Top banner — ALWAYS visible, does not collapse on scroll */}
+      <div style={{ background: T, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, lineHeight: '22px', textAlign: 'center', padding: '0 16px' }}>
+          Support Available 24/7 — ⚠️ We do not accept Medicare or Medicaid
+        </p>
+      </div>
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.35)' : 'none' }}>
         <div className="lp-wide header-inner" style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', objectFit: 'contain', flexShrink: 1, minWidth: 0 }} />
@@ -571,8 +567,8 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Sub-nav — white bar with scroll-spy active state */}
-        <div className="subnav" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
+        {/* Sub-nav — white bar with scroll-spy active state, docks under always-visible header (50 banner + 110 nav) */}
+        <div className="subnav" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 160, zIndex: 40 }}>
           <div className="lp-inner subnav-links" style={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
             {[
               { label: 'Our Center',          id: 'our-center' },
@@ -717,7 +713,7 @@ export default function Page() {
             {/* Row 1 — photo left (mirrored per Figma), text right */}
             <FadeUp>
               <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
-                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
                   <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
@@ -750,7 +746,7 @@ export default function Page() {
                     Most residential stays range from 1 to 3 months, depending on individual progress and treatment needs.
                   </p>
                 </div>
-                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
                   <img src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
               </div>
@@ -759,7 +755,7 @@ export default function Page() {
             {/* Row 3 — photo left, text right */}
             <FadeUp delay={0.15}>
               <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0' }}>
-                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, height: 260, borderRadius: 10, overflow: 'hidden' }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
                   <img src={SEC3_AFTER} alt="Aftercare" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
