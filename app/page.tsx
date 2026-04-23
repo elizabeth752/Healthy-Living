@@ -70,6 +70,17 @@ const REC_TECH      = '/assets/423dfe45-62c3-4bb9-96b5-da3da0dbb427.svg';
 
 // Section 6 — Insurance logos strip
 const INS_STRIP     = '/assets/71b8be5b-8604-4f95-9711-50214dab403c.svg';
+// Individual logos extracted from Figma nodes 6062:4803-4809 for proper desktop marquee.
+// TODO: add missing 8 (MultiPlan, Beacon + 6 unnamed Vectors) once Ellie exports them as PNGs.
+const INS_LOGOS = [
+  { src: '/assets/insurance/aetna.svg',           alt: 'Aetna',                    width: 155 },
+  { src: '/assets/insurance/anthem.svg',          alt: 'Anthem',                   width: 202 },
+  { src: '/assets/insurance/bluecross.svg',       alt: 'BlueCross BlueShield',     width: 164 },
+  { src: '/assets/insurance/blue-california.svg', alt: 'Blue California',          width: 103 },
+  { src: '/assets/insurance/cigna.svg',           alt: 'Cigna',                    width: 101 },
+  { src: '/assets/insurance/highmark.svg',        alt: 'Highmark',                 width: 166 },
+  { src: '/assets/insurance/tribal.svg',          alt: 'Tribal Health',            width: 65 },
+];
 
 // Section 7 — Step icons
 const STEP1_IC      = '/assets/620f93c9-2fc3-4252-8a66-29b3a8552aaa.svg';
@@ -1025,9 +1036,17 @@ export default function Page() {
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
-            {/* Desktop: single static strip */}
-            <img className="ins-logos-static" src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
-            {/* Mobile: auto-scrolling marquee for legibility at small width */}
+            {/* Desktop: marquee of individual logos — Ellie's Figma shows them extending beyond frame */}
+            <div className="ins-logos-desktop" aria-label="Insurance logos">
+              <div className="marquee-track">
+                {[...INS_LOGOS, ...INS_LOGOS].map((logo, idx) => (
+                  <img key={idx} src={logo.src} alt={idx < INS_LOGOS.length ? logo.alt : ''}
+                    aria-hidden={idx >= INS_LOGOS.length}
+                    style={{ height: 50, width: 'auto', flexShrink: 0, objectFit: 'contain' }} />
+                ))}
+              </div>
+            </div>
+            {/* Mobile: original composite marquee — unchanged */}
             <div className="ins-logos-mobile" aria-hidden="true">
               <div className="marquee-track">
                 <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
