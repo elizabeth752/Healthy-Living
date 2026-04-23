@@ -210,6 +210,10 @@ function InsuranceForm({ height = 460 }: { height?: number }) {
   }, [height]);
   return (
     <div style={{ width: '100%' }}>
+      {/* Reassurance ABOVE the form — always visible on every viewport, sets expectation before filling */}
+      <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '0 4px 12px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
+        Your information is private and secure. No pressure to commit.
+      </p>
       <iframe
         className="ctm-call-widget"
         src={CTM_FORM_URL}
@@ -219,14 +223,11 @@ function InsuranceForm({ height = 460 }: { height?: number }) {
         allow="clipboard-write"
         onLoad={() => setIframeLoaded(true)}
       />
-      {/* Fallback link — always shown, lets users open form in new tab if iframe is blocked by their browser/extensions */}
+      {/* Fallback link — for browsers that block 3rd-party iframes (Brave shields, uBlock, etc) */}
       <p style={{ textAlign: 'center', fontSize: 12, color: '#666', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
         Trouble seeing the form? <a href={CTM_FORM_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#0D3442', fontWeight: 600, textDecoration: 'underline' }}>Open it in a new window →</a>
       </p>
-      <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '10px 4px 4px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
-        Your information is private and secure. No pressure to commit.
-      </p>
-      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
+      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '10px 4px 0', lineHeight: 1.5 }}>
         By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including via autodialed or prerecorded calls and text messages, regarding treatment options. This consent is not a condition of receiving services.
       </p>
     </div>
