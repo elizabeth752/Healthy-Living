@@ -232,8 +232,10 @@ h3, h4, h5 { line-height: 1.15; }
   .subnav-links { gap: 14px !important; }
   .subnav-links button { font-size: 13px !important; }
 
-  /* Location: single column */
+  /* Location: single column, auto-height card so body text never clips */
   .location-grid { grid-template-columns: 1fr !important; }
+  .location-card { height: auto !important; }
+  .location-card .location-text { padding: 22px 24px 24px !important; }
 
   /* Section padding */
   .section-pad { padding: 48px 0 !important; }

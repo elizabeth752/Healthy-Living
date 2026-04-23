@@ -192,9 +192,11 @@ function DecorativeBg({
 }
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
+const CTM_FORM_URL = 'https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html';
 function InsuranceForm({ height = 460 }: { height?: number }) {
   const MIN_H = 380; // never collapse below this — iframe must always show fields
   const [h, setH] = useState(height);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
   useEffect(() => {
     const fit = () => {
       const fitted = window.innerWidth <= 768
@@ -210,13 +212,18 @@ function InsuranceForm({ height = 460 }: { height?: number }) {
     <div style={{ width: '100%' }}>
       <iframe
         className="ctm-call-widget"
-        src="https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html"
+        src={CTM_FORM_URL}
         style={{ width: '100%', height: h, minHeight: MIN_H, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
         title="Verify Insurance Coverage"
         scrolling="yes"
         allow="clipboard-write"
+        onLoad={() => setIframeLoaded(true)}
       />
-      <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '12px 4px 4px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
+      {/* Fallback link — always shown, lets users open form in new tab if iframe is blocked by their browser/extensions */}
+      <p style={{ textAlign: 'center', fontSize: 12, color: '#666', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
+        Trouble seeing the form? <a href={CTM_FORM_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#0D3442', fontWeight: 600, textDecoration: 'underline' }}>Open it in a new window →</a>
+      </p>
+      <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '10px 4px 4px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
         Your information is private and secure. No pressure to commit.
       </p>
       <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
@@ -1115,12 +1122,12 @@ export default function Page() {
               </div>
             </FadeUp>
             <FadeUp delay={0.1}>
-              {/* Joined photo + card — single 398-tall block per Figma */}
-              <div style={{ borderRadius: 8, overflow: 'hidden', height: 398, display: 'flex', flexDirection: 'column', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
+              {/* Joined photo + card — desktop 398 fixed (matches map height), mobile auto so text never clips */}
+              <div className="location-card" style={{ borderRadius: 8, overflow: 'hidden', height: 398, display: 'flex', flexDirection: 'column', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
                 <div style={{ height: 240, flexShrink: 0 }}>
                   <img src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
-                <div style={{ background: '#fff', flex: 1, padding: '20px 30px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div className="location-text" style={{ background: '#fff', flex: 1, padding: '20px 30px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <p style={{ fontWeight: 600, color: N, fontSize: 18, lineHeight: 1.2 }}>Healthy Living Residential Program</p>
                   <p style={{ color: '#386376', fontSize: 15 }}>22512 Garzota Drive, Santa Clarita, CA 91350</p>
                   <p style={{ color: '#333', fontSize: 14, lineHeight: 1.55 }}>A physician-owned detox and residential treatment center offering medically supervised care for adults ready to reclaim their lives.</p>
