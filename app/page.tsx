@@ -200,8 +200,8 @@ function InsuranceForm() {
         style={{ width: '100%', padding: '14px 16px', background: O, color: N, border: 'none', borderRadius: 4, fontSize: 18, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>
         Check Your Coverage
       </motion.button>
-      <p style={{ textAlign: 'center', fontSize: 12, color: '#666', fontStyle: 'italic', margin: 0 }}>
-        Your information is private and secure. No pressure to commit.
+      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, lineHeight: 1.5 }}>
+        By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including by phone or text, regarding treatment options. This consent is not a condition of receiving services. <span style={{ whiteSpace: 'nowrap' }}>Your information is private and secure.</span>
       </p>
     </form>
   );

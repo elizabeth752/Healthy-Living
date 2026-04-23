@@ -10,6 +10,9 @@ export const metadata: Metadata = {
     description: 'Physician-owned detox & residential treatment. Santa Clarita, CA.',
     type: 'website',
   },
+  alternates: {
+    canonical: 'https://healthylivingresidential.com/',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
