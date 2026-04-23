@@ -167,7 +167,18 @@ function InsuranceForm() {
   );
 
   return (
-    <form onSubmit={e => { e.preventDefault(); setDone(true); }} style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
+    <form onSubmit={e => {
+      e.preventDefault();
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: 'insurance_form_submit',
+        form_name: 'patient_name',
+        phone: f.phone,
+        email: f.email,
+        insurance_carrier: f.carrier,
+      });
+      setDone(true);
+    }} style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
         <div><label style={LBL}>Your Name<span style={{ color: '#d80027' }}>*</span></label><input required style={INP} value={f.name} onChange={u('name')} /></div>
         <div><label style={LBL}>Your Phone<span style={{ color: '#d80027' }}>*</span></label><input required type="tel" style={INP} value={f.phone} onChange={u('phone')} /></div>
