@@ -688,7 +688,7 @@ export default function Page() {
       <section className="hero-section" style={{ position: 'relative', paddingTop: 160 }}>
         {/* full-bleed background */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-          <img src={HERO_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center right' }} />
+          <img src={HERO_BG} alt="" width={2528} height={1696} fetchPriority="high" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center right' }} />
           {/* Figma gradient: to-left, transparent 5.2% → 90% opaque 41.9% */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to left, rgba(237,244,244,0) 5.208%, rgba(237,244,244,0.9) 41.855%)' }} />
         </div>
