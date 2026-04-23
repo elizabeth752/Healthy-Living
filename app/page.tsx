@@ -119,11 +119,13 @@ const INS_BTN_IC = '/assets/d9606794-a866-4c8e-adc7-017a9e865ffb.svg';
 const LOCATION_PHOTO = '/assets/1b1d5a28-3422-45a4-994d-25f3377fd21e.jpg';
 
 /* ── Design tokens ──────────────────────────────────────────────────────── */
-const N  = '#0D3442';
-const T  = '#56B5B7';
-const O  = '#CEA36F';
-const BG = '#EDF4F4';
-const DT = '#174154';
+const N     = '#0D3442';   // navy primary
+const T     = '#56B5B7';   // teal
+const O     = '#CEA36F';   // gold (subnav active state, dashed dividers)
+const BG    = '#EDF4F4';   // off-white teal
+const DT    = '#174154';   // deep navy (trust banner, conditions)
+const AMBER = '#F9A21C';   // CTA buttons per Figma (Call/Begin/Verify/Check)
+const NAVY_BTN = '#132E49'; // CTA button text per Figma
 
 /* ── Utilities ──────────────────────────────────────────────────────────── */
 function FadeUp({ children, delay = 0, style = {}, className = '' }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties; className?: string }) {
@@ -289,7 +291,7 @@ function ReviewsCarousel() {
           transition={{ duration: 0.4 }}
           className="reviews-row" style={{ display: 'flex', gap: 16 }}>
           {slice.map(({ r, key }) => (
-            <div key={key} style={{ background: '#fff', padding: 20, boxShadow: '0 4px 4px rgba(0,0,0,0.15)', flex: 1, display: 'flex', flexDirection: 'column', gap: 10, borderRadius: 4, minWidth: 0 }}>
+            <div key={key} style={{ background: '#fff', padding: 20, boxShadow: '0 4px 4px rgba(0,0,0,0.25)', flex: 1, display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <img src={r.photo} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                 <div>
@@ -379,7 +381,7 @@ function Header() {
           <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', objectFit: 'contain', flexShrink: 1, minWidth: 0 }} />
           <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
-            style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
             <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
             <span className="header-cta-full">Call Us &nbsp;(661) 794-6992</span>
             <span className="header-cta-short">(661) 794-6992</span>
@@ -542,7 +544,7 @@ export default function Page() {
       <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16 }}>It's what we help you achieve.</p>
           </FadeUp>
           <FadeUp delay={0.1}><Carousel /></FadeUp>
@@ -562,7 +564,7 @@ export default function Page() {
           </FadeUp>
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
               <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call (661) 794-6992
             </motion.a>
           </FadeUp>
@@ -573,7 +575,7 @@ export default function Page() {
       <section style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
             <p style={{ color: '#555', fontSize: 16, lineHeight: 1.65, maxWidth: 720, margin: '0 auto' }}>
               We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities.
             </p>
@@ -584,13 +586,13 @@ export default function Page() {
               <div className="recovery-grid">
                 {group.map((item, idx) => (
                   <FadeUp key={item.title} delay={(gi * 4 + idx) * 0.07}>
-                    <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '20px 0', borderBottom: gi === 0 || idx < group.length - 2 ? `1px solid rgba(0,0,0,0.07)` : 'none' }}>
-                      <div style={{ width: 48, height: 48, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <img src={item.icon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+                    <div style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '10px' }}>
+                      <div style={{ width: 70, height: 70, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <img src={item.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
                       </div>
-                      <div>
-                        <p style={{ fontWeight: 700, fontSize: 16, color: N, marginBottom: 6 }}>{item.title}</p>
-                        <p style={{ color: '#555', fontSize: 14, lineHeight: 1.7 }}>{item.desc}</p>
+                      <div style={{ flex: 1, minWidth: 0, padding: '10px 0' }}>
+                        <p style={{ fontWeight: 500, fontSize: 18, color: N, marginBottom: 6, lineHeight: '22px' }}>{item.title}</p>
+                        <p style={{ color: '#000', fontSize: 16, lineHeight: 1.5 }}>{item.desc}</p>
                       </div>
                     </div>
                   </FadeUp>
@@ -614,14 +616,14 @@ export default function Page() {
             {/* Left — text + CTA */}
             <div style={{ flex: '1 1 0', minWidth: 0 }}>
               <FadeUp>
-                <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
+                <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
                   Addiction Rarely Tells The Whole Story. Trauma Does.
                 </h2>
                 <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.65, marginBottom: 28, maxWidth: 640 }}>
                   Our team is also trained to recognize and gently address the trauma that drives addiction — including EMDR therapy for those who are ready to go deeper and end the cycle of trauma.
                 </p>
                 <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, textDecoration: 'none' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, textDecoration: 'none' }}>
                   <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                   Call Today (661) 794-6992
                 </motion.a>
@@ -643,7 +645,7 @@ export default function Page() {
       <section style={{ background: '#fff', padding: '70px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>Your Recovery Path to Healthy Living</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Your Recovery Path to Healthy Living</h2>
             <p style={{ color: '#222', fontSize: 16, lineHeight: 1.65, maxWidth: 900, margin: '0 auto' }}>
               Whether you're seeking intensive support or looking to balance treatment with daily life, we offer a full continuum of care that meets you where you are in life.
             </p>
@@ -657,7 +659,7 @@ export default function Page() {
                   <img src={SEC3_DETOX} alt="Medical Detox" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Medical Detox & Medication-Assisted Treatment (MAT)</h3>
+                  <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Medical Detox & Medication-Assisted Treatment (MAT)</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     When you arrive, one of our physicians will sit down with you for a thorough medical evaluation — not just to check boxes, but to truly understand where you are and what you need.
                     <br /><br />
@@ -675,7 +677,7 @@ export default function Page() {
             <FadeUp delay={0.1}>
               <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
                 <div style={{ flex: 1, paddingRight: 20 }}>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Inpatient Residential Treatment Program</h3>
+                  <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Inpatient Residential Treatment Program</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     Once you're stable, our team of therapists, counselors, and experiential instructors work with you to build a recovery plan that's truly yours.
                     <br /><br />
@@ -699,7 +701,7 @@ export default function Page() {
                   <img src={SEC3_AFTER} alt="Aftercare" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 20 }}>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: N, marginBottom: 16, lineHeight: 1.3 }}>Aftercare Planning, Ongoing Care, & Alumni</h3>
+                  <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Aftercare Planning, Ongoing Care, & Alumni</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     Recovery is a lifelong journey, and the work doesn't stop after completing residential treatment. We ensure you have the resources and support to maintain sobriety and continue healing.
                     <br /><br />
@@ -714,8 +716,8 @@ export default function Page() {
 
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Start Your Recovery Today
+              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0, filter: 'brightness(0) invert(1)' }} />Begin Treatment
             </motion.a>
           </FadeUp>
         </div>
@@ -725,7 +727,7 @@ export default function Page() {
       <section id="conditions" style={{ background: DT, padding: '70px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff', marginBottom: 16 }}>Care for Every Type of Addiction</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Care for Every Type of Addiction</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.6, maxWidth: 700, margin: '0 auto' }}>
               Addiction doesn't look the same for everyone — and neither does our care. Whatever you're facing, we have the experience and the compassion to help.
             </p>
@@ -733,7 +735,7 @@ export default function Page() {
           <ConditionsCarousel conditions={CONDITIONS} />
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
               <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />We're Here to Support
             </motion.a>
           </FadeUp>
@@ -744,7 +746,7 @@ export default function Page() {
       <section style={{ background: BG, padding: '80px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 48 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 700, margin: '0 auto' }}>We know what addiction does to the brain, body, and spirit. You don't need more willpower — you need the right medical team.</p>
           </FadeUp>
           <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
@@ -770,7 +772,7 @@ export default function Page() {
       <section id="programs" style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
@@ -790,7 +792,7 @@ export default function Page() {
       <section style={{ background: '#386376', padding: '70px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, maxWidth: 860, margin: '0 auto' }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment on the same day.</p>
           </FadeUp>
           <div className="steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
@@ -805,7 +807,7 @@ export default function Page() {
                     <img src={s.icon} alt="" style={{ width: 38, height: 38, objectFit: 'contain' }} />
                   </div>
                   <div>
-                    <h3 style={{ fontWeight: 700, color: N, fontSize: 20, marginBottom: 12, lineHeight: 1.3, whiteSpace: 'pre-line' }}>{s.title}</h3>
+                    <h3 style={{ fontWeight: 500, color: N, fontSize: 20, marginBottom: 12, lineHeight: '22px', whiteSpace: 'pre-line' }}>{s.title}</h3>
                     <p style={{ color: '#222', fontSize: 16, lineHeight: 1.65 }}>{s.body}</p>
                   </div>
                 </div>
@@ -819,7 +821,7 @@ export default function Page() {
       <section style={{ background: BG, padding: '70px 0' }}>
         <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
           <FadeUp className="reviews-title-col" style={{ width: 280, flexShrink: 0 }}>
-            <h2 style={{ fontSize: 50, fontWeight: 700, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People.<br />Real Recovery.</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People. Real Recovery.</h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
           </FadeUp>
           <ReviewsCarousel />
@@ -830,7 +832,7 @@ export default function Page() {
       <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '80px 0 100px' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 72 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
           <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
             {[
@@ -846,11 +848,11 @@ export default function Page() {
                     <img src={s.icon} alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
                   </div>
                   {/* Card */}
-                  <div style={{ background: BG, borderRadius: 10, padding: '52px 20px 28px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}>
-                    <div style={{ fontSize: 52, fontWeight: 800, color: N, marginBottom: 12 }}>
+                  <div style={{ background: BG, borderRadius: 10, padding: '52px 14px 28px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 34, fontWeight: 500, color: N, marginBottom: 8 }}>
                       <CountUp target={s.val} suffix={s.suffix} />
                     </div>
-                    <p style={{ color: '#555', fontSize: 14, lineHeight: 1.55 }}>{s.label}</p>
+                    <p style={{ color: '#000', fontSize: 14, lineHeight: 1.4 }}>{s.label}</p>
                   </div>
                 </div>
               </FadeUp>
@@ -863,7 +865,7 @@ export default function Page() {
       <section style={{ background: BG, padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N, marginBottom: 14 }}>California's Hidden Gem for Recovery</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>California's Hidden Gem for Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 800, margin: '0 auto', lineHeight: 1.65 }}>Tucked into the hills of Santa Clarita, our center draws people from across California and beyond — because when the care is right, it's worth the drive.</p>
           </FadeUp>
           <div className="location-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,530px) 1fr', gap: 24, alignItems: 'start' }}>
@@ -878,17 +880,17 @@ export default function Page() {
                 <div style={{ borderRadius: 8, overflow: 'hidden', height: 240 }}>
                   <img src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <div style={{ background: '#fff', borderRadius: 8, padding: '20px 24px' }}>
-                  <p style={{ fontWeight: 700, color: N, marginBottom: 6, fontSize: 16 }}>Healthy Living Residential Program</p>
-                  <p style={{ color: N, fontSize: 14, marginBottom: 8 }}>22512 Garzota Drive, Santa Clarita, CA 91350</p>
-                  <p style={{ color: '#666', fontSize: 14, lineHeight: 1.65 }}>A physician-owned detox and residential treatment center offering medically supervised care for adults ready to reclaim their lives.</p>
+                <div style={{ background: '#fff', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, padding: '20px 30px', boxShadow: '0 4px 4px rgba(0,0,0,0.25)' }}>
+                  <p style={{ fontWeight: 500, color: N, marginBottom: 10, fontSize: 20, lineHeight: '22px' }}>Healthy Living Residential Program</p>
+                  <p style={{ color: '#386376', fontSize: 16, marginBottom: 10 }}>22512 Garzota Drive, Santa Clarita, CA 91350</p>
+                  <p style={{ color: '#333', fontSize: 16, lineHeight: 1.5 }}>A physician-owned detox and residential treatment center offering medically supervised care for adults ready to reclaim their lives.</p>
                 </div>
               </div>
             </FadeUp>
           </div>
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
+              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
               Check Availability
             </motion.a>
           </FadeUp>
@@ -896,10 +898,10 @@ export default function Page() {
       </section>
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
-      <section style={{ background: '#fff', padding: '80px 0' }}>
+      <section style={{ background: BG, padding: '70px 0' }}>
         <div className="lp-inner">
-          <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 700, color: N }}>Frequently Asked Questions</h2>
+          <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 500, color: N }}>Frequently Asked Questions</h2>
           </FadeUp>
           <FAQ />
           <div style={{ textAlign: 'center', marginTop: 36 }}>
@@ -921,14 +923,14 @@ export default function Page() {
       </section>
 
       {/* ════ CTA ════════════════════════════════════════════════════════ */}
-      <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', padding: '80px 0' }}>
+      <section style={{ position: 'relative', textAlign: 'center', overflow: 'hidden', padding: '50px 0' }}>
         <div style={{ position: 'absolute', inset: 0 }}>
           <img src={CTA_BG} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.68)' }} />
         </div>
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp>
-            <h2 style={{ color: '#fff', fontSize: 40, fontWeight: 700, marginBottom: 16 }}>You Deserve to Actually Live Healthy</h2>
+            <h2 style={{ color: '#fff', fontSize: 40, fontWeight: 500, marginBottom: 16 }}>You Deserve to Actually Live Healthy</h2>
             <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: 18, lineHeight: 1.6, marginBottom: 36 }}>
               Our physicians are here to make sure you get well, comfortable and safely.
             </p>
@@ -939,7 +941,7 @@ export default function Page() {
               </motion.a>
               <motion.button onClick={() => setShowInsModal(true)}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
                 <img src={INS_BTN_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                 Verify Insurance
               </motion.button>

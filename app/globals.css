@@ -62,9 +62,9 @@ body {
 }
 
 /* ── Responsive grids ────────────────────────────────────── */
-.recovery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 60px; }
+.recovery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 20px; }
 .recovery-grid > * { min-width: 0; }
-@media (max-width: 768px) { .recovery-grid { grid-template-columns: 1fr !important; gap: 0 !important; } }
+@media (max-width: 768px) { .recovery-grid { grid-template-columns: 1fr !important; gap: 16px !important; } }
 
 /* ── Animations ─────────────────────────────────────────── */
 @keyframes marquee {
