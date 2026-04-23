@@ -225,44 +225,76 @@ function Carousel() {
   );
 }
 
-/* ── Conditions Carousel ────────────────────────────────────────────────── */
+/* ── Conditions Carousel — native horizontal scroll w/ snap, ~2 cards visible per Figma ── */
 function ConditionsCarousel({ conditions }: { conditions: { icon: string; title: string; desc: string }[] }) {
-  const [idx, setIdx] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const total = conditions.length;
-  const next = () => setIdx(a => (a + 1) % total);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const scrollToIdx = (i: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.children[i] as HTMLElement | undefined;
+    if (card) el.scrollTo({ left: card.offsetLeft - 10, behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(next, 2000);
-    return () => clearInterval(t);
-  }, [paused]);
-
-  const getSlice = () => Array.from({ length: 3 }, (_, o) => conditions[(idx + o) % total]);
+    const el = scrollRef.current;
+    if (!el) return;
+    const handler = () => {
+      const cardW = 516; // 500 + 16 gap
+      const i = Math.round(el.scrollLeft / cardW);
+      setActiveIdx(Math.min(Math.max(0, i), conditions.length - 1));
+    };
+    el.addEventListener('scroll', handler, { passive: true });
+    return () => el.removeEventListener('scroll', handler);
+  }, [conditions.length]);
 
   return (
-    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      <p style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 16 }}>Common Conditions:</p>
-      <AnimatePresence mode="wait">
-        <motion.div key={idx} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }}
-          transition={{ duration: 0.35 }}
-          className="conditions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-          {getSlice().map((c, o) => (
-            <motion.div key={o} whileHover={{ y: -4, boxShadow: '0 10px 28px rgba(0,0,0,0.18)' }}
-              style={{ background: '#fff', borderRadius: 10, padding: '28px 20px', boxShadow: '0 4px 4px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, textAlign: 'center' }}>
-              <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={c.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
-              </div>
-              <p style={{ fontSize: 17, fontWeight: 600, color: N, lineHeight: 1.3 }}>{c.title}</p>
-              <p style={{ fontSize: 13, color: '#444', lineHeight: 1.65 }}>{c.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
+    <div>
+      <p style={{ color: '#fff', fontWeight: 700, fontSize: 18, lineHeight: '22px', textAlign: 'center', marginBottom: 16 }}>Common Conditions:</p>
+      <div
+        ref={scrollRef}
+        className="conditions-scroller"
+        style={{
+          display: 'flex',
+          gap: 16,
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollSnapType: 'x mandatory',
+          padding: 10,
+          scrollbarWidth: 'none',
+        }}
+      >
+        {conditions.map((c, idx) => (
+          <div key={idx}
+            style={{
+              flexShrink: 0,
+              width: 500,
+              scrollSnapAlign: 'start',
+              background: '#fff',
+              borderRadius: 10,
+              padding: '20px 24px',
+              boxShadow: '0 4px 4px rgba(0,0,0,0.25)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 20,
+              textAlign: 'center',
+            }}>
+            <div style={{ width: 70, height: 70, borderRadius: '50%', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <img src={c.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
+              <p style={{ fontSize: 18, fontWeight: 500, color: N, lineHeight: '22px' }}>{c.title}</p>
+              <p style={{ fontSize: 16, color: '#000', lineHeight: 1.5 }}>{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 22 }}>
         {conditions.map((_, di) => (
-          <button key={di} onClick={() => setIdx(di)}
-            style={{ width: di === idx ? 20 : 8, height: 8, borderRadius: 4, background: di === idx ? O : 'rgba(255,255,255,0.35)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
+          <button key={di} onClick={() => scrollToIdx(di)}
+            style={{ width: di === activeIdx ? 20 : 8, height: 8, borderRadius: 4, background: di === activeIdx ? O : 'rgba(255,255,255,0.35)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
     </div>
@@ -397,6 +429,22 @@ function Header() {
 ══════════════════════════════════════════════════════════════════════════ */
 export default function Page() {
   const [showInsModal, setShowInsModal] = useState(false);
+  const [activeSection, setActiveSection] = useState('our-center');
+
+  useEffect(() => {
+    const ids = ['our-center', 'conditions', 'programs'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
+      },
+      { rootMargin: '-200px 0px -60% 0px', threshold: 0 }
+    );
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const AMENITIES = [
     { label: 'Outdoor Activities & Beach Access',    icon: AMEN_1 },
@@ -523,19 +571,33 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Sub-nav — white bar */}
+        {/* Sub-nav — white bar with scroll-spy active state */}
         <div className="subnav" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 110, zIndex: 40 }}>
-          <div className="lp-inner subnav-links" style={{ display: 'flex', justifyContent: 'center', gap: 48 }}>
+          <div className="lp-inner subnav-links" style={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
             {[
               { label: 'Our Center',          id: 'our-center' },
               { label: 'Conditions We Treat', id: 'conditions' },
               { label: 'Programs',            id: 'programs'   },
-            ].map(({ label, id }) => (
-              <button key={id} onClick={() => scrollTo(id)}
-                style={{ padding: '12px 0', fontSize: 16, color: N, fontWeight: 400, background: 'none', border: 'none', cursor: 'pointer', borderBottom: '2px solid transparent', fontFamily: 'inherit' }}>
-                {label}
-              </button>
-            ))}
+            ].map(({ label, id }) => {
+              const isActive = activeSection === id;
+              return (
+                <button key={id} onClick={() => scrollTo(id)}
+                  style={{
+                    padding: '10px 0 6px',
+                    fontSize: 16,
+                    color: isActive ? O : N,
+                    fontWeight: isActive ? 700 : 400,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    borderBottom: isActive ? `2px solid ${O}` : '2px solid transparent',
+                    fontFamily: 'inherit',
+                    transition: 'color 0.2s, border-color 0.2s',
+                  }}>
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
