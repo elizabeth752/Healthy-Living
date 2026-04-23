@@ -767,11 +767,10 @@ export default function Page() {
               </div>
               {/* Transportation callout — practical benefit pill, sits below badges */}
               <div className="hero-transport-callout" style={{
-                display: 'flex',
-                width: 'fit-content',
+                display: 'inline-flex',
                 alignItems: 'center',
                 gap: 8,
-                margin: '18px auto 0',
+                marginTop: 18,
                 padding: '8px 16px',
                 background: 'rgba(249, 162, 28, 0.12)',
                 border: `1px solid ${O}`,
