@@ -187,7 +187,7 @@ function DecorativeBg({
         </radialGradient>
       </defs>
       {/* Concentric organic wave rings — evokes calm water / wellness */}
-      <g fill="none" stroke={`url(#${gradId})`} strokeWidth="1.4">
+      <g fill="none" stroke={`url(#${gradId})`} strokeWidth="2.5">
         <path d="M300,80 C460,80 540,180 540,300 C540,440 420,520 300,520 C180,520 60,440 60,300 C60,180 140,80 300,80 Z" />
         <path d="M300,130 C440,130 500,210 500,300 C500,420 400,490 300,490 C200,490 100,420 100,300 C100,210 160,130 300,130 Z" />
         <path d="M300,180 C420,180 460,240 460,300 C460,400 380,460 300,460 C220,460 140,400 140,300 C140,240 180,180 300,180 Z" />
@@ -199,10 +199,10 @@ function DecorativeBg({
 }
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
-function InsuranceForm({ height = 720 }: { height?: number }) {
+function InsuranceForm({ height = 460 }: { height?: number }) {
   const [h, setH] = useState(height);
   useEffect(() => {
-    const fit = () => setH(window.innerWidth <= 768 ? Math.min(height, window.innerHeight - 180) : height);
+    const fit = () => setH(window.innerWidth <= 768 ? Math.min(height, window.innerHeight - 220) : height);
     fit();
     window.addEventListener('resize', fit);
     return () => window.removeEventListener('resize', fit);
@@ -281,11 +281,20 @@ function Carousel() {
   );
 }
 
-/* ── Conditions Carousel — native horizontal scroll w/ snap, click+drag enabled ── */
+/* ── Conditions Carousel — native horizontal scroll w/ snap, drag + momentum ── */
 function ConditionsCarousel({ conditions }: { conditions: { icon: string; title: string; desc: string }[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const dragState = useRef({ isDown: false, startX: 0, startScroll: 0, moved: false });
+  const dragState = useRef({
+    isDown: false,
+    startX: 0,
+    startScroll: 0,
+    moved: false,
+    lastX: 0,
+    lastT: 0,
+    velocity: 0,
+  });
+  const momentumRaf = useRef<number | null>(null);
   const [grabbing, setGrabbing] = useState(false);
 
   const scrollToIdx = (i: number) => {
@@ -307,11 +316,29 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
     return () => el.removeEventListener('scroll', handler);
   }, [conditions.length]);
 
+  // Cancel any pending momentum animation
+  const cancelMomentum = () => {
+    if (momentumRaf.current != null) {
+      cancelAnimationFrame(momentumRaf.current);
+      momentumRaf.current = null;
+    }
+  };
+
   // Mouse drag-to-scroll (touch + trackpad already work natively)
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType !== 'mouse') return;
     const el = scrollRef.current; if (!el) return;
-    dragState.current = { isDown: true, startX: e.clientX, startScroll: el.scrollLeft, moved: false };
+    cancelMomentum();
+    const now = performance.now();
+    dragState.current = {
+      isDown: true,
+      startX: e.clientX,
+      startScroll: el.scrollLeft,
+      moved: false,
+      lastX: e.clientX,
+      lastT: now,
+      velocity: 0,
+    };
     setGrabbing(true);
     el.setPointerCapture(e.pointerId);
     el.style.scrollSnapType = 'none';
@@ -322,6 +349,16 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
     const dx = e.clientX - s.startX;
     if (Math.abs(dx) > 4) s.moved = true;
     el.scrollLeft = s.startScroll - dx;
+    // Track velocity (px/ms) using last move
+    const now = performance.now();
+    const dt = now - s.lastT;
+    if (dt > 0) {
+      const instantV = (s.lastX - e.clientX) / dt; // positive = scrolling right
+      // Smooth velocity: 70% recent, 30% prior — feels natural
+      s.velocity = s.velocity * 0.3 + instantV * 0.7;
+    }
+    s.lastX = e.clientX;
+    s.lastT = now;
   };
   const onPointerEnd = (e: React.PointerEvent) => {
     const s = dragState.current; if (!s.isDown) return;
@@ -329,12 +366,40 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
     setGrabbing(false);
     const el = scrollRef.current; if (!el) return;
     el.releasePointerCapture?.(e.pointerId);
-    el.style.scrollSnapType = 'x mandatory';
+
+    // If user dragged with velocity, run momentum scroll before re-enabling snap
+    if (s.moved && Math.abs(s.velocity) > 0.05) {
+      let v = s.velocity * 16; // px/frame at ~60fps
+      const friction = 0.94; // deceleration per frame
+      const tick = () => {
+        if (!el) return;
+        if (Math.abs(v) < 0.5) {
+          // Coast complete — re-enable snap which will lock to nearest card
+          el.style.scrollSnapType = 'x mandatory';
+          momentumRaf.current = null;
+          return;
+        }
+        el.scrollLeft += v;
+        v *= friction;
+        // If we hit either edge, stop
+        if (el.scrollLeft <= 0 || el.scrollLeft >= el.scrollWidth - el.clientWidth) {
+          el.style.scrollSnapType = 'x mandatory';
+          momentumRaf.current = null;
+          return;
+        }
+        momentumRaf.current = requestAnimationFrame(tick);
+      };
+      momentumRaf.current = requestAnimationFrame(tick);
+    } else {
+      el.style.scrollSnapType = 'x mandatory';
+    }
   };
   // Suppress click on cards if user just dragged
   const onClickCapture = (e: React.MouseEvent) => {
     if (dragState.current.moved) { e.preventDefault(); e.stopPropagation(); dragState.current.moved = false; }
   };
+
+  useEffect(() => () => cancelMomentum(), []);
 
   return (
     <div>
@@ -462,7 +527,7 @@ function FAQ() {
         <div key={idx} style={{ borderRadius: 10, overflow: 'hidden' }}>
           <button onClick={() => setOpen(open === idx ? null : idx)}
             style={{ width: '100%', background: open === idx ? '#386376' : N, border: 'none', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-            <span style={{ color: '#fff', fontSize: 17, fontWeight: 500, textAlign: 'left', lineHeight: 1.35 }}>{item.q}</span>
+            <span style={{ color: '#fff', fontSize: 17, fontWeight: 700, textAlign: 'left', lineHeight: 1.35 }}>{item.q}</span>
             <img src={open === idx ? FAQ_OPEN : FAQ_SHUT} alt="" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
           </button>
           <AnimatePresence>
@@ -470,7 +535,7 @@ function FAQ() {
               <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} style={{ overflow: 'hidden', background: '#386376' }}>
                 <div style={{ padding: '8px 12px 14px' }}>
                   <div style={{ background: '#fff', borderRadius: 10, boxShadow: '0 4px 4px rgba(0,0,0,0.25)', padding: '16px 20px' }}>
-                    <p style={{ color: '#333', fontSize: 15, lineHeight: 1.7 }}>{item.a}</p>
+                    <p style={{ color: '#1a1a1a', fontSize: 15, lineHeight: 1.7, fontWeight: 400 }}>{item.a}</p>
                   </div>
                 </div>
               </motion.div>
@@ -634,9 +699,9 @@ export default function Page() {
               {/* CTA + trust badges (Figma: inline on one line at desktop) */}
               <div className="hero-cta-row" style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'nowrap' }}>
                 <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                  style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 17, padding: '13px 14px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  <img src={PHONE_IC} alt="" style={{ width: 18, height: 18, objectFit: 'contain', flexShrink: 0 }} />
-                  Speak with Admissions 24/7
+                  style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 17, padding: '14px 22px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, lineHeight: 1, filter: 'brightness(1)' }}>
+                  <img src={PHONE_IC} alt="" style={{ width: 18, height: 18, objectFit: 'contain', flexShrink: 0, filter: 'brightness(0) invert(1)' }} />
+                  <span>Speak with Admissions 24/7</span>
                 </motion.a>
                 <div className="hero-badges-row" style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'nowrap', flexShrink: 1, minWidth: 0 }}>
                   <img src={BADGE_G}  alt="" style={{ width: 36, height: 36, objectFit: 'contain', flexShrink: 0 }} />
@@ -696,11 +761,11 @@ export default function Page() {
 
       {/* ════ FACILITY / OUR CENTER ══════════════════════════════════════ */}
       <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-right" tone="light" opacity={0.07} size={560} />
-        <DecorativeBg position="bottom-left" tone="light" opacity={0.05} size={420} />
+        <DecorativeBg position="top-right" tone="light" opacity={0.22} size={620} />
+        <DecorativeBg position="bottom-left" tone="light" opacity={0.18} size={500} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16 }}>It's what we help you achieve.</p>
           </FadeUp>
           <FadeUp delay={0.1}><Carousel /></FadeUp>
@@ -731,7 +796,7 @@ export default function Page() {
       <section style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
             <p style={{ color: '#555', fontSize: 16, lineHeight: 1.65, maxWidth: 720, margin: '0 auto' }}>
               We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities.
             </p>
@@ -772,7 +837,7 @@ export default function Page() {
             {/* Left — text + CTA */}
             <div style={{ flex: '1 1 0', minWidth: 0 }}>
               <FadeUp>
-                <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
+                <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
                   Addiction Rarely Tells The Whole Story. Trauma Does.
                 </h2>
                 <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.65, marginBottom: 28, maxWidth: 640 }}>
@@ -785,12 +850,12 @@ export default function Page() {
                 </motion.a>
               </FadeUp>
             </div>
-            {/* Right — photo card (Figma: contained card, head+shoulders crop) */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 360 }}>
-              {/* BG tab behind photo — desktop only */}
-              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: -10, left: 16, right: 16, height: 60, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20, zIndex: 0 }} />
-              <div className="trust-photo-box" style={{ position: 'relative', width: '100%', height: 380, borderRadius: 10, overflow: 'hidden', background: '#fff', zIndex: 1 }}>
-                <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', display: 'block' }} />
+            {/* Right — photo card (Figma: 310x351 photo with off-white tab behind bottom) */}
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310, height: 351 }}>
+              {/* BG tab behind photo — extends 100px from bottom, sits BEHIND photo */}
+              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderRadius: 10, zIndex: 0 }} />
+              <div className="trust-photo-box" style={{ position: 'relative', width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden', background: '#fff', zIndex: 1, boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}>
+                <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
             </FadeUp>
           </div>
@@ -801,8 +866,8 @@ export default function Page() {
       <section style={{ background: '#fff', padding: '70px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Your Recovery Path to Healthy Living</h2>
-            <p style={{ color: '#222', fontSize: 16, lineHeight: 1.65, maxWidth: 900, margin: '0 auto' }}>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>Your Recovery Path to Healthy Living</h2>
+            <p style={{ color: '#222', fontSize: 16, lineHeight: 1.65, maxWidth: 800, margin: '0 auto' }}>
               Whether you're seeking intensive support or looking to balance treatment with daily life, we offer a full continuum of care that meets you where you are in life.
             </p>
           </FadeUp>
@@ -872,8 +937,8 @@ export default function Page() {
 
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0, filter: 'brightness(0) invert(1)' }} />Begin Treatment
+              style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
+              Begin Treatment
             </motion.a>
           </FadeUp>
         </div>
@@ -883,7 +948,7 @@ export default function Page() {
       <section id="conditions" style={{ background: DT, padding: '70px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Care for Every Type of Addiction</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', marginBottom: 16 }}>Care for Every Type of Addiction</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.6, maxWidth: 700, margin: '0 auto' }}>
               Addiction doesn't look the same for everyone — and neither does our care. Whatever you're facing, we have the experience and the compassion to help.
             </p>
@@ -902,7 +967,7 @@ export default function Page() {
       <section style={{ background: BG, padding: '80px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 48 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 700, margin: '0 auto' }}>We know what addiction does to the brain, body, and spirit. You don't need more willpower — you need the right medical team.</p>
           </FadeUp>
           <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
@@ -928,7 +993,7 @@ export default function Page() {
       <section id="programs" style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
@@ -948,7 +1013,7 @@ export default function Page() {
       <section style={{ background: '#386376', padding: '70px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', marginBottom: 14 }}>You Call. We Handle The Rest.</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, maxWidth: 860, margin: '0 auto' }}>Connect with care anytime, day or night. Our team walks you through everything and can get you enrolled in treatment on the same day.</p>
           </FadeUp>
           <div className="steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
@@ -975,11 +1040,11 @@ export default function Page() {
 
       {/* ════ TESTIMONIALS ═══════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-right" tone="dark" opacity={0.06} size={500} />
-        <DecorativeBg position="bottom-left" tone="dark" opacity={0.04} size={400} />
+        <DecorativeBg position="top-right" tone="dark" opacity={0.14} size={520} />
+        <DecorativeBg position="bottom-left" tone="dark" opacity={0.10} size={420} />
         <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 32, alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
           <FadeUp className="reviews-title-col" style={{ width: 360, flexShrink: 0 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, lineHeight: 1.15, marginBottom: 18, letterSpacing: '-0.01em' }}>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, lineHeight: 1.15, marginBottom: 18, letterSpacing: '-0.01em' }}>
               Real People.<br />Real Recovery.
             </h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
@@ -989,12 +1054,12 @@ export default function Page() {
       </section>
 
       {/* ════ STATS ══════════════════════════════════════════════════════ */}
-      <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '80px 0 100px', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-left" tone="light" opacity={0.08} size={520} />
-        <DecorativeBg position="bottom-right" tone="light" opacity={0.06} size={460} />
+      <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '60px 0 80px', position: 'relative', overflow: 'hidden' }}>
+        <DecorativeBg position="top-left" tone="light" opacity={0.22} size={560} />
+        <DecorativeBg position="bottom-right" tone="light" opacity={0.18} size={500} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
-          <FadeUp style={{ textAlign: 'center', marginBottom: 72 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
+          <FadeUp style={{ textAlign: 'center', marginBottom: 50 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
           <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
             {[
@@ -1004,17 +1069,17 @@ export default function Page() {
               { val: 93,  suffix: '%', label: 'Completion rate for residential treatment',             icon: STAT4_IC },
             ].map((s, idx) => (
               <FadeUp key={s.label} delay={idx * 0.08}>
-                <div style={{ position: 'relative', paddingTop: 35 }}>
+                <div style={{ position: 'relative', paddingTop: 28 }}>
                   {/* Icon circle floating above card */}
-                  <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 70, height: 70, borderRadius: '50%', background: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
-                    <img src={s.icon} alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+                  <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 56, height: 56, borderRadius: '50%', background: '#fff', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+                    <img src={s.icon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
                   </div>
-                  {/* Card */}
-                  <div style={{ background: BG, borderRadius: 10, padding: '52px 14px 28px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 34, fontWeight: 500, color: N, marginBottom: 8 }}>
+                  {/* Card — rectangular per Figma 255x127 inner */}
+                  <div style={{ background: BG, borderRadius: 8, padding: '36px 14px 18px', textAlign: 'center', minHeight: 127 }}>
+                    <div style={{ fontSize: 32, fontWeight: 600, color: N, marginBottom: 6, lineHeight: 1.1 }}>
                       <CountUp target={s.val} suffix={s.suffix} />
                     </div>
-                    <p style={{ color: '#000', fontSize: 14, lineHeight: 1.4 }}>{s.label}</p>
+                    <p style={{ color: '#000', fontSize: 13, lineHeight: 1.4 }}>{s.label}</p>
                   </div>
                 </div>
               </FadeUp>
@@ -1027,10 +1092,10 @@ export default function Page() {
       <section style={{ background: BG, padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N, marginBottom: 14 }}>California's Hidden Gem for Recovery</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>California's Hidden Gem for Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 800, margin: '0 auto', lineHeight: 1.65 }}>Tucked into the hills of Santa Clarita, our center draws people from across California and beyond — because when the care is right, it's worth the drive.</p>
           </FadeUp>
-          <div className="location-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,530px) 1fr', gap: 24, alignItems: 'start' }}>
+          <div className="location-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'stretch' }}>
             <FadeUp>
               <div style={{ borderRadius: 8, overflow: 'hidden', height: 398 }}>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d826!2d-118.5479!3d34.4284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29a4e3d4b9a2b%3A0x0!2s22512+Garzota+Dr%2C+Santa+Clarita%2C+CA+91350!5e0!3m2!1sen!2sus!4v1"
@@ -1038,14 +1103,15 @@ export default function Page() {
               </div>
             </FadeUp>
             <FadeUp delay={0.1}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div style={{ borderRadius: 8, overflow: 'hidden', height: 240 }}>
-                  <img src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              {/* Joined photo + card — single 398-tall block per Figma */}
+              <div style={{ borderRadius: 8, overflow: 'hidden', height: 398, display: 'flex', flexDirection: 'column', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
+                <div style={{ height: 240, flexShrink: 0 }}>
+                  <img src={LOCATION_PHOTO} alt="Healthy Living exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
-                <div style={{ background: '#fff', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, padding: '20px 30px', boxShadow: '0 4px 4px rgba(0,0,0,0.25)' }}>
-                  <p style={{ fontWeight: 500, color: N, marginBottom: 10, fontSize: 20, lineHeight: '22px' }}>Healthy Living Residential Program</p>
-                  <p style={{ color: '#386376', fontSize: 16, marginBottom: 10 }}>22512 Garzota Drive, Santa Clarita, CA 91350</p>
-                  <p style={{ color: '#333', fontSize: 16, lineHeight: 1.5 }}>A physician-owned detox and residential treatment center offering medically supervised care for adults ready to reclaim their lives.</p>
+                <div style={{ background: '#fff', flex: 1, padding: '20px 30px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <p style={{ fontWeight: 600, color: N, fontSize: 18, lineHeight: 1.2 }}>Healthy Living Residential Program</p>
+                  <p style={{ color: '#386376', fontSize: 15 }}>22512 Garzota Drive, Santa Clarita, CA 91350</p>
+                  <p style={{ color: '#333', fontSize: 14, lineHeight: 1.55 }}>A physician-owned detox and residential treatment center offering medically supervised care for adults ready to reclaim their lives.</p>
                 </div>
               </div>
             </FadeUp>
@@ -1060,10 +1126,12 @@ export default function Page() {
       </section>
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
-      <section style={{ background: BG, padding: '70px 0' }}>
-        <div className="lp-inner">
+      <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
+        <DecorativeBg position="bottom-left" tone="dark" opacity={0.14} size={500} />
+        <DecorativeBg position="top-right" tone="dark" opacity={0.10} size={400} />
+        <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 500, color: N }}>Frequently Asked Questions</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N }}>Frequently Asked Questions</h2>
           </FadeUp>
           <FAQ />
           <div style={{ textAlign: 'center', marginTop: 36 }}>
@@ -1092,20 +1160,21 @@ export default function Page() {
         </div>
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp>
-            <h2 style={{ color: '#fff', fontSize: 40, fontWeight: 500, marginBottom: 16 }}>You Deserve to Actually Live Healthy</h2>
+            <h2 style={{ color: '#fff', fontSize: 40, fontWeight: 600, marginBottom: 16 }}>You Deserve to Actually Live Healthy</h2>
             <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: 18, lineHeight: 1.6, marginBottom: 36 }}>
               Our physicians are here to make sure you get well, comfortable and safely.
             </p>
             <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
               <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call Now — (661) 794-6992
+                style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', lineHeight: 1 }}>
+                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0, filter: 'brightness(0) invert(1)' }} />
+                <span>Call Now — (661) 794-6992</span>
               </motion.a>
               <motion.button onClick={() => setShowInsModal(true)}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit', lineHeight: 1 }}>
                 <img src={INS_BTN_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
-                Verify Insurance
+                <span>Verify Insurance</span>
               </motion.button>
             </div>
           </FadeUp>
@@ -1122,17 +1191,17 @@ export default function Page() {
         {showInsModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setShowInsModal(false)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 24, overflowY: 'auto' }}>
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
               onClick={e => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
               aria-labelledby="ins-modal-title"
-              style={{ background: BG, borderRadius: 12, padding: '36px 32px', width: '100%', maxWidth: 580, boxShadow: '0 20px 60px rgba(0,0,0,0.35)', position: 'relative' }}>
+              style={{ background: BG, borderRadius: 12, padding: '32px 28px', width: '100%', maxWidth: 560, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.35)', position: 'relative' }}>
               <button onClick={() => setShowInsModal(false)} aria-label="Close insurance verification form"
-                style={{ position: 'absolute', top: 16, right: 16, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer', fontSize: 18, color: N, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 24 }}>
-                <span style={{ color: N, fontWeight: 500, fontSize: 18 }}>Get Instant Insurance Verification</span>
+                style={{ position: 'absolute', top: 14, right: 14, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer', fontSize: 18, color: N, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>✕</button>
+              <div id="ins-modal-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
+                <span style={{ color: N, fontWeight: 600, fontSize: 18 }}>Get Instant Insurance Verification</span>
                 <img src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
               </div>
               <InsuranceForm />

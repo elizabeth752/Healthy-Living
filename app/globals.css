@@ -57,10 +57,22 @@ h3, h4, h5 { line-height: 1.15; }
   .hero-cta-row { flex-wrap: wrap !important; gap: 18px !important; }
 }
 
-/* ── Subnav: gold hover state on inactive tabs ─────────────────── */
+/* ── Subnav: hover any tab dims the active one (mutually exclusive highlight) ─── */
 .subnav-link[data-active="false"]:hover {
   color: #CEA36F !important;
-  border-bottom-color: rgba(206, 163, 111, 0.5) !important;
+  border-bottom-color: #CEA36F !important;
+}
+/* When the subnav-links container is hovered, neutralize the active state */
+.subnav-links:hover .subnav-link[data-active="true"] {
+  color: #0D3442 !important;
+  border-bottom-color: transparent !important;
+  font-weight: 400 !important;
+}
+/* But re-highlight the actual hovered tab (works whether it was active or not) */
+.subnav-links .subnav-link:hover {
+  color: #CEA36F !important;
+  border-bottom-color: #CEA36F !important;
+  font-weight: 700 !important;
 }
 
 /* ── Header responsive ───────────────────────────────────── */
