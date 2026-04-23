@@ -150,60 +150,20 @@ function CountUp({ target, suffix = '' }: { target: number; suffix?: string }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
-/* ── Insurance form ─────────────────────────────────────────────────────── */
+/* ── Insurance form (CTM iframe — formreactor.js loaded in layout) ──────── */
 function InsuranceForm() {
-  const [f, setF] = useState({ name: '', phone: '', email: '', policyId: '', carrier: 'Aetna', dob: '' });
-  const [done, setDone] = useState(false);
-  const u = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setF(p => ({ ...p, [k]: e.target.value }));
-  const INP: React.CSSProperties = { width: '100%', height: 40, padding: '0 12px', border: `1px solid ${T}`, borderRadius: 4, fontSize: 14, background: '#fff', boxSizing: 'border-box', outline: 'none', color: '#3a3a3a', fontFamily: 'inherit' };
-  const LBL: React.CSSProperties = { display: 'block', fontSize: 13, marginBottom: 6, color: '#000', fontWeight: 400 };
-
-  if (done) return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', padding: '20px 0' }}>
-      <div style={{ fontSize: 48, color: T, marginBottom: 12 }}>✓</div>
-      <p style={{ fontWeight: 700, fontSize: 18, color: N }}>We'll call you within 15 minutes.</p>
-      <p style={{ fontSize: 14, color: '#555', marginTop: 8 }}>Or call: <a href="tel:+16617625668" style={{ color: T, fontWeight: 700 }}>(661) 762-5668</a></p>
-    </motion.div>
-  );
-
   return (
-    <form onSubmit={e => {
-      e.preventDefault();
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({
-        event: 'insurance_form_submit',
-        form_name: 'patient_name',
-        phone: f.phone,
-        email: f.email,
-        insurance_carrier: f.carrier,
-      });
-      setDone(true);
-    }} style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-        <div><label style={LBL}>Your Name<span style={{ color: '#d80027' }}>*</span></label><input required style={INP} value={f.name} onChange={u('name')} /></div>
-        <div><label style={LBL}>Your Phone<span style={{ color: '#d80027' }}>*</span></label><input required type="tel" style={INP} value={f.phone} onChange={u('phone')} /></div>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-        <div><label style={LBL}>Email<span style={{ color: '#d80027' }}>*</span></label><input required type="email" style={INP} value={f.email} onChange={u('email')} /></div>
-        <div><label style={LBL}>Membership Policy ID<span style={{ color: '#d80027' }}>*</span></label><input style={INP} value={f.policyId} onChange={u('policyId')} /></div>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-        <div>
-          <label style={LBL}>Insurance Carrier<span style={{ color: '#d80027' }}>*</span></label>
-          <select required style={{ ...INP, paddingRight: 32 }} value={f.carrier} onChange={u('carrier')}>
-            {['Aetna','Anthem','Cigna','Humana','United','BlueCross','Beacon','Optum','Magellan','Other PPO'].map(c => <option key={c}>{c}</option>)}
-          </select>
-        </div>
-        <div><label style={LBL}>Date of Birth</label><input placeholder="MM/DD/YYYY" style={INP} value={f.dob} onChange={u('dob')} /></div>
-      </div>
-      <motion.button type="submit" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-        style={{ width: '100%', padding: '14px 16px', background: '#F9A21C', color: '#132E49', border: 'none', borderRadius: 4, fontSize: 18, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
-        Check Your Coverage
-      </motion.button>
-      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, lineHeight: 1.5 }}>
+    <div>
+      <iframe
+        className="ctm-call-widget"
+        src="https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html"
+        style={{ width: '100%', height: 360, border: 'none', display: 'block', background: 'transparent' }}
+        title="Verify Insurance Coverage"
+      />
+      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '10px 4px 0', lineHeight: 1.5 }}>
         By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including by phone or text, regarding treatment options. This consent is not a condition of receiving services. <span style={{ whiteSpace: 'nowrap' }}>Your information is private and secure.</span>
       </p>
-    </form>
+    </div>
   );
 }
 
@@ -417,12 +377,12 @@ function Header() {
       <div style={{ background: N, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.35)' : 'none' }}>
         <div className="lp-wide header-inner" style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', objectFit: 'contain', flexShrink: 1, minWidth: 0 }} />
-          <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+          <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
             style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
             <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
-            <span className="header-cta-full">Call Us &nbsp;(661) 762-5668</span>
-            <span className="header-cta-short">(661) 762-5668</span>
+            <span className="header-cta-full">Call Us &nbsp;(661) 794-6992</span>
+            <span className="header-cta-short">(661) 794-6992</span>
           </motion.a>
         </div>
       </div>
@@ -533,7 +493,7 @@ export default function Page() {
 
               {/* CTA + trust badges */}
               <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
-                <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
                   Speak with Admissions 24/7
@@ -601,9 +561,9 @@ export default function Page() {
             </div>
           </FadeUp>
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
-            <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call (661) 762-5668
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call (661) 794-6992
             </motion.a>
           </FadeUp>
         </div>
@@ -639,7 +599,7 @@ export default function Page() {
             </div>
           ))}
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 48 }}>
-            <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: N, color: '#fff', fontWeight: 600, fontSize: 18, padding: '14px 40px', borderRadius: 4, textDecoration: 'none', letterSpacing: '0.01em' }}>
               Connect with Treatment
             </motion.a>
@@ -660,10 +620,10 @@ export default function Page() {
                 <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.65, marginBottom: 28, maxWidth: 640 }}>
                   Our team is also trained to recognize and gently address the trauma that drives addiction — including EMDR therapy for those who are ready to go deeper and end the cycle of trauma.
                 </p>
-                <motion.a href="tel:+16617625668" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, textDecoration: 'none' }}>
                   <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
-                  Call Today (661) 762-5668
+                  Call Today (661) 794-6992
                 </motion.a>
               </FadeUp>
             </div>
@@ -753,7 +713,7 @@ export default function Page() {
           </div>
 
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
-            <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
               <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Start Your Recovery Today
             </motion.a>
@@ -772,7 +732,7 @@ export default function Page() {
           </FadeUp>
           <ConditionsCarousel conditions={CONDITIONS} />
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
-            <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
               <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />We're Here to Support
             </motion.a>
@@ -859,7 +819,7 @@ export default function Page() {
       <section style={{ background: BG, padding: '70px 0' }}>
         <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
           <FadeUp className="reviews-title-col" style={{ width: 280, flexShrink: 0 }}>
-            <h2 style={{ fontSize: 38, fontWeight: 700, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People.<br />Real Recovery.</h2>
+            <h2 style={{ fontSize: 50, fontWeight: 700, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People.<br />Real Recovery.</h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
           </FadeUp>
           <ReviewsCarousel />
@@ -927,7 +887,7 @@ export default function Page() {
             </FadeUp>
           </div>
           <FadeUp style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
-            <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+            <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               style={{ background: O, color: N, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none' }}>
               Check Availability
             </motion.a>
@@ -950,7 +910,7 @@ export default function Page() {
       </section>
 
       {/* ════ MOBILE FORM ════════════════════════════════════════════════ */}
-      <section id="form" style={{ background: BG, padding: '48px 24px' }} className="lg:hidden">
+      <section id="form" className="mobile-form-section" style={{ background: BG, padding: '48px 24px' }}>
         <div style={{ maxWidth: 440, margin: '0 auto', background: '#fff', borderRadius: 12, padding: '28px 24px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
             <span style={{ color: N, fontWeight: 500, fontSize: 16 }}>Get Instant Insurance Verification</span>
@@ -973,9 +933,9 @@ export default function Page() {
               Our physicians are here to make sure you get well, comfortable and safely.
             </p>
             <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <motion.a href="tel:+16617625668" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+              <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                 style={{ background: N, color: '#fff', fontWeight: 500, fontSize: 18, padding: '14px 24px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call Now — (661) 762-5668
+                <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call Now — (661) 794-6992
               </motion.a>
               <motion.button onClick={() => setShowInsModal(true)}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
