@@ -148,10 +148,20 @@ h3, h4, h5 { line-height: 1.15; }
 /* Hide scrollbars on horizontal carousels but keep functionality */
 .conditions-scroller::-webkit-scrollbar { display: none; }
 
-/* ── Insurance logos: static strip on desktop, marquee on mobile ─────────── */
+/* ── Insurance logos: desktop marquee (new) + mobile marquee (ORIGINAL, untouched) ───── */
+.ins-logos-desktop {
+  display: block;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+}
+.ins-logos-desktop .marquee-track {
+  animation-duration: 45s;
+  gap: 60px;
+}
 .ins-logos-mobile { display: none; }
 @media (max-width: 768px) {
-  .ins-logos-static { display: none !important; }
+  .ins-logos-desktop { display: none !important; }
   .ins-logos-mobile {
     display: block;
     overflow: hidden;
