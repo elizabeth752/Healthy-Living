@@ -82,8 +82,8 @@ const STAT2_IC      = '/assets/e3d24105-99f3-408e-8e0f-f02e295fb34f.svg';
 const STAT3_IC      = '/assets/91a31f23-28ff-4171-9676-5fa39be97100.svg';
 const STAT4_IC      = '/assets/60a7657d-4bc5-4fdc-8acb-ffe9709fd824.svg';
 
-// Trust Banner photo
-const TRUST_PHOTO   = '/assets/802d3aa1-7759-49f9-9b36-c9287b6f81fb.jpg';
+// Trust Banner photo — transparent PNG cutout (man on transparent bg)
+const TRUST_PHOTO   = '/assets/802d3aa1-7759-49f9-9b36-c9287b6f81fb-cutout.png';
 
 // Seccion 3 — Treatment Path photos
 const SEC3_DETOX    = '/assets/ea0ad611-966a-4eb4-8e0d-9f0d9baf5525.jpg';
@@ -152,49 +152,31 @@ function CountUp({ target, suffix = '' }: { target: number; suffix?: string }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
-/* ── Decorative background motif (organic wave) — Healthy Living brand ─── */
+/* ── Decorative brand bird/wing motif — Healthy Living's actual logo asset ── */
+const BIRD_BG = '/assets/bird-bg.png';
 function DecorativeBg({
-  position = 'top-right',
-  tone = 'light',
-  opacity = 0.08,
-  size = 520,
+  position = 'top-left',
+  size = 320,
+  opacity = 1,
+  flip = false,
 }: {
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-  tone?: 'light' | 'dark';
-  opacity?: number;
   size?: number;
+  opacity?: number;
+  flip?: boolean;
 }) {
-  const stroke = tone === 'light' ? '#FFFFFF' : '#0D3442';
-  const gradId = `dbg-fade-${position}-${tone}`;
   const pos: React.CSSProperties = { position: 'absolute', pointerEvents: 'none', zIndex: 0 };
-  if (position.includes('top'))    pos.top    = -size * 0.35;
-  if (position.includes('bottom')) pos.bottom = -size * 0.35;
-  if (position.includes('left'))   pos.left   = -size * 0.25;
-  if (position.includes('right'))  pos.right  = -size * 0.25;
+  if (position.includes('top'))    pos.top    = 0;
+  if (position.includes('bottom')) pos.bottom = 0;
+  if (position.includes('left'))   pos.left   = 0;
+  if (position.includes('right'))  pos.right  = 0;
   return (
-    <svg
+    <img
       aria-hidden="true"
-      width={size}
-      height={size}
-      viewBox="0 0 600 600"
-      style={{ ...pos, opacity }}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <radialGradient id={gradId} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={stroke} stopOpacity="1" />
-          <stop offset="100%" stopColor={stroke} stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {/* Concentric organic wave rings — evokes calm water / wellness */}
-      <g fill="none" stroke={`url(#${gradId})`} strokeWidth="2.5">
-        <path d="M300,80 C460,80 540,180 540,300 C540,440 420,520 300,520 C180,520 60,440 60,300 C60,180 140,80 300,80 Z" />
-        <path d="M300,130 C440,130 500,210 500,300 C500,420 400,490 300,490 C200,490 100,420 100,300 C100,210 160,130 300,130 Z" />
-        <path d="M300,180 C420,180 460,240 460,300 C460,400 380,460 300,460 C220,460 140,400 140,300 C140,240 180,180 300,180 Z" />
-        <path d="M300,230 C400,230 420,270 420,300 C420,380 360,430 300,430 C240,430 180,380 180,300 C180,270 200,230 300,230 Z" />
-        <path d="M300,275 C340,275 360,290 360,310 C360,350 330,375 300,375 C270,375 240,350 240,310 C240,290 260,275 300,275 Z" />
-      </g>
-    </svg>
+      src={BIRD_BG}
+      alt=""
+      style={{ ...pos, width: size, height: 'auto', opacity, transform: flip ? 'scaleX(-1)' : 'none' }}
+    />
   );
 }
 
@@ -218,8 +200,11 @@ function InsuranceForm({ height = 460 }: { height?: number }) {
         sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
         allow="clipboard-write"
       />
-      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '10px 4px 0', lineHeight: 1.5 }}>
-        By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including via autodialed or prerecorded calls and text messages, regarding treatment options. This consent is not a condition of receiving services. <span style={{ whiteSpace: 'nowrap' }}>Your information is private and secure.</span>
+      <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '12px 4px 4px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
+        Your information is private and secure. No pressure to commit.
+      </p>
+      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
+        By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including via autodialed or prerecorded calls and text messages, regarding treatment options. This consent is not a condition of receiving services.
       </p>
     </div>
   );
@@ -568,9 +553,9 @@ function Header() {
           <img src={LOGO} alt="Healthy Living Residential Program" className="header-logo" style={{ height: 44, width: 'auto', objectFit: 'contain', flexShrink: 1, minWidth: 0 }} />
           <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
-            style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 16px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-            <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, flexShrink: 0 }} />
-            <span className="header-cta-full">Call Us &nbsp;(661) 794-6992</span>
+            style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 22px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, lineHeight: 1 }}>
+            <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, flexShrink: 0, objectFit: 'contain' }} />
+            <span className="header-cta-full">Call Us&nbsp;&nbsp;(661) 794-6992</span>
             <span className="header-cta-short">(661) 794-6992</span>
           </motion.a>
         </div>
@@ -620,10 +605,10 @@ export default function Page() {
   ];
 
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian M.D.', role: 'Medical Director',               img: TEAM_NARINE, pos: '-5.48% -5.29%',  size: '110.97% 148%'  },
-    { name: 'Dr. Harout Mesrobian',         role: 'CEO',                            img: TEAM_HAROUT, pos: '-18.23% -5.19%', size: '136.46% 182%'  },
-    { name: 'Ritsa Fistes, LMFT',           role: 'Clinical Director',              img: TEAM_RITSA,  pos: '-9.92% -24.76%', size: '123.72% 165%'  },
-    { name: 'Julie Tatian',                 role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  pos: '0% -9.57%',      size: '100% 124.95%'  },
+    { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, focus: 'center 18%' },
+    { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, focus: 'center 22%' },
+    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  focus: 'center 12%' },
+    { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  focus: 'center 14%' },
   ];
 
   const RECOVERY_ITEMS = [
@@ -660,19 +645,20 @@ export default function Page() {
         </div>
 
         {/* Hero content — lp-wide handles responsive side padding */}
-        <div className="lp-wide" style={{ position: 'relative', zIndex: 1, paddingTop: 50, paddingBottom: 40 }}>
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+        <div className="lp-wide hero-grid" style={{ position: 'relative', zIndex: 1, paddingTop: 50, paddingBottom: 40 }}>
+          <div className="hero-row" style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
 
             {/* LEFT — fills available space up to 750px */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              style={{ flex: '1 1 0', minWidth: 0 }}>
-              <h1 style={{ fontSize: 'clamp(28px, 4vw, 50px)', fontWeight: 700, lineHeight: 1.2, color: N, marginBottom: 20 }}>
-                Physician-Owned Detox &<br />Residential Treatment
+              className="hero-text-col" style={{ flex: '1 1 0', minWidth: 0 }}>
+              <h1 className="hero-title" style={{ fontSize: 'clamp(28px, 4vw, 50px)', fontWeight: 700, lineHeight: 1.2, color: N, marginBottom: 20 }}>
+                Physician-Owned Detox &amp;{' '}
+                <span className="hero-title-line2">Residential Treatment</span>
               </h1>
-              <p style={{ color: '#386376', fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
+              <p className="hero-stars" style={{ color: '#386376', fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
                 ⭐️⭐️⭐️⭐️⭐ 4.9/5 on Google from 78+ Reviews
               </p>
-              <p style={{ fontSize: 18, color: N, lineHeight: '22px', marginBottom: 20, maxWidth: 728 }}>
+              <p className="hero-body" style={{ fontSize: 18, color: N, lineHeight: '22px', marginBottom: 20, maxWidth: 728 }}>
                 Founded by two board-certified addiction physicians and built around the whole person, we offer a comfortable, medically guided path to lasting change in the hills of Santa Clarita.
               </p>
 
@@ -761,8 +747,6 @@ export default function Page() {
 
       {/* ════ FACILITY / OUR CENTER ══════════════════════════════════════ */}
       <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-right" tone="light" opacity={0.22} size={620} />
-        <DecorativeBg position="bottom-left" tone="light" opacity={0.18} size={500} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
@@ -785,16 +769,18 @@ export default function Page() {
           </FadeUp>
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />Call (661) 794-6992
+              style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', lineHeight: 1 }}>
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+              <span>Call (661) 794-6992</span>
             </motion.a>
           </FadeUp>
         </div>
       </section>
 
       {/* ════ RECOVERY — THE WAY IT SHOULD FEEL ═════════════════════════ */}
-      <section style={{ background: '#fff', padding: '80px 0' }}>
-        <div className="lp-inner">
+      <section style={{ background: '#fff', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
+        <DecorativeBg position="top-left" size={360} opacity={0.6} />
+        <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
             <p style={{ color: '#555', fontSize: 16, lineHeight: 1.65, maxWidth: 720, margin: '0 auto' }}>
@@ -844,19 +830,19 @@ export default function Page() {
                   Our team is also trained to recognize and gently address the trauma that drives addiction — including EMDR therapy for those who are ready to go deeper and end the cycle of trauma.
                 </p>
                 <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 20px', borderRadius: 4, textDecoration: 'none' }}>
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, textDecoration: 'none', lineHeight: 1 }}>
                   <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
-                  Call Today (661) 794-6992
+                  <span>Call Today (661) 794-6992</span>
                 </motion.a>
               </FadeUp>
             </div>
-            {/* Right — photo card (Figma: 310x351 photo with off-white tab behind bottom) */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310, height: 351 }}>
-              {/* BG tab behind photo — extends 100px from bottom, sits BEHIND photo */}
-              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderRadius: 10, zIndex: 0 }} />
-              <div className="trust-photo-box" style={{ position: 'relative', width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden', background: '#fff', zIndex: 1, boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}>
-                <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
-              </div>
+            {/* Right — Figma cutout style: man on transparent bg, tiny white accent card at chest only */}
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 380, height: 440, alignSelf: 'flex-end' }}>
+              {/* Small white accent card — only behind chest area, "barely visible" depth tab per Figma */}
+              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 30, left: 30, right: 30, height: 130, background: '#FFFFFF', borderRadius: 10, zIndex: 0, opacity: 0.95 }} />
+              {/* Photo — transparent PNG, full bleed, no card frame, no clipping */}
+              <img className="trust-photo-img" src={TRUST_PHOTO} alt="Care team member"
+                style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block', zIndex: 1 }} />
             </FadeUp>
           </div>
         </div>
@@ -956,8 +942,9 @@ export default function Page() {
           <ConditionsCarousel conditions={CONDITIONS} />
           <FadeUp delay={0.2} style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
             <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />We're Here to Support
+              style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', lineHeight: 1 }}>
+              <img src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+              <span>We're Here to Support</span>
             </motion.a>
           </FadeUp>
         </div>
@@ -970,17 +957,17 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
             <p style={{ color: '#555', fontSize: 16, maxWidth: 700, margin: '0 auto' }}>We know what addiction does to the brain, body, and spirit. You don't need more willpower — you need the right medical team.</p>
           </FadeUp>
-          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, alignItems: 'start' }}>
             {TEAM.map((m, idx) => (
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
-                  <div style={{ width: '100%', height: 310, borderRadius: 10, overflow: 'hidden', position: 'relative' }}>
+                  <div style={{ width: '100%', aspectRatio: '1', borderRadius: 10, overflow: 'hidden', position: 'relative', background: '#fff' }}>
                     <img src={m.img} alt={m.name} className="team-photo-img"
-                      style={{ position: 'absolute', width: m.size.split(' ')[0], height: m.size.split(' ')[1], left: m.pos.split(' ')[0], top: m.pos.split(' ')[1], maxWidth: 'none' }} />
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: m.focus, display: 'block' }} />
                   </div>
-                  <div style={{ padding: '14px 10px 0' }}>
-                    <p style={{ fontWeight: 700, color: N, fontSize: 18, lineHeight: '22px' }}>{m.name}</p>
-                    <p style={{ color: T, fontSize: 12, marginTop: 2 }}>{m.role}</p>
+                  <div style={{ padding: '14px 10px 0', minHeight: 64 }}>
+                    <p style={{ fontWeight: 700, color: N, fontSize: 17, lineHeight: 1.25, minHeight: 42 }}>{m.name}</p>
+                    <p style={{ color: T, fontSize: 12, marginTop: 4 }}>{m.role}</p>
                   </div>
                 </motion.div>
               </FadeUp>
@@ -997,7 +984,15 @@ export default function Page() {
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
-            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
+            {/* Desktop: single static strip */}
+            <img className="ins-logos-static" src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
+            {/* Mobile: auto-scrolling marquee for legibility at small width */}
+            <div className="ins-logos-mobile" aria-hidden="true">
+              <div className="marquee-track">
+                <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
+              </div>
+            </div>
           </FadeUp>
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
             <motion.button onClick={() => setShowInsModal(true)}
@@ -1040,8 +1035,6 @@ export default function Page() {
 
       {/* ════ TESTIMONIALS ═══════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-right" tone="dark" opacity={0.14} size={520} />
-        <DecorativeBg position="bottom-left" tone="dark" opacity={0.10} size={420} />
         <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 32, alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
           <FadeUp className="reviews-title-col" style={{ width: 360, flexShrink: 0 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, lineHeight: 1.15, marginBottom: 18, letterSpacing: '-0.01em' }}>
@@ -1055,8 +1048,6 @@ export default function Page() {
 
       {/* ════ STATS ══════════════════════════════════════════════════════ */}
       <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '60px 0 80px', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-left" tone="light" opacity={0.22} size={560} />
-        <DecorativeBg position="bottom-right" tone="light" opacity={0.18} size={500} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 50 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
@@ -1127,8 +1118,7 @@ export default function Page() {
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="bottom-left" tone="dark" opacity={0.14} size={500} />
-        <DecorativeBg position="top-right" tone="dark" opacity={0.10} size={400} />
+        <DecorativeBg position="bottom-left" size={360} opacity={0.7} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N }}>Frequently Asked Questions</h2>

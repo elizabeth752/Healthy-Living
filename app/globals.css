@@ -1,4 +1,5 @@
 @import "tailwindcss";
+/* v3-rebuild-marker */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { overflow-x: hidden; }
@@ -55,6 +56,31 @@ h3, h4, h5 { line-height: 1.15; }
 /* ── Hero CTA + badges row: inline on desktop, wrap on smaller ─── */
 @media (max-width: 1100px) {
   .hero-cta-row { flex-wrap: wrap !important; gap: 18px !important; }
+}
+
+/* Desktop only: force "Residential Treatment" onto its own line */
+.hero-title-line2 { display: block; }
+@media (max-width: 768px) {
+  .hero-title-line2 { display: inline; }
+}
+
+/* ── Mobile hero — centered everything per Figma mobile design ─────────── */
+@media (max-width: 768px) {
+  .hero-text-col { text-align: center !important; }
+  .hero-title    { font-size: 32px !important; line-height: 1.15 !important; margin-bottom: 14px !important; }
+  .hero-title br { display: none; }
+  .hero-stars    { text-align: center !important; font-size: 13px !important; }
+  .hero-body     { text-align: center !important; max-width: 100% !important; font-size: 15px !important; line-height: 1.55 !important; }
+  .hero-bullets  { align-items: flex-start !important; max-width: 280px; margin: 18px auto 24px !important; }
+  .hero-cta-row  { flex-direction: column !important; align-items: center !important; gap: 22px !important; }
+  .hero-cta-row > a:first-child { width: 100% !important; max-width: 320px; padding: 16px 24px !important; font-size: 16px !important; }
+  .hero-badges-row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 14px 22px !important;
+    width: 100%;
+  }
 }
 
 /* ── Subnav: hover any tab dims the active one (mutually exclusive highlight) ─── */
@@ -116,6 +142,22 @@ h3, h4, h5 { line-height: 1.15; }
 /* Hide scrollbars on horizontal carousels but keep functionality */
 .conditions-scroller::-webkit-scrollbar { display: none; }
 
+/* ── Insurance logos: static strip on desktop, marquee on mobile ─────────── */
+.ins-logos-mobile { display: none; }
+@media (max-width: 768px) {
+  .ins-logos-static { display: none !important; }
+  .ins-logos-mobile {
+    display: block;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  }
+  .ins-logos-mobile .marquee-track {
+    animation-duration: 22s;
+    gap: 32px;
+  }
+}
+
 @keyframes pulse-ring {
   0%   { box-shadow: 0 0 0 0 rgba(249,162,28,0.55); }
   70%  { box-shadow: 0 0 0 14px rgba(249,162,28,0); }
@@ -143,24 +185,24 @@ h3, h4, h5 { line-height: 1.15; }
                     border-bottom: 1px solid rgba(255,255,255,0.12) !important; }
   .amenity-item:last-child { border-bottom: none !important; }
 
-  /* Trust banner: text top, photo bottom */
-  .trust-inner    { flex-direction: column !important; }
-  .trust-photo-col { width: 100% !important; flex-shrink: 1 !important; }
-  .trust-photo-box { width: 100% !important; height: 300px !important; }
-  .trust-photo-img { width: 100% !important; height: 100% !important; left: 0 !important; top: 0 !important;
-                     max-width: 100% !important; object-position: center 15% !important; }
+  /* Trust banner: text top, photo bottom — cutout PNG style (transparent on navy) */
+  .trust-inner    { flex-direction: column !important; gap: 24px !important; }
+  .trust-photo-col { width: 100% !important; max-width: 360px !important; height: 440px !important; margin: 0 auto !important; }
+  .trust-photo-img { object-position: center bottom !important; }
 
-  /* Treatment path rows: stack vertically */
-  .treatment-row  { flex-direction: column !important; }
-  .treatment-photo { width: 100% !important; height: 220px !important; flex-shrink: 1 !important; }
+  /* Treatment path rows: stack vertically — photo ALWAYS on top regardless of DOM order */
+  .treatment-row  { flex-direction: column !important; align-items: stretch !important; gap: 16px !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .treatment-row > div:not(.treatment-photo) { padding-left: 0 !important; padding-right: 0 !important; }
+  .treatment-photo { width: 100% !important; height: 240px !important; flex-shrink: 1 !important; min-height: 0 !important; order: -1 !important; }
 
   /* Conditions carousel: single card */
   .conditions-grid { grid-template-columns: 1fr !important; }
   .conditions-grid > div:nth-child(2),
   .conditions-grid > div:nth-child(3) { display: none !important; }
 
-  /* Team grid: 2 columns, faces use cover not percentage dims */
-  .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  /* Team grid: 1 column per Figma mobile, faces use cover */
+  .team-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .team-grid > * { max-width: 360px; margin: 0 auto; width: 100%; }
   .team-photo-img {
     position: absolute !important; inset: 0 !important;
     width: 100% !important; height: 100% !important;
