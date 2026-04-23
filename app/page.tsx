@@ -195,10 +195,10 @@ function DecorativeBg({
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 const CTM_FORM_URL = 'https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html';
-function InsuranceForm({ height = 500 }: { height?: number }) {
-  // CTM form base height is ~280px, but the Insurance Carrier <select> dropdown
-  // expands downward ~200px when opened. 500px fits the dropdown without clipping
-  // while still being tighter than the original 720.
+function InsuranceForm({ height = 320 }: { height?: number }) {
+  // TEMP: 320px demo state so Elizabeth can see the Insurance Carrier dropdown
+  // clip (dropdown expands beyond iframe viewport when scrolling=no).
+  // Proper fix = native form rebuild. Bump back to 500 after demo.
   return (
     <div style={{ width: '100%' }}>
       {/* Reassurance ABOVE the form — always visible on every viewport, sets expectation before filling */}
@@ -1025,13 +1025,11 @@ export default function Page() {
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
-            {/* Desktop: single static strip */}
-            <img className="ins-logos-static" src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
-            {/* Mobile: auto-scrolling marquee for legibility at small width */}
-            <div className="ins-logos-mobile" aria-hidden="true">
+            {/* Marquee at every viewport — keeps logos at native size, no squish on scale-down */}
+            <div className="ins-logos-marquee" aria-label="Insurance logos">
               <div className="marquee-track">
-                <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
-                <img src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="Insurance logos" style={{ height: 50, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" aria-hidden="true" style={{ height: 50, flexShrink: 0 }} />
               </div>
             </div>
           </FadeUp>
