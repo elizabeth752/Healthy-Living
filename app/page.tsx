@@ -196,9 +196,9 @@ function DecorativeBg({
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 const CTM_FORM_URL = 'https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html';
 function InsuranceForm({ height = 320 }: { height?: number }) {
-  // TEMP: 320px demo state so Elizabeth can see the Insurance Carrier dropdown
-  // clip (dropdown expands beyond iframe viewport when scrolling=no).
-  // Proper fix = native form rebuild. Bump back to 500 after demo.
+  // Tight 320px height with scrolling=auto: form fits cleanly with no whitespace,
+  // and when the Insurance Carrier dropdown overflows, browser's native direction
+  // detection kicks in (opens up/down based on space) + iframe scrollbar as fallback.
   return (
     <div style={{ width: '100%' }}>
       {/* Reassurance ABOVE the form — always visible on every viewport, sets expectation before filling */}
@@ -210,7 +210,7 @@ function InsuranceForm({ height = 320 }: { height?: number }) {
         src={CTM_FORM_URL}
         style={{ width: '100%', height, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
         title="Verify Insurance Coverage"
-        scrolling="no"
+        scrolling="auto"
         allow="clipboard-write"
       />
       {/* Fallback link — for browsers that block 3rd-party iframes (Brave shields, uBlock, etc) */}
