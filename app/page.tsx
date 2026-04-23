@@ -463,6 +463,7 @@ function ReviewsCarousel() {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const total = REVIEWERS.length;
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
     if (paused) return;
@@ -472,8 +473,29 @@ function ReviewsCarousel() {
 
   const slice = Array.from({ length: 3 }, (_, o) => ({ r: REVIEWERS[(idx + o) % total], key: (idx + o) % total }));
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    setPaused(true);
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const dx = touchStartX.current != null ? e.changedTouches[0].clientX - touchStartX.current : 0;
+    if (Math.abs(dx) > 50) {
+      setIdx(a => (dx < 0 ? (a + 1) % total : (a - 1 + total) % total));
+    }
+    touchStartX.current = null;
+    setPaused(false);
+  };
+
   return (
-    <div style={{ flex: 1, minWidth: 0 }} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <div
+      style={{ flex: 1, minWidth: 0 }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onMouseDown={() => setPaused(true)}
+      onMouseUp={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <AnimatePresence mode="wait">
         <motion.div key={idx}
           initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
