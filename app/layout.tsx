@@ -5,6 +5,13 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Physician-Owned Detox & Residential Treatment | Healthy Living',
   description: 'Same-day admissions 24/7. Physician-owned detox and residential treatment in the hills of Santa Clarita. Couples welcome. Pet-friendly. Most PPO insurance accepted.',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: 'Healthy Living Residential Program',
     description: 'Physician-owned detox & residential treatment. Santa Clarita, CA.',
@@ -19,6 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.svg" />
         <Script id="gtm" strategy="afterInteractive">{`
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
