@@ -159,23 +159,34 @@ function DecorativeBg({
   size = 320,
   opacity = 1,
   flip = false,
+  contrast = 'normal',
 }: {
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   size?: number;
   opacity?: number;
   flip?: boolean;
+  contrast?: 'normal' | 'boost'; // boost = darker, for sections where bird-bg blends with section bg
 }) {
   const pos: React.CSSProperties = { position: 'absolute', pointerEvents: 'none', zIndex: 0 };
   if (position.includes('top'))    pos.top    = 0;
   if (position.includes('bottom')) pos.bottom = 0;
   if (position.includes('left'))   pos.left   = 0;
   if (position.includes('right'))  pos.right  = 0;
+  const transforms = [];
+  if (flip) transforms.push('scaleX(-1)');
   return (
     <img
       aria-hidden="true"
       src={BIRD_BG}
       alt=""
-      style={{ ...pos, width: size, height: 'auto', opacity, transform: flip ? 'scaleX(-1)' : 'none' }}
+      style={{
+        ...pos,
+        width: size,
+        height: 'auto',
+        opacity,
+        transform: transforms.length ? transforms.join(' ') : 'none',
+        filter: contrast === 'boost' ? 'brightness(0.7) saturate(1.6)' : 'none',
+      }}
     />
   );
 }
@@ -1118,7 +1129,7 @@ export default function Page() {
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="bottom-left" size={360} opacity={1} />
+        <DecorativeBg position="bottom-left" size={360} opacity={1} contrast="boost" />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N }}>Frequently Asked Questions</h2>
