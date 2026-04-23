@@ -193,9 +193,15 @@ function DecorativeBg({
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 function InsuranceForm({ height = 460 }: { height?: number }) {
+  const MIN_H = 380; // never collapse below this — iframe must always show fields
   const [h, setH] = useState(height);
   useEffect(() => {
-    const fit = () => setH(window.innerWidth <= 768 ? Math.min(height, window.innerHeight - 220) : height);
+    const fit = () => {
+      const fitted = window.innerWidth <= 768
+        ? Math.max(MIN_H, Math.min(height, window.innerHeight - 200))
+        : height;
+      setH(fitted);
+    };
     fit();
     window.addEventListener('resize', fit);
     return () => window.removeEventListener('resize', fit);
@@ -205,10 +211,9 @@ function InsuranceForm({ height = 460 }: { height?: number }) {
       <iframe
         className="ctm-call-widget"
         src="https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html"
-        style={{ width: '100%', height: h, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
+        style={{ width: '100%', height: h, minHeight: MIN_H, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
         title="Verify Insurance Coverage"
         scrolling="yes"
-        sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
         allow="clipboard-write"
       />
       <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '12px 4px 4px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
@@ -847,13 +852,15 @@ export default function Page() {
                 </motion.a>
               </FadeUp>
             </div>
-            {/* Right — Figma cutout style: man on transparent bg, tiny white accent card at chest only */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 380, height: 440, alignSelf: 'flex-end' }}>
-              {/* Small white accent card — only behind chest area, "barely visible" depth tab per Figma */}
-              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 30, left: 30, right: 30, height: 130, background: '#FFFFFF', borderRadius: 10, zIndex: 0, opacity: 0.95 }} />
-              {/* Photo — transparent PNG, full bleed, no card frame, no clipping */}
-              <img className="trust-photo-img" src={TRUST_PHOTO} alt="Care team member"
-                style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block', zIndex: 1 }} />
+            {/* Right — EXACT Figma spec (node 6059:3888): 310x351 contained box, photo cropped per Figma percentages, white card #EDF4F4 behind lower 100px */}
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310, height: 351 }}>
+              {/* White card BG — Figma node 6059:3889: 310x100, top:251 (=bottom:0), rounded top corners, color #EDF4F4 */}
+              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 100, background: '#EDF4F4', borderTopLeftRadius: 20, borderTopRightRadius: 20, zIndex: 0 }} />
+              {/* Photo container — Figma node 6059:3890: 310x351 with overflow hidden */}
+              <div className="trust-photo-box" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden', zIndex: 1 }}>
+                <img className="trust-photo-img" src={TRUST_PHOTO} alt="Care team member"
+                  style={{ position: 'absolute', height: '167%', top: '-4.44%', left: '-8.84%', width: '111.88%', maxWidth: 'none', display: 'block' }} />
+              </div>
             </FadeUp>
           </div>
         </div>
