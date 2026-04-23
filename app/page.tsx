@@ -196,16 +196,12 @@ function DecorativeBg({
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 const CTM_FORM_URL = 'https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html';
 function InsuranceForm({ height = 460 }: { height?: number }) {
-  const MIN_H = 380; // never collapse below this — iframe must always show fields
+  // Mobile: 6 fields stack vertically — needs ~720px to show all + button without inner-scroll.
+  // Desktop: 2-col grid fits in 460px.
+  const MOBILE_H = 720;
   const [h, setH] = useState(height);
-  const [iframeLoaded, setIframeLoaded] = useState(false);
   useEffect(() => {
-    const fit = () => {
-      const fitted = window.innerWidth <= 768
-        ? Math.max(MIN_H, Math.min(height, window.innerHeight - 200))
-        : height;
-      setH(fitted);
-    };
+    const fit = () => setH(window.innerWidth <= 768 ? MOBILE_H : height);
     fit();
     window.addEventListener('resize', fit);
     return () => window.removeEventListener('resize', fit);
@@ -219,11 +215,10 @@ function InsuranceForm({ height = 460 }: { height?: number }) {
       <iframe
         className="ctm-call-widget"
         src={CTM_FORM_URL}
-        style={{ width: '100%', height: h, minHeight: MIN_H, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
+        style={{ width: '100%', height: h, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
         title="Verify Insurance Coverage"
-        scrolling="yes"
+        scrolling="no"
         allow="clipboard-write"
-        onLoad={() => setIframeLoaded(true)}
       />
       {/* Fallback link — for browsers that block 3rd-party iframes (Brave shields, uBlock, etc) */}
       <p style={{ textAlign: 'center', fontSize: 12, color: '#666', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>

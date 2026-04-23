@@ -212,9 +212,6 @@ h3, h4, h5 { line-height: 1.15; }
   /* Stats grid: single column */
   .stats-grid { grid-template-columns: 1fr !important; }
 
-  /* Trust banner: hide decorative BG tab */
-  .trust-bg-tab { display: none !important; }
-
   /* How it works: 1 column */
   .steps-grid { grid-template-columns: 1fr !important; }
 
