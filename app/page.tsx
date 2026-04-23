@@ -43,22 +43,22 @@ const CAR_ARR  = '/assets/a22864e4-c981-403e-a2e6-4827de9e9761.svg';
 
 // Facility photos (node 6041:3105 — Seccion 1)
 const FACILITY = [
-  '/assets/5c6ecc85-d659-4f9f-8385-7c2f680faf70.jpg',
-  '/assets/358929a5-95fd-44f4-ba70-54754635bdc7.jpg',
-  '/assets/99a773b4-b8d1-4be2-a231-038ae9f874f1.jpg',
-  '/assets/1c7c93db-8d50-4fde-9db2-eb25ebf61eed.jpg',
-  '/assets/3f53217c-b4c1-453a-980f-17f81a56c281.jpg',
-  '/assets/988c538c-85dc-4c04-8b8c-e5d251c0412a.jpg',
-  '/assets/aa92df69-2f4a-428c-9426-8ca742b16d76.jpg',
-  '/assets/bd90d69f-3f77-4f34-b4c5-647c89c1f0ab.jpg',
-  '/assets/924693b0-5a19-4e5a-b7c8-47cd33538f87.jpg',
-  '/assets/7474da6c-6e63-4d2d-b103-7c67da882b92.jpg',
-  '/assets/c6b56340-07cd-41c8-965d-5d79215b5a0a.jpg',
-  '/assets/246e6c2c-3428-42db-ad1c-ba9a6023668d.jpg',
-  '/assets/aedb0a73-ea7d-409e-a044-11f4dc061bcc.jpg',
-  '/assets/dd0ac0f6-9636-4139-b832-c5512b76ca53.jpg',
-  '/assets/cc361b6e-f352-475a-9afc-89c1831e5cc9.jpg',
-  '/assets/9ed7f966-0050-4183-ab48-ecbe978662dd.jpg',
+  '/assets/5c6ecc85-d659-4f9f-8385-7c2f680faf70.webp',
+  '/assets/358929a5-95fd-44f4-ba70-54754635bdc7.webp',
+  '/assets/99a773b4-b8d1-4be2-a231-038ae9f874f1.webp',
+  '/assets/1c7c93db-8d50-4fde-9db2-eb25ebf61eed.webp',
+  '/assets/3f53217c-b4c1-453a-980f-17f81a56c281.webp',
+  '/assets/988c538c-85dc-4c04-8b8c-e5d251c0412a.webp',
+  '/assets/aa92df69-2f4a-428c-9426-8ca742b16d76.webp',
+  '/assets/bd90d69f-3f77-4f34-b4c5-647c89c1f0ab.webp',
+  '/assets/924693b0-5a19-4e5a-b7c8-47cd33538f87.webp',
+  '/assets/7474da6c-6e63-4d2d-b103-7c67da882b92.webp',
+  '/assets/c6b56340-07cd-41c8-965d-5d79215b5a0a.webp',
+  '/assets/246e6c2c-3428-42db-ad1c-ba9a6023668d.webp',
+  '/assets/aedb0a73-ea7d-409e-a044-11f4dc061bcc.webp',
+  '/assets/dd0ac0f6-9636-4139-b832-c5512b76ca53.webp',
+  '/assets/cc361b6e-f352-475a-9afc-89c1831e5cc9.webp',
+  '/assets/9ed7f966-0050-4183-ab48-ecbe978662dd.webp',
 ];
 
 // Amenity icons
@@ -301,7 +301,7 @@ function Carousel() {
         {FACILITY.slice(0, 6).map((src, idx) => (
           <button key={idx} onClick={() => setI(idx)}
             style={{ flexShrink: 0, padding: 0, background: 'none', border: 'none', cursor: 'pointer', position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
-            <OptImg loading="lazy" src={src} alt="" style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
+            <OptImg loading="lazy" src={src.replace(/\.(jpe?g|webp)$/i, '-thumb.webp')} alt="" width={336} height={160} style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
             {idx !== i && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.65)', borderRadius: 4 }} />}
           </button>
         ))}
@@ -765,6 +765,24 @@ export default function Page() {
                   <OptImg src={SAMHSA}   alt="" style={{ width: 70, height: 24, objectFit: 'contain', flexShrink: 0 }} />
                 </div>
               </div>
+              {/* Transportation callout — practical benefit pill, sits below badges */}
+              <div className="hero-transport-callout" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                marginTop: 18,
+                padding: '8px 16px',
+                background: 'rgba(249, 162, 28, 0.12)',
+                border: `1px solid ${O}`,
+                borderRadius: 20,
+                color: N,
+                fontSize: 14,
+                fontWeight: 500,
+                lineHeight: 1.3
+              }}>
+                <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>🚐</span>
+                <span>Complimentary transportation available for verified patients</span>
+              </div>
             </motion.div>
 
             {/* RIGHT — form card 530px */}
@@ -852,7 +870,7 @@ export default function Page() {
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
             <p style={{ color: '#555', fontSize: 16, lineHeight: 1.65, maxWidth: 720, margin: '0 auto' }}>
-              We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities.
+              We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities. We also provide complimentary transportation for verified patients — because logistics should never stand between you and the care you need.
             </p>
           </FadeUp>
           {[RECOVERY_ITEMS.slice(0,4), RECOVERY_ITEMS.slice(4)].map((group, gi) => (

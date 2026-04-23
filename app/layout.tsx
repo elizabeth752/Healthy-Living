@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="shortcut icon" href="/favicon.svg" />
-        <link rel="preload" as="image" href="/assets/b98d49b5-9f35-465b-88d4-d034211e775a.jpg" fetchPriority="high" />
+        <link rel="preload" as="image" href="/assets/b98d49b5-9f35-465b-88d4-d034211e775a.webp" type="image/webp" fetchPriority="high" />
         <link rel="preconnect" href="https://206076.tctm.co" />
         <link rel="dns-prefetch" href="https://206076.tctm.co" />
         <Script id="gtm" strategy="afterInteractive">{`
