@@ -152,18 +152,67 @@ function CountUp({ target, suffix = '' }: { target: number; suffix?: string }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
-/* ── Insurance form (CTM iframe — formreactor.js loaded in layout) ──────── */
-function InsuranceForm() {
+/* ── Decorative background motif (organic wave) — Healthy Living brand ─── */
+function DecorativeBg({
+  position = 'top-right',
+  tone = 'light',
+  opacity = 0.08,
+  size = 520,
+}: {
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  tone?: 'light' | 'dark';
+  opacity?: number;
+  size?: number;
+}) {
+  const stroke = tone === 'light' ? '#FFFFFF' : '#0D3442';
+  const gradId = `dbg-fade-${position}-${tone}`;
+  const pos: React.CSSProperties = { position: 'absolute', pointerEvents: 'none', zIndex: 0 };
+  if (position.includes('top'))    pos.top    = -size * 0.35;
+  if (position.includes('bottom')) pos.bottom = -size * 0.35;
+  if (position.includes('left'))   pos.left   = -size * 0.25;
+  if (position.includes('right'))  pos.right  = -size * 0.25;
   return (
-    <div>
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 600 600"
+      style={{ ...pos, opacity }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <radialGradient id={gradId} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={stroke} stopOpacity="1" />
+          <stop offset="100%" stopColor={stroke} stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {/* Concentric organic wave rings — evokes calm water / wellness */}
+      <g fill="none" stroke={`url(#${gradId})`} strokeWidth="1.4">
+        <path d="M300,80 C460,80 540,180 540,300 C540,440 420,520 300,520 C180,520 60,440 60,300 C60,180 140,80 300,80 Z" />
+        <path d="M300,130 C440,130 500,210 500,300 C500,420 400,490 300,490 C200,490 100,420 100,300 C100,210 160,130 300,130 Z" />
+        <path d="M300,180 C420,180 460,240 460,300 C460,400 380,460 300,460 C220,460 140,400 140,300 C140,240 180,180 300,180 Z" />
+        <path d="M300,230 C400,230 420,270 420,300 C420,380 360,430 300,430 C240,430 180,380 180,300 C180,270 200,230 300,230 Z" />
+        <path d="M300,275 C340,275 360,290 360,310 C360,350 330,375 300,375 C270,375 240,350 240,310 C240,290 260,275 300,275 Z" />
+      </g>
+    </svg>
+  );
+}
+
+/* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
+function InsuranceForm({ height = 720 }: { height?: number }) {
+  return (
+    <div style={{ width: '100%' }}>
       <iframe
         className="ctm-call-widget"
         src="https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html"
-        style={{ width: '100%', height: 360, border: 'none', display: 'block', background: 'transparent' }}
+        style={{ width: '100%', height, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
         title="Verify Insurance Coverage"
+        scrolling="no"
+        sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
+        allow="clipboard-write"
       />
       <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '10px 4px 0', lineHeight: 1.5 }}>
-        By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including by phone or text, regarding treatment options. This consent is not a condition of receiving services. <span style={{ whiteSpace: 'nowrap' }}>Your information is private and secure.</span>
+        By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including via autodialed or prerecorded calls and text messages, regarding treatment options. This consent is not a condition of receiving services. <span style={{ whiteSpace: 'nowrap' }}>Your information is private and secure.</span>
       </p>
     </div>
   );
@@ -225,10 +274,12 @@ function Carousel() {
   );
 }
 
-/* ── Conditions Carousel — native horizontal scroll w/ snap, ~2 cards visible per Figma ── */
+/* ── Conditions Carousel — native horizontal scroll w/ snap, click+drag enabled ── */
 function ConditionsCarousel({ conditions }: { conditions: { icon: string; title: string; desc: string }[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
+  const dragState = useRef({ isDown: false, startX: 0, startScroll: 0, moved: false });
+  const [grabbing, setGrabbing] = useState(false);
 
   const scrollToIdx = (i: number) => {
     const el = scrollRef.current;
@@ -249,12 +300,46 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
     return () => el.removeEventListener('scroll', handler);
   }, [conditions.length]);
 
+  // Mouse drag-to-scroll (touch + trackpad already work natively)
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'mouse') return;
+    const el = scrollRef.current; if (!el) return;
+    dragState.current = { isDown: true, startX: e.clientX, startScroll: el.scrollLeft, moved: false };
+    setGrabbing(true);
+    el.setPointerCapture(e.pointerId);
+    el.style.scrollSnapType = 'none';
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    const s = dragState.current; if (!s.isDown) return;
+    const el = scrollRef.current; if (!el) return;
+    const dx = e.clientX - s.startX;
+    if (Math.abs(dx) > 4) s.moved = true;
+    el.scrollLeft = s.startScroll - dx;
+  };
+  const onPointerEnd = (e: React.PointerEvent) => {
+    const s = dragState.current; if (!s.isDown) return;
+    s.isDown = false;
+    setGrabbing(false);
+    const el = scrollRef.current; if (!el) return;
+    el.releasePointerCapture?.(e.pointerId);
+    el.style.scrollSnapType = 'x mandatory';
+  };
+  // Suppress click on cards if user just dragged
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (dragState.current.moved) { e.preventDefault(); e.stopPropagation(); dragState.current.moved = false; }
+  };
+
   return (
     <div>
       <p style={{ color: '#fff', fontWeight: 700, fontSize: 18, lineHeight: '22px', textAlign: 'center', marginBottom: 16 }}>Common Conditions:</p>
       <div
         ref={scrollRef}
         className="conditions-scroller"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerEnd}
+        onPointerCancel={onPointerEnd}
+        onClickCapture={onClickCapture}
         style={{
           display: 'flex',
           gap: 16,
@@ -263,6 +348,8 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
           scrollSnapType: 'x mandatory',
           padding: 10,
           scrollbarWidth: 'none',
+          cursor: grabbing ? 'grabbing' : 'grab',
+          userSelect: grabbing ? 'none' : 'auto',
         }}
       >
         {conditions.map((c, idx) => (
@@ -599,8 +686,10 @@ export default function Page() {
       </section>
 
       {/* ════ FACILITY / OUR CENTER ══════════════════════════════════════ */}
-      <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0' }}>
-        <div className="lp-inner">
+      <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
+        <DecorativeBg position="top-right" tone="light" opacity={0.07} size={560} />
+        <DecorativeBg position="bottom-left" tone="light" opacity={0.05} size={420} />
+        <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff', marginBottom: 16 }}>Healthy Living Isn't Just Our Name</h2>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16 }}>It's what we help you achieve.</p>
@@ -687,12 +776,12 @@ export default function Page() {
                 </motion.a>
               </FadeUp>
             </div>
-            {/* Right — photo card */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310 }}>
+            {/* Right — photo card (Figma: contained card, head+shoulders crop) */}
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 360 }}>
               {/* BG tab behind photo — desktop only */}
-              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20 }} />
-              <div className="trust-photo-box" style={{ position: 'relative', width: 310, height: 351, borderRadius: 10, overflow: 'hidden' }}>
-                <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '111.88%', height: '167%', position: 'absolute', left: '-8.84%', top: '-4.44%', objectFit: 'cover', maxWidth: 'none' }} />
+              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: -10, left: 16, right: 16, height: 60, background: BG, borderTopLeftRadius: 20, borderTopRightRadius: 20, zIndex: 0 }} />
+              <div className="trust-photo-box" style={{ position: 'relative', width: '100%', height: 380, borderRadius: 10, overflow: 'hidden', background: '#fff', zIndex: 1 }}>
+                <img className="trust-photo-img" src={TRUST_PHOTO} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', display: 'block' }} />
               </div>
             </FadeUp>
           </div>
@@ -876,8 +965,10 @@ export default function Page() {
       </section>
 
       {/* ════ TESTIMONIALS ═══════════════════════════════════════════════ */}
-      <section style={{ background: BG, padding: '70px 0' }}>
-        <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+      <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
+        <DecorativeBg position="top-right" tone="dark" opacity={0.06} size={500} />
+        <DecorativeBg position="bottom-left" tone="dark" opacity={0.04} size={400} />
+        <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 24, alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
           <FadeUp className="reviews-title-col" style={{ width: 280, flexShrink: 0 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: N, lineHeight: 1.2, marginBottom: 16 }}>Real People. Real Recovery.</h2>
             <p style={{ color: '#444', fontSize: 16, lineHeight: 1.6 }}>These are the stories that remind us why we do this work.</p>
@@ -887,8 +978,10 @@ export default function Page() {
       </section>
 
       {/* ════ STATS ══════════════════════════════════════════════════════ */}
-      <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '80px 0 100px' }}>
-        <div className="lp-inner">
+      <section style={{ background: 'linear-gradient(to bottom, #0D3442 0%, #56B5B7 100%)', padding: '80px 0 100px', position: 'relative', overflow: 'hidden' }}>
+        <DecorativeBg position="top-left" tone="light" opacity={0.08} size={520} />
+        <DecorativeBg position="bottom-right" tone="light" opacity={0.06} size={460} />
+        <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 72 }}>
             <h2 style={{ fontSize: 40, fontWeight: 500, color: '#fff' }}>Thousands Served — Decades of Trust</h2>
           </FadeUp>
@@ -1018,11 +1111,14 @@ export default function Page() {
         {showInsModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setShowInsModal(false)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 24, overflowY: 'auto' }}>
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
               onClick={e => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="ins-modal-title"
               style={{ background: BG, borderRadius: 12, padding: '36px 32px', width: '100%', maxWidth: 580, boxShadow: '0 20px 60px rgba(0,0,0,0.35)', position: 'relative' }}>
-              <button onClick={() => setShowInsModal(false)}
+              <button onClick={() => setShowInsModal(false)} aria-label="Close insurance verification form"
                 style={{ position: 'absolute', top: 16, right: 16, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.08)', border: 'none', cursor: 'pointer', fontSize: 18, color: N, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 24 }}>
                 <span style={{ color: N, fontWeight: 500, fontSize: 18 }}>Get Instant Insurance Verification</span>
