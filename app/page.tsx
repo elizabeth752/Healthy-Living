@@ -870,7 +870,7 @@ export default function Page() {
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
             <p style={{ color: '#555', fontSize: 16, lineHeight: 1.65, maxWidth: 720, margin: '0 auto' }}>
-              We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities. We also provide complimentary transportation for verified patients — because logistics should never stand between you and the care you need.
+              We built this program around the belief that comfort, dignity, and real human connection aren't luxuries in recovery — they're necessities. We also provide complimentary transportation for verified patients, so logistics never stand between you and the care you need.
             </p>
           </FadeUp>
           {[RECOVERY_ITEMS.slice(0,4), RECOVERY_ITEMS.slice(4)].map((group, gi) => (
