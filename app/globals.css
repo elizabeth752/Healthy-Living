@@ -13,6 +13,12 @@ body {
 h1, h2 { line-height: 1.1; letter-spacing: -0.005em; }
 h3, h4, h5 { line-height: 1.15; }
 
+/* Row 2 of treatment path: DOM is photo-first; desktop flips visually so photo appears RIGHT */
+@media (min-width: 769px) {
+  .treatment-row-reverse { flex-direction: row-reverse !important; }
+  .treatment-row-reverse > div:not(.treatment-photo) { padding-left: 0 !important; padding-right: 20px !important; }
+}
+
 /* ── Layout containers ──────────────────────────────────── */
 .lp-inner {
   max-width: 1440px;
@@ -199,16 +205,9 @@ h3, h4, h5 { line-height: 1.15; }
   .conditions-grid > div:nth-child(2),
   .conditions-grid > div:nth-child(3) { display: none !important; }
 
-  /* Team grid: 1 column per Figma mobile, faces use cover */
+  /* Team grid: 1 column per Figma mobile. Photo positioning uses per-person inline (not overridden) */
   .team-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
   .team-grid > * { max-width: 360px; margin: 0 auto; width: 100%; }
-  .team-photo-img {
-    position: absolute !important; inset: 0 !important;
-    width: 100% !important; height: 100% !important;
-    left: 0 !important; top: 0 !important;
-    object-fit: cover !important; object-position: center top !important;
-    max-width: 100% !important;
-  }
 
   /* Stats grid: single column */
   .stats-grid { grid-template-columns: 1fr !important; }

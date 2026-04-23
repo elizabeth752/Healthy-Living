@@ -160,18 +160,20 @@ function DecorativeBg({
   opacity = 1,
   flip = false,
   contrast = 'normal',
+  offset = 0,
 }: {
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   size?: number;
   opacity?: number;
   flip?: boolean;
-  contrast?: 'normal' | 'boost'; // boost = darker, for sections where bird-bg blends with section bg
+  contrast?: 'normal' | 'boost';
+  offset?: number; // px to nudge into the section overflow (negative bottom for "tucked under" half-bird look)
 }) {
   const pos: React.CSSProperties = { position: 'absolute', pointerEvents: 'none', zIndex: 0 };
-  if (position.includes('top'))    pos.top    = 0;
-  if (position.includes('bottom')) pos.bottom = 0;
-  if (position.includes('left'))   pos.left   = 0;
-  if (position.includes('right'))  pos.right  = 0;
+  if (position.includes('top'))    pos.top    = -offset;
+  if (position.includes('bottom')) pos.bottom = -offset;
+  if (position.includes('left'))   pos.left   = -offset;
+  if (position.includes('right'))  pos.right  = -offset;
   const transforms = [];
   if (flip) transforms.push('scaleX(-1)');
   return (
@@ -805,7 +807,7 @@ export default function Page() {
 
       {/* ════ RECOVERY — THE WAY IT SHOULD FEEL ═════════════════════════ */}
       <section style={{ background: '#fff', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="bottom-left" size={220} opacity={1} />
+        <DecorativeBg position="bottom-left" size={340} opacity={1} offset={120} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
@@ -908,10 +910,13 @@ export default function Page() {
               </div>
             </FadeUp>
 
-            {/* Row 2 — text left, photo right */}
+            {/* Row 2 — DOM order: photo first (matches mobile order). Desktop flips visually with row-reverse */}
             <FadeUp delay={0.1}>
-              <div className="treatment-row" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
-                <div style={{ flex: 1, paddingRight: 20 }}>
+              <div className="treatment-row treatment-row-reverse" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '30px 0', borderBottom: `1px solid ${O}` }}>
+                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
+                  <img src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Inpatient Residential Treatment Program</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
                     Once you're stable, our team of therapists, counselors, and experiential instructors work with you to build a recovery plan that's truly yours.
@@ -922,9 +927,6 @@ export default function Page() {
                     <br /><br />
                     Most residential stays range from 1 to 3 months, depending on individual progress and treatment needs.
                   </p>
-                </div>
-                <div className="treatment-photo" style={{ width: 310, flexShrink: 0, alignSelf: 'stretch', minHeight: 260, borderRadius: 10, overflow: 'hidden' }}>
-                  <img src={SEC3_RESID} alt="Residential Treatment" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
               </div>
             </FadeUp>
@@ -1147,7 +1149,7 @@ export default function Page() {
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="bottom-left" size={220} opacity={1} />
+        <DecorativeBg position="bottom-left" size={340} opacity={1} offset={120} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N }}>Frequently Asked Questions</h2>
