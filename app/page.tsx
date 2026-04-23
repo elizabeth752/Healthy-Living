@@ -620,11 +620,13 @@ export default function Page() {
     { icon: IC_DUAL,     title: 'Co-Occurring Disorders',   desc: 'When addiction and mental health challenges exist together, we address both at the same time.' },
   ];
 
+  // top offset chosen per-photo so ALL eyes align at ~30% of card height
+  // (computed from native eye Y in photo: Narine 26%, Harout 16%, Ritsa 22%, Julie 26%)
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, focus: 'center 18%' },
-    { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, focus: 'center 22%' },
-    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  focus: 'center 12%' },
-    { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  focus: 'center 14%' },
+    { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, top: '-5%' },
+    { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, top: '9%'  },
+    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  top: '0%'  },
+    { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  top: '-5%' },
   ];
 
   const RECOVERY_ITEMS = [
@@ -979,9 +981,10 @@ export default function Page() {
             {TEAM.map((m, idx) => (
               <FadeUp key={m.name} delay={idx * 0.08}>
                 <motion.div whileHover={{ y: -4 }}>
+                  {/* Photo: aspect-preserving (width 100%, height auto) with per-person top offset to align eyes */}
                   <div style={{ width: '100%', aspectRatio: '1', borderRadius: 10, overflow: 'hidden', position: 'relative', background: '#fff' }}>
                     <img src={m.img} alt={m.name} className="team-photo-img"
-                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: m.focus, display: 'block' }} />
+                      style={{ position: 'absolute', left: 0, top: m.top, width: '100%', height: 'auto', maxWidth: 'none', display: 'block' }} />
                   </div>
                   <div style={{ padding: '14px 10px 0', minHeight: 64 }}>
                     <p style={{ fontWeight: 700, color: N, fontSize: 17, lineHeight: 1.25, minHeight: 42 }}>{m.name}</p>
