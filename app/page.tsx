@@ -1025,8 +1025,17 @@ export default function Page() {
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
-            {/* Static strip — one copy, full width, no duplicates */}
-            <img src={INS_STRIP} alt="Insurance logos" style={{ width: '100%', height: 50, display: 'block', objectFit: 'contain' }} />
+            {/* True marquee — logos at 90px (readable), 6 duplicates so track > viewport on every desktop */}
+            <div className="ins-logos-marquee" aria-label="Insurance logos">
+              <div className="marquee-track">
+                <img src={INS_STRIP} alt="Insurance logos" style={{ height: 90, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" aria-hidden="true" style={{ height: 90, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" aria-hidden="true" style={{ height: 90, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" aria-hidden="true" style={{ height: 90, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" aria-hidden="true" style={{ height: 90, flexShrink: 0 }} />
+                <img src={INS_STRIP} alt="" aria-hidden="true" style={{ height: 90, flexShrink: 0 }} />
+              </div>
+            </div>
           </FadeUp>
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
             <motion.button onClick={() => setShowInsModal(true)}
