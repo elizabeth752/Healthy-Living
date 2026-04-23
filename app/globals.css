@@ -148,9 +148,9 @@ h3, h4, h5 { line-height: 1.15; }
 /* Hide scrollbars on horizontal carousels but keep functionality */
 .conditions-scroller::-webkit-scrollbar { display: none; }
 
-/* ── Insurance logos: static strip on desktop, marquee on mobile ─────────── */
+/* ── Insurance logos: static strip from tablet up, marquee only on true mobile (≤500px) ─ */
 .ins-logos-mobile { display: none; }
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .ins-logos-static { display: none !important; }
   .ins-logos-mobile {
     display: block;
