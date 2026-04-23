@@ -1129,7 +1129,7 @@ export default function Page() {
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="bottom-left" size={360} opacity={1} contrast="boost" />
+        <DecorativeBg position="bottom-left" size={360} opacity={1} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N }}>Frequently Asked Questions</h2>
