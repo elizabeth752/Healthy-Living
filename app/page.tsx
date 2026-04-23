@@ -779,7 +779,7 @@ export default function Page() {
 
       {/* ════ RECOVERY — THE WAY IT SHOULD FEEL ═════════════════════════ */}
       <section style={{ background: '#fff', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="top-left" size={360} opacity={0.6} />
+        <DecorativeBg position="bottom-left" size={360} opacity={1} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ marginBottom: 48, textAlign: 'center' }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 16 }}>Recovery, The Way It Should Feel</h2>
@@ -1118,7 +1118,7 @@ export default function Page() {
 
       {/* ════ FAQ ════════════════════════════════════════════════════════ */}
       <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
-        <DecorativeBg position="bottom-left" size={360} opacity={0.7} />
+        <DecorativeBg position="bottom-left" size={360} opacity={1} />
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp style={{ textAlign: 'center', marginBottom: 30 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N }}>Frequently Asked Questions</h2>
