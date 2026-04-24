@@ -716,9 +716,12 @@ export default function Page() {
         <div className="lp-wide hero-grid" style={{ position: 'relative', zIndex: 1, paddingTop: 50, paddingBottom: 40 }}>
           <div className="hero-row" style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
 
-            {/* LEFT — fills available space up to 750px */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              className="hero-text-col" style={{ flex: '1 1 0', minWidth: 0 }}>
+            {/* LEFT — fills available space up to 750px. NOTE: framer-motion
+                fade-in REMOVED from this column — it was gating LCP on slow
+                mobile (heading invisible until JS hydrates = LCP delays
+                10-15s on simulated slow 4G + slow CPU). H1 paints
+                immediately now. Other sections keep their fade-ins. */}
+            <div className="hero-text-col" style={{ flex: '1 1 0', minWidth: 0 }}>
               <h1 className="hero-title" style={{ fontSize: 'clamp(28px, 4vw, 50px)', fontWeight: 700, lineHeight: 1.2, color: N, marginBottom: 20 }}>
                 Physician-Owned Detox &amp;{' '}
                 <span className="hero-title-line2">Residential Treatment</span>
@@ -788,10 +791,12 @@ export default function Page() {
                 </svg>
                 <span>Complimentary transportation available for verified patients</span>
               </div>
-            </motion.div>
+            </div>
 
-            {/* RIGHT — form card 530px */}
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+            {/* RIGHT — form card 530px. Framer fade-in REMOVED for same LCP
+                reasons: form card was the LCP candidate on desktop, was
+                invisible until JS hydrated. */}
+            <div
               className="hero-form"
               style={{ width: 530, flexShrink: 0, backdropFilter: 'blur(5px)', background: 'rgba(237,244,244,0.8)', border: '1px solid rgba(237,244,244,0.04)', borderRadius: 6, boxShadow: '0 4px 8px rgba(0,0,0,0.2)', padding: '30px 20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 20 }}>
@@ -799,7 +804,7 @@ export default function Page() {
                 <OptImg src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
               </div>
               <InsuranceForm />
-            </motion.div>
+            </div>
           </div>
         </div>
 
