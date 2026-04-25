@@ -43,22 +43,25 @@ const CAR_ARR  = '/assets/a22864e4-c981-403e-a2e6-4827de9e9761.svg';
 
 // Facility photos (node 6041:3105 — Seccion 1)
 const FACILITY = [
-  '/assets/5c6ecc85-d659-4f9f-8385-7c2f680faf70.webp',
-  '/assets/358929a5-95fd-44f4-ba70-54754635bdc7.webp',
-  '/assets/99a773b4-b8d1-4be2-a231-038ae9f874f1.webp',
-  '/assets/1c7c93db-8d50-4fde-9db2-eb25ebf61eed.webp',
-  '/assets/3f53217c-b4c1-453a-980f-17f81a56c281.webp',
-  '/assets/988c538c-85dc-4c04-8b8c-e5d251c0412a.webp',
-  '/assets/aa92df69-2f4a-428c-9426-8ca742b16d76.webp',
-  '/assets/bd90d69f-3f77-4f34-b4c5-647c89c1f0ab.webp',
-  '/assets/924693b0-5a19-4e5a-b7c8-47cd33538f87.webp',
-  '/assets/7474da6c-6e63-4d2d-b103-7c67da882b92.webp',
-  '/assets/c6b56340-07cd-41c8-965d-5d79215b5a0a.webp',
-  '/assets/246e6c2c-3428-42db-ad1c-ba9a6023668d.webp',
-  '/assets/aedb0a73-ea7d-409e-a044-11f4dc061bcc.webp',
-  '/assets/dd0ac0f6-9636-4139-b832-c5512b76ca53.webp',
-  '/assets/cc361b6e-f352-475a-9afc-89c1831e5cc9.webp',
-  '/assets/9ed7f966-0050-4183-ab48-ecbe978662dd.webp',
+  '/assets/facility-01.webp',
+  '/assets/facility-02.webp',
+  '/assets/facility-03.webp',
+  '/assets/facility-04.webp',
+  '/assets/facility-05.webp',
+  '/assets/facility-06.webp',
+  '/assets/facility-07.webp',
+  '/assets/facility-08.webp',
+  '/assets/facility-09.webp',
+  '/assets/facility-10.webp',
+  '/assets/facility-11.webp',
+  '/assets/facility-12.webp',
+  '/assets/facility-13.webp',
+  '/assets/facility-14.webp',
+  '/assets/facility-15.webp',
+  '/assets/facility-16.webp',
+  '/assets/facility-17.webp',
+  '/assets/facility-18.webp',
+  '/assets/facility-19.webp',
 ];
 
 // Amenity icons
@@ -292,13 +295,13 @@ function Carousel() {
       </div>
       {/* Dots below photos, not overlaid */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
-        {FACILITY.slice(0, 12).map((_, di) => (
+        {FACILITY.map((_, di) => (
           <button key={di} onClick={() => setI(di)}
             style={{ width: di === i ? 18 : 6, height: 6, borderRadius: 3, background: di === i ? '#fff' : 'rgba(255,255,255,0.45)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
       <div style={{ display: 'flex', gap: 10, overflowX: 'auto' }}>
-        {FACILITY.slice(0, 6).map((src, idx) => (
+        {FACILITY.map((src, idx) => (
           <button key={idx} onClick={() => setI(idx)}
             style={{ flexShrink: 0, padding: 0, background: 'none', border: 'none', cursor: 'pointer', position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
             <OptImg loading="lazy" src={src.replace(/\.(jpe?g|webp)$/i, '-thumb.webp')} alt="" width={336} height={160} style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
