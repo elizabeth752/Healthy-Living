@@ -264,12 +264,23 @@ function Carousel() {
   const total = FACILITY.length;
   const prev = () => setI(a => (a - 1 + total) % total);
   const next = () => setI(a => (a + 1) % total);
+  const thumbStripRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (paused) return;
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
   }, [paused]);
+
+  // Auto-scroll the thumbnail strip to keep the active thumb in view
+  useEffect(() => {
+    const strip = thumbStripRef.current;
+    if (!strip) return;
+    const activeThumb = strip.children[i] as HTMLElement | undefined;
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, [i]);
 
   return (
     <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
@@ -300,12 +311,25 @@ function Carousel() {
             style={{ width: di === i ? 18 : 6, height: 6, borderRadius: 3, background: di === i ? '#fff' : 'rgba(255,255,255,0.45)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
-      <div style={{ display: 'flex', gap: 10, overflowX: 'auto' }}>
+      <div ref={thumbStripRef} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollSnapType: 'x mandatory', paddingBottom: 4 }}>
         {FACILITY.map((src, idx) => (
           <button key={idx} onClick={() => setI(idx)}
-            style={{ flexShrink: 0, padding: 0, background: 'none', border: 'none', cursor: 'pointer', position: 'relative', borderRadius: 4, overflow: 'hidden' }}>
+            style={{
+              flexShrink: 0,
+              padding: 0,
+              background: 'none',
+              border: idx === i ? `2px solid ${AMBER}` : '2px solid transparent',
+              cursor: 'pointer',
+              position: 'relative',
+              borderRadius: 6,
+              overflow: 'hidden',
+              scrollSnapAlign: 'center',
+              transition: 'border 0.2s, opacity 0.2s',
+              opacity: idx === i ? 1 : 0.55,
+            }}
+            onMouseEnter={(e) => { if (idx !== i) (e.currentTarget as HTMLElement).style.opacity = '0.8'; }}
+            onMouseLeave={(e) => { if (idx !== i) (e.currentTarget as HTMLElement).style.opacity = '0.55'; }}>
             <OptImg loading="lazy" src={src.replace(/\.(jpe?g|webp)$/i, '-thumb.webp')} alt="" width={336} height={160} style={{ width: 168, height: 80, objectFit: 'cover', display: 'block', borderRadius: 4 }} />
-            {idx !== i && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.65)', borderRadius: 4 }} />}
           </button>
         ))}
       </div>
