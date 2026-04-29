@@ -597,6 +597,7 @@ function FAQ() {
     { q: 'Is family involvement allowed or encouraged?', a: 'Yes. Family therapy and regular family contact are encouraged. We offer family education sessions and can coordinate visits as part of the healing process.' },
     { q: 'Is your program LGBTQ+ friendly?', a: 'Yes. We are fully inclusive and affirming. Our clinical team is trained in LGBTQ+ specific needs, and we strive to create a safe, welcoming environment for all.' },
     { q: 'How long does treatment last?', a: 'Detox typically lasts 5–14 days. Residential treatment ranges from 30 to 90+ days. Length is tailored to each individual based on medical needs and treatment progress.' },
+    { q: 'Do you offer transportation assistance to treatment?', a: "We understand that getting to treatment is sometimes the first obstacle, and we don't want logistics to be the reason someone doesn't get the help they need. Healthy Living offers transportation assistance and coordination for clients who need support getting to our Santa Clarita facility safely.\n\nWhether you're coming from within the Los Angeles area, the San Fernando Valley, or further across Southern California, our admissions team can help coordinate arrangements before your arrival.\n\nThis may include guidance on the best route, coordination with a trusted transport service, or simply walking you through what to expect on your first day so nothing feels uncertain." },
     { q: 'What happens after I complete the residential program?', a: 'We connect you with outpatient programs, sober living, and ongoing therapy in Santa Clarita and Los Angeles. Our alumni program provides online support groups and monthly meetings.' },
   ];
   return (
@@ -613,7 +614,17 @@ function FAQ() {
               <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} style={{ overflow: 'hidden', background: '#386376' }}>
                 <div style={{ padding: '8px 12px 14px' }}>
                   <div style={{ background: '#fff', borderRadius: 10, boxShadow: '0 4px 4px rgba(0,0,0,0.25)', padding: '16px 20px' }}>
-                    <p style={{ color: '#1a1a1a', fontSize: 15, lineHeight: 1.7, fontWeight: 400 }}>{item.a}</p>
+                    {item.a.split('\n\n').map((para, pIdx, all) => (
+                      <p
+                        key={pIdx}
+                        style={{
+                          color: '#1a1a1a', fontSize: 15, lineHeight: 1.7, fontWeight: 400,
+                          marginBottom: pIdx < all.length - 1 ? '0.85em' : 0,
+                        }}
+                      >
+                        {para}
+                      </p>
+                    ))}
                   </div>
                 </div>
               </motion.div>
@@ -1147,9 +1158,9 @@ export default function Page() {
           </FadeUp>
           <div className="steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {[
-              { icon: STEP1_IC, title: 'Step 1: Call & Speak With a\nCare Specialist',        body: 'Our team is available 24/7 to answer your questions, understand your situation, and help you determine the next right step.' },
-              { icon: STEP2_IC, title: 'Step 2: Complete a Brief\nPre-Admission Screening',   body: "We'll walk you through a short, structured screening to better understand your needs, clinical history, and what level of care is right." },
-              { icon: STEP3_IC, title: 'Step 3: Review Insurance\nand Payment Options',        body: 'Our team will verify your insurance benefits and clearly explain coverage and costs so you can make an informed decision without pressure.' },
+              { icon: STEP1_IC, title: 'Step 1: Call & Speak With a\nCare Specialist',        body: 'Our team is available 24/7 to answer your questions, understand your situation, and help you determine the next right step. Every call is answered by someone who understands addiction, not an automated system or a call center. No judgment, no pressure — just an honest conversation.' },
+              { icon: STEP2_IC, title: 'Step 2: Complete a Brief\nPre-Admission Screening',   body: "We'll walk you through a short, structured screening to better understand your needs, clinical history, and what level of care is appropriate. By the end of the call, you'll have a clear picture of what treatment actually looks like for you. This typically takes less than 15 minutes, and there's no obligation to commit." },
+              { icon: STEP3_IC, title: 'Step 3: Review Insurance, Payment,\nand Transportation Options', body: 'Our team will verify your insurance benefits and clearly explain coverage, costs, and private pay options. We also help coordinate transportation to ensure you can access care safely and without added stress, so you can make an informed decision without pressure or surprises.' },
             ].map((s, idx) => (
               <FadeUp key={idx} delay={idx * 0.1}>
                 <div style={{ background: '#fff', borderRadius: 14, padding: '24px 22px', textAlign: 'center', height: '100%', boxShadow: '0 4px 4px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
