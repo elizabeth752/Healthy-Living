@@ -272,14 +272,18 @@ function Carousel() {
     return () => clearInterval(t);
   }, [paused]);
 
-  // Auto-scroll the thumbnail strip to keep the active thumb in view
+  // Auto-scroll the thumbnail strip horizontally to keep the active thumb in view.
+  // Use strip.scrollTo (not activeThumb.scrollIntoView) so we don't fight the
+  // page's vertical scroll position — scrollIntoView yanks the whole page when
+  // the strip isn't already in the viewport, which made every carousel tick
+  // bounce the user back up to the gallery section.
   useEffect(() => {
     const strip = thumbStripRef.current;
     if (!strip) return;
     const activeThumb = strip.children[i] as HTMLElement | undefined;
-    if (activeThumb) {
-      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
+    if (!activeThumb) return;
+    const targetLeft = activeThumb.offsetLeft - (strip.clientWidth - activeThumb.clientWidth) / 2;
+    strip.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
   }, [i]);
 
   return (
