@@ -43,6 +43,7 @@ const CAR_ARR  = '/assets/a22864e4-c981-403e-a2e6-4827de9e9761.svg';
 
 // Facility photos (node 6041:3105 — Seccion 1)
 const FACILITY = [
+  '/assets/facility-19.webp', // exterior — moved to first per client request (Julian Bejarano, 2026-05-05)
   '/assets/facility-01.webp',
   '/assets/facility-02.webp',
   '/assets/facility-03.webp',
@@ -61,7 +62,6 @@ const FACILITY = [
   '/assets/facility-16.webp',
   '/assets/facility-17.webp',
   '/assets/facility-18.webp',
-  '/assets/facility-19.webp',
 ];
 
 // Amenity icons
