@@ -115,19 +115,20 @@ const STAT2_IC      = '/assets/e3d24105-99f3-408e-8e0f-f02e295fb34f.svg';
 const STAT3_IC      = '/assets/91a31f23-28ff-4171-9676-5fa39be97100.svg';
 const STAT4_IC      = '/assets/60a7657d-4bc5-4fdc-8acb-ffe9709fd824.svg';
 
-// Trust Banner photo — transparent PNG cutout (man on transparent bg)
-const TRUST_PHOTO   = '/assets/802d3aa1-7759-49f9-9b36-c9287b6f81fb-cutout.png';
+// Trust Banner photo — transparent PNG cutout (new guy: beanie + plaid shirt, Figma node 6172-466)
+const TRUST_PHOTO   = '/assets/team-new-6172-466-cutout-v3.png';
 
-// Seccion 3 — Treatment Path photos
-const SEC3_DETOX    = '/assets/ea0ad611-966a-4eb4-8e0d-9f0d9baf5525.jpg';
-const SEC3_RESID    = '/assets/2b87a38f-43ff-4ab7-ab8f-8c1bbdec93a2.jpg';
-const SEC3_AFTER    = '/assets/d8abe6f4-76a5-4536-aa20-a3c3de0a65ad.jpg';
+// Seccion 3 — Treatment Path photos (updated 2026-05-19 from Figma node 6178:465)
+const SEC3_DETOX    = '/assets/sec3-new-6178-468.jpg';
+const SEC3_RESID    = '/assets/sec3-new-6178-477.jpg';
+const SEC3_AFTER    = '/assets/sec3-new-6178-480.jpg';
 
-// Team headshots (fresh from full-page pull)
-const TEAM_NARINE = '/assets/47c14a8c-1861-456e-8f45-d6224e83109e.jpg';
-const TEAM_HAROUT = '/assets/0f004f6c-58af-4090-92ba-91df9de1c458.jpg';
-const TEAM_RITSA  = '/assets/637effc5-6e18-4e2e-a252-bed4a074b696.jpg';
-const TEAM_JULIE  = '/assets/c02dcd51-ff0e-4efb-a10d-2ce09270748b.jpg';
+// Team headshots (updated 2026-05-19 from Figma Seccion 5 node 3574:3006)
+// Order matches x-position: Narine x:114, Harout x:444, Ritsa x:774, Julie x:1104
+const TEAM_NARINE = '/assets/dr-6036-1692.jpg';
+const TEAM_HAROUT = '/assets/dr-6036-1694.jpg';
+const TEAM_RITSA  = '/assets/dr-6036-1697.jpg';
+const TEAM_JULIE  = '/assets/dr-6041-1851.jpg';
 
 // Reviews
 const STARS     = '/assets/6d0d84c4-5abf-4e0c-b267-1051986a3f8e.svg';
@@ -713,12 +714,12 @@ export default function Page() {
   ];
 
   // Per-person photo framing: zoom (width %) + top + left so all faces are similar size & eyes aligned at ~30% of card
-  // Harout's head sits high in his original photo + lots of background, so he needs zoom (width > 100%) to fill the frame
+  // Names/titles verbatim from Figma Seccion 5 (updated 2026-05-19)
   const TEAM = [
-    { name: 'Dr. Narine Arutyounian, M.D.', role: 'Medical Director',               img: TEAM_NARINE, width: '100%', top: '-5%', left: '0%'   },
-    { name: 'Dr. Harout Mesrobian',          role: 'CEO',                            img: TEAM_HAROUT, width: '130%', top: '0%',  left: '-15%' },
-    { name: 'Ritsa Fistes, LMFT',            role: 'Clinical Director',              img: TEAM_RITSA,  width: '100%', top: '-10%', left: '0%'   },
-    { name: 'Julie Tatian',                  role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  width: '100%', top: '-5%',  left: '0%'   },
+    { name: 'Dr. Narine Arutyounian MD', role: 'Medical Director',               img: TEAM_NARINE, width: '100%', top: '0%',  left: '0%'  },
+    { name: 'Dr. Harout Mesrobian MD',   role: 'CEO',                            img: TEAM_HAROUT, width: '100%', top: '0%',  left: '0%'  },
+    { name: 'Ritsa Fistes, LMFT',        role: 'Clinical Director',              img: TEAM_RITSA,  width: '100%', top: '0%',  left: '0%'  },
+    { name: 'Julie Tatian MSN, NP',      role: 'Psychiatric Nurse Practitioner', img: TEAM_JULIE,  width: '100%', top: '0%',  left: '0%'  },
   ];
 
   const RECOVERY_ITEMS = [
@@ -726,7 +727,7 @@ export default function Page() {
     { icon: REC_DOG,      title: 'Dog-Friendly',            desc: 'Comfort and connection are part of healing, and sometimes that comes on four legs.' },
     { icon: REC_HOLISTIC, title: 'Holistic Care',           desc: 'Music, art, movement, sound, animals, and time in nature treats the whole person, not just the addiction.' },
     { icon: REC_DETOX,    title: 'Comfort-First Detox',     desc: "Detox doesn't have to feel like punishment. Our medical team & MAT protocols keeps you safe and comfortable." },
-    { icon: REC_MEDICAL,  title: 'Medical Leadership',      desc: "Founded and overseen by two board-certified addiction physicians, clinical excellence isn't a feature, it's the foundation." },
+    { icon: REC_MEDICAL,  title: 'Medical Leadership',      desc: "Physician-founded and medically directed — clinical excellence isn't a feature here, it's the foundation of everything we do." },
     { icon: REC_PROF,     title: 'Professional Pathways',   desc: "Built for people who can't step away from everything, our program offers the structure and discretion that professionals need." },
     { icon: REC_MEALS,    title: 'Chef-Prepared Meals',     desc: "In-house chef prepares nourishing meals daily, because a body that's well-fed heals faster and feels more like itself again." },
     { icon: REC_TECH,     title: 'Flexible Tech Policies',  desc: "Phones and technology are allowed (with limits), because isolation isn't part of our approach to recovery." },
@@ -772,7 +773,7 @@ export default function Page() {
                 ⭐️⭐️⭐️⭐️⭐ 4.9/5 on Google from 78+ Reviews
               </p>
               <p className="hero-body" style={{ fontSize: 18, color: N, lineHeight: '22px', marginBottom: 20, maxWidth: 728 }}>
-                Founded by two board-certified addiction physicians and built around the whole person, we offer a comfortable, medically guided path to lasting change in the hills of Santa Clarita.
+                Physician-founded, medically directed, and built around the whole person — we offer a comfortable, medically guided path to lasting change in the hills of Santa Clarita.
               </p>
 
               {/* Bullet grid — 2 cols on desktop, stacks on mobile */}
@@ -974,15 +975,10 @@ export default function Page() {
                 </motion.a>
               </FadeUp>
             </div>
-            {/* Right — EXACT Figma spec (node 6059:3888): 310x351 contained box, photo cropped per Figma percentages, white card #EDF4F4 behind lower 100px */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, position: 'relative', width: 310, height: 351 }}>
-              {/* White card BG — Figma node 6059:3889: 310x100, top:251 (=bottom:0), rounded top corners, color #EDF4F4 */}
-              <div className="trust-bg-tab" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 100, background: '#EDF4F4', borderTopLeftRadius: 20, borderTopRightRadius: 20, zIndex: 0 }} />
-              {/* Photo container — Figma node 6059:3890: 310x351 with overflow hidden */}
-              <div className="trust-photo-box" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden', zIndex: 1 }}>
-                <OptImg className="trust-photo-img" loading="lazy" src={TRUST_PHOTO} alt="Care team member"
-                  style={{ position: 'absolute', height: '167%', top: '-4.44%', left: '-8.84%', width: '111.88%', maxWidth: 'none', display: 'block' }} />
-              </div>
+            {/* Right — transparent PNG cutout floating on navy, no card behind it */}
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, width: 310 }}>
+              <OptImg className="trust-photo-img" loading="lazy" src={TRUST_PHOTO} alt="Care team member"
+                style={{ display: 'block', width: '100%', height: 'auto' }} />
             </FadeUp>
           </div>
         </div>
@@ -1106,9 +1102,9 @@ export default function Page() {
                     <OptImg loading="lazy" src={m.img} alt={m.name} className="team-photo-img"
                       style={{ position: 'absolute', left: m.left, top: m.top, width: m.width, height: 'auto', maxWidth: 'none', display: 'block' }} />
                   </div>
-                  <div style={{ padding: '14px 10px 0', minHeight: 64 }}>
-                    <p style={{ fontWeight: 700, color: N, fontSize: 17, lineHeight: 1.25, minHeight: 42 }}>{m.name}</p>
-                    <p style={{ color: '#2A7A7C', fontSize: 14, fontWeight: 600, marginTop: 6, lineHeight: 1.3 }}>{m.role}</p>
+                  <div style={{ padding: '8px 10px 0' }}>
+                    <p style={{ fontWeight: 700, color: N, fontSize: 17, lineHeight: 1.25 }}>{m.name}</p>
+                    <p style={{ color: '#2A7A7C', fontSize: 14, fontWeight: 600, marginTop: 4, lineHeight: 1.3 }}>{m.role}</p>
                   </div>
                 </motion.div>
               </FadeUp>
@@ -1121,7 +1117,7 @@ export default function Page() {
       <section id="programs" style={{ background: '#fff', padding: '80px 0' }}>
         <div className="lp-inner">
           <FadeUp style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>Care Backed by Major Insurance</h2>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>We Are In Network with Blue Shield and Major Insurance Companies</h2>
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
           <FadeUp delay={0.1} style={{ marginBottom: 36 }}>

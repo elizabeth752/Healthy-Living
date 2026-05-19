@@ -202,9 +202,9 @@ h3, h4, h5 { line-height: 1.15; }
                     border-bottom: 1px solid rgba(255,255,255,0.12) !important; }
   .amenity-item:last-child { border-bottom: none !important; }
 
-  /* Trust banner: text top, photo bottom — Figma contained 310x351 spec, scales up */
+  /* Trust banner: text top, photo bottom — cutout PNG, natural aspect ratio */
   .trust-inner    { flex-direction: column !important; gap: 24px !important; }
-  .trust-photo-col { width: 310px !important; height: 351px !important; margin: 0 auto !important; }
+  .trust-photo-col { width: 280px !important; height: auto !important; margin: 0 auto !important; }
 
   /* Treatment path rows: stack vertically — photo ALWAYS on top regardless of DOM order */
   .treatment-row  { flex-direction: column !important; align-items: stretch !important; gap: 16px !important; padding-left: 0 !important; padding-right: 0 !important; }
