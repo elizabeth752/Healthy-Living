@@ -1140,7 +1140,7 @@ export default function Page() {
                 {[...INS_LOGOS, ...INS_LOGOS].map((logo, idx) => (
                   <OptImg loading="lazy" key={idx} src={logo.src} alt={idx < INS_LOGOS.length ? logo.alt : ''}
                     aria-hidden={idx >= INS_LOGOS.length}
-                    style={{ height: 50, width: 'auto', flexShrink: 0, objectFit: 'contain' }} />
+                    style={{ height: 50, width: 'auto', maxWidth: logo.width, flexShrink: 0, objectFit: 'contain' }} />
                 ))}
               </div>
             </div>

@@ -151,6 +151,8 @@ h3, h4, h5 { line-height: 1.15; }
 /* ── Insurance logos: desktop individual-logo marquee + mobile composite marquee ───── */
 .ins-logos-desktop {
   display: block;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
