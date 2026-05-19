@@ -975,10 +975,23 @@ export default function Page() {
                 </motion.a>
               </FadeUp>
             </div>
-            {/* Right — transparent PNG cutout floating on navy, no card behind it */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, width: 310 }}>
+            {/* Right — transparent PNG cutout with Figma backdrop rect (6172-465) behind it */}
+            {/* Rect geometry from Figma: 310×100px inside 310×351px group → bottom-aligned, 28.5% of photo height */}
+            {/* Fill: #EDF4F4, borderRadius: 20px 20px 0 0 */}
+            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, width: 310, position: 'relative' }}>
+              {/* Backdrop rect — sits behind the cutout, bottom-aligned, ~28.5% of photo height */}
+              <div className="trust-photo-rect" style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '28.5%',
+                background: '#EDF4F4',
+                borderRadius: '20px 20px 0 0',
+                zIndex: 0,
+              }} />
               <OptImg className="trust-photo-img" loading="lazy" src={TRUST_PHOTO} alt="Care team member"
-                style={{ display: 'block', width: '100%', height: 'auto' }} />
+                style={{ display: 'block', width: '100%', height: 'auto', position: 'relative', zIndex: 1 }} />
             </FadeUp>
           </div>
         </div>
