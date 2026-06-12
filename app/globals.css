@@ -114,9 +114,10 @@ h3, h4, h5 { line-height: 1.15; }
   .header-inner    { height: 72px !important; }
   .hero-section    { padding-top: 122px !important; }
   .header-logo     { height: 30px !important; }
-  .header-cta      { font-size: 13px !important; padding: 9px 10px !important; gap: 6px !important; }
+  .header-cta      { font-size: 13px !important; padding: 9px 14px !important; gap: 0 !important; }
   .header-cta-full  { display: none; }
   .header-cta-short { display: inline; }
+  .header-cta-icon  { display: none; }  /* drop phone icon on mobile so button is shorter, no overlap with logo */
   /* Mobile subnav docks under 50 banner + 72 header */
   .subnav { top: 122px !important; }
 
@@ -148,8 +149,8 @@ h3, h4, h5 { line-height: 1.15; }
 /* Hide scrollbars on horizontal carousels but keep functionality */
 .conditions-scroller::-webkit-scrollbar { display: none; }
 
-/* ── Insurance logos: desktop individual-logo marquee + mobile composite marquee ───── */
-.ins-logos-desktop {
+/* ── Insurance logos: one individual-logo marquee at all widths ───── */
+.ins-logos {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -157,24 +158,48 @@ h3, h4, h5 { line-height: 1.15; }
   mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
 }
-.ins-logos-desktop .marquee-track {
+.ins-logos .marquee-track {
   animation-duration: 35s;
   gap: 60px;
   align-items: center;
 }
-.ins-logos-mobile { display: none; }
-@media (max-width: 500px) {
-  .ins-logos-desktop { display: none !important; }
-  .ins-logos-mobile {
-    display: block;
-    overflow: hidden;
-    mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+/* Height-based sizing; width follows each logo's true aspect ratio (from width/height attrs) */
+.ins-logo-img {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .ins-logos {
+    /* smaller fade so logos aren't half-ghosted at the edges on a narrow screen */
+    mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
   }
-  .ins-logos-mobile .marquee-track {
-    animation-duration: 22s;
-    gap: 32px;
-  }
+  .ins-logos .marquee-track { gap: 30px; animation-duration: 24s; }
+  .ins-logo-img { height: 28px; }
+}
+
+/* ── Trust bar (under-hero insurance strip): single non-wrapping row ─────
+   safe-center keeps it centered when it fits and falls back to start-aligned
+   + horizontal scroll when it doesn't — so a logo can never wrap alone. */
+.trustbar-logos {
+  display: flex;
+  align-items: center;
+  justify-content: safe center;
+  flex-wrap: nowrap;
+  gap: 28px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.trustbar-logos::-webkit-scrollbar { display: none; }
+.trustbar-logo-img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: grayscale(1);
+  opacity: 0.55;
 }
 
 @keyframes pulse-ring {
@@ -237,9 +262,10 @@ h3, h4, h5 { line-height: 1.15; }
   .reviews-layout { flex-direction: column !important; }
   .reviews-title-col { width: 100% !important; }
 
-  /* Sub-nav: compress gap so 3 tabs fit on 390px */
-  .subnav-links { gap: 14px !important; }
-  .subnav-links button { font-size: 13px !important; }
+  /* Sub-nav: 5 tabs — scroll horizontally on narrow screens instead of overflowing (v2) */
+  .subnav-links { gap: 18px !important; justify-content: flex-start !important; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .subnav-links::-webkit-scrollbar { display: none; }
+  .subnav-links button { font-size: 13px !important; white-space: nowrap; flex-shrink: 0; }
 
   /* Location: single column, auto-height card so body text never clips */
   .location-grid { grid-template-columns: 1fr !important; }
@@ -248,4 +274,8 @@ h3, h4, h5 { line-height: 1.15; }
 
   /* Section padding */
   .section-pad { padding: 48px 0 !important; }
+
+  /* Trust bar: tighter on phones; start-aligned so the horizontal scroll reads naturally */
+  .trustbar-logos { gap: 20px !important; justify-content: flex-start !important; }
+  .trustbar-logo-img { height: 22px !important; }
 }
