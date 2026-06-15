@@ -91,17 +91,19 @@ const REC_MEALS     = '/assets/bf078a69-8127-4664-961a-6818d73bf62c.svg';
 const REC_TECH      = '/assets/423dfe45-62c3-4bb9-96b5-da3da0dbb427.svg';
 
 // Section 6 — Insurance logos strip
-const INS_STRIP     = '/assets/71b8be5b-8604-4f95-9711-50214dab403c.svg';
-// Individual logos extracted from Figma nodes 6062:4803-4809 for proper desktop marquee.
+// Individual logos extracted from Figma nodes 6062:4803-4809 for the marquee.
 // TODO: add missing 8 (MultiPlan, Beacon + 6 unnamed Vectors) once Ellie exports them as PNGs.
+// width/height are the SVG's true viewBox dimensions — passed as <img> attrs so
+// the browser derives the correct intrinsic aspect ratio (these SVGs are authored
+// width="100%" height="100%", so without explicit dims they distort when sized).
 const INS_LOGOS = [
-  { src: '/assets/insurance/aetna.svg',           alt: 'Aetna',                    width: 155 },
-  { src: '/assets/insurance/anthem.svg',          alt: 'Anthem',                   width: 202 },
-  { src: '/assets/insurance/bluecross.svg',       alt: 'BlueCross BlueShield',     width: 164 },
-  { src: '/assets/insurance/blue-california.svg', alt: 'Blue California',          width: 103 },
-  { src: '/assets/insurance/cigna.svg',           alt: 'Cigna',                    width: 101 },
-  { src: '/assets/insurance/highmark.svg',        alt: 'Highmark',                 width: 166 },
-  { src: '/assets/insurance/tribal.svg',          alt: 'Tribal Health',            width: 65 },
+  { src: '/assets/insurance/aetna.svg',           alt: 'Aetna',                width: 155, height: 28 },
+  { src: '/assets/insurance/anthem.svg',          alt: 'Anthem',               width: 202, height: 30 },
+  { src: '/assets/insurance/bluecross.svg',       alt: 'BlueCross BlueShield', width: 164, height: 32 },
+  { src: '/assets/insurance/blue-california.svg', alt: 'Blue California',      width: 103, height: 40 },
+  { src: '/assets/insurance/cigna.svg',           alt: 'Cigna',                width: 101, height: 50 },
+  { src: '/assets/insurance/highmark.svg',        alt: 'Highmark',             width: 166, height: 26 },
+  { src: '/assets/insurance/tribal.svg',          alt: 'Tribal Health',        width: 149, height: 40 },
 ];
 
 // Section 7 — Step icons
@@ -114,9 +116,6 @@ const STAT1_IC      = '/assets/7bb23f50-b405-4b9a-b6aa-0174ea6e6bae.svg';
 const STAT2_IC      = '/assets/e3d24105-99f3-408e-8e0f-f02e295fb34f.svg';
 const STAT3_IC      = '/assets/91a31f23-28ff-4171-9676-5fa39be97100.svg';
 const STAT4_IC      = '/assets/60a7657d-4bc5-4fdc-8acb-ffe9709fd824.svg';
-
-// Trust Banner photo — transparent PNG cutout (new guy: beanie + plaid shirt, Figma node 6172-466)
-const TRUST_PHOTO   = '/assets/team-new-6172-466-cutout-v3.png';
 
 // Seccion 3 — Treatment Path photos (updated 2026-05-19 from Figma node 6178:465)
 const SEC3_DETOX    = '/assets/sec3-new-6178-468.jpg';
@@ -171,19 +170,6 @@ function FadeUp({ children, delay = 0, style = {}, className = '' }: { children:
       {children}
     </motion.div>
   );
-}
-
-function CountUp({ target, suffix = '' }: { target: number; suffix?: string }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let v = 0; const step = target / 60;
-    const t = setInterval(() => { v += step; if (v >= target) { setN(target); clearInterval(t); } else setN(Math.floor(v)); }, 18);
-    return () => clearInterval(t);
-  }, [inView, target]);
-  return <span ref={ref}>{n}{suffix}</span>;
 }
 
 /* ── Decorative brand bird/wing motif — Healthy Living's actual logo asset ── */
@@ -663,13 +649,29 @@ function Header() {
           <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             className="header-cta"
             style={{ background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 22px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0, lineHeight: 1 }}>
-            <OptImg src={PHONE_IC} alt="" style={{ width: 20, height: 20, flexShrink: 0, objectFit: 'contain' }} />
+            <OptImg src={PHONE_IC} alt="" className="header-cta-icon" style={{ width: 20, height: 20, flexShrink: 0, objectFit: 'contain' }} />
             <span className="header-cta-full">Call Us&nbsp;&nbsp;(661) 794-6992</span>
             <span className="header-cta-short">(661) 794-6992</span>
           </motion.a>
         </div>
       </div>
     </header>
+  );
+}
+
+/* ── Trust Bar — accepted-insurance logo strip directly under the hero ──────
+   Surfaces "we take your insurance" to the visitors who never scroll past the
+   hero. Additive only — does not reorder or touch any existing section. */
+function TrustBar() {
+  return (
+    <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '18px 0' }}>
+      <div className="lp-inner trustbar-logos" aria-label="Accepted insurance">
+        {INS_LOGOS.map(logo => (
+          <OptImg key={logo.alt} src={logo.src} alt={logo.alt} loading="lazy"
+            width={logo.width} height={logo.height} className="trustbar-logo-img" />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -681,7 +683,7 @@ export default function Page() {
   const [activeSection, setActiveSection] = useState('our-center');
 
   useEffect(() => {
-    const ids = ['our-center', 'conditions', 'programs'];
+    const ids = ['our-center', 'conditions', 'team', 'programs', 'reviews'];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(e => { if (e.isIntersecting) setActiveSection(e.target.id); });
@@ -769,11 +771,8 @@ export default function Page() {
                 Physician-Owned Detox &amp;{' '}
                 <span className="hero-title-line2">Residential Treatment</span>
               </h1>
-              <p className="hero-stars" style={{ color: '#386376', fontSize: 14, fontWeight: 700, marginBottom: 10 }}>
+              <p className="hero-stars" style={{ color: '#386376', fontSize: 14, fontWeight: 700, marginBottom: 20 }}>
                 ⭐️⭐️⭐️⭐️⭐ 4.9/5 on Google from 78+ Reviews
-              </p>
-              <p className="hero-body" style={{ fontSize: 18, color: N, lineHeight: '22px', marginBottom: 20, maxWidth: 728 }}>
-                Physician-founded, medically directed, and built around the whole person — we offer a comfortable, medically guided path to lasting change in the hills of Santa Clarita.
               </p>
 
               {/* Bullet grid — 2 cols on desktop, stacks on mobile */}
@@ -855,9 +854,11 @@ export default function Page() {
         <div className="subnav" style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', position: 'sticky', top: 160, zIndex: 40 }}>
           <div className="lp-inner subnav-links" style={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
             {[
-              { label: 'Our Center',          id: 'our-center' },
-              { label: 'Conditions We Treat', id: 'conditions' },
-              { label: 'Programs',            id: 'programs'   },
+              { label: 'Our Center', id: 'our-center' },
+              { label: 'Conditions', id: 'conditions' },
+              { label: 'Team',       id: 'team'       },
+              { label: 'Insurances', id: 'programs'   },
+              { label: 'Reviews',    id: 'reviews'    },
             ].map(({ label, id }) => {
               const isActive = activeSection === id;
               return (
@@ -883,6 +884,9 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {/* ════ TRUST BAR — credibility strip under the hero ═══════════════ */}
+      <TrustBar />
 
       {/* ════ FACILITY / OUR CENTER ══════════════════════════════════════ */}
       <section id="our-center" style={{ background: 'linear-gradient(to top, #0D3442, #386376)', padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
@@ -955,45 +959,28 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ════ TRUST BANNER ═══════════════════════════════════════════════ */}
-      <section style={{ background: DT, padding: '50px 0' }}>
-        <div className="lp-inner">
-          <div className="trust-inner" style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-            {/* Left — text + CTA */}
-            <div style={{ flex: '1 1 0', minWidth: 0 }}>
-              <FadeUp>
-                <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
-                  Addiction Rarely Tells The Whole Story. Trauma Does.
-                </h2>
-                <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 16, lineHeight: 1.65, marginBottom: 28, maxWidth: 640 }}>
-                  Our team is also trained to recognize and gently address the trauma that drives addiction — including EMDR therapy for those who are ready to go deeper and end the cycle of trauma.
-                </p>
-                <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 28px', borderRadius: 4, textDecoration: 'none', lineHeight: 1 }}>
-                  <OptImg loading="lazy" src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
-                  <span>Call Today (661) 794-6992</span>
-                </motion.a>
-              </FadeUp>
+      {/* ════ COUPLES BANNER — full-width, centered, no photo ════════════ */}
+      <section style={{ background: DT, padding: '76px 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
+          <FadeUp style={{ textAlign: 'center', maxWidth: 740, margin: '0 auto' }}>
+            <div style={{ width: 76, height: 76, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+              <OptImg src={REC_COUPLES} alt="" style={{ width: 42, height: 42, objectFit: 'contain' }} />
             </div>
-            {/* Right — transparent PNG cutout with Figma backdrop rect (6172-465) behind it */}
-            {/* Rect geometry from Figma: 310×100px inside 310×351px group → bottom-aligned, 28.5% of photo height */}
-            {/* Fill: #EDF4F4, borderRadius: 20px 20px 0 0 */}
-            <FadeUp delay={0.1} className="trust-photo-col" style={{ flexShrink: 0, width: 310, position: 'relative' }}>
-              {/* Backdrop rect — sits behind the cutout, bottom-aligned, ~28.5% of photo height */}
-              <div className="trust-photo-rect" style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-                height: '28.5%',
-                background: '#EDF4F4',
-                borderRadius: '20px 20px 0 0',
-                zIndex: 0,
-              }} />
-              <OptImg className="trust-photo-img" loading="lazy" src={TRUST_PHOTO} alt="Care team member"
-                style={{ display: 'block', width: '100%', height: 'auto', position: 'relative', zIndex: 1 }} />
-            </FadeUp>
-          </div>
+            <p style={{ color: T, fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>
+              You shouldn't have to choose
+            </p>
+            <h2 style={{ fontSize: 40, fontWeight: 600, color: '#fff', lineHeight: 1.15, marginBottom: 18 }}>
+              Couples Heal Here — Side by Side
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 18, lineHeight: 1.65, marginBottom: 32 }}>
+              We're one of the few centers in California where couples go through detox and residential treatment together — with both shared and individual therapy. The people who struggled together can get well together, without ever choosing between recovery and the person they love.
+            </p>
+            <motion.a href="tel:+16617946992" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: AMBER, color: NAVY_BTN, fontWeight: 500, fontSize: 18, padding: '14px 32px', borderRadius: 4, textDecoration: 'none', lineHeight: 1 }}>
+              <OptImg src={PHONE_IC} alt="" style={{ width: 20, height: 20, objectFit: 'contain', flexShrink: 0 }} />
+              <span>Call Today (661) 794-6992</span>
+            </motion.a>
+          </FadeUp>
         </div>
       </section>
 
@@ -1017,13 +1004,7 @@ export default function Page() {
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Medical Detox & Medication-Assisted Treatment (MAT)</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
-                    When you arrive, one of our physicians will sit down with you for a thorough medical evaluation — not just to check boxes, but to truly understand where you are and what you need.
-                    <br /><br />
-                    If Medication-Assisted Treatment (MAT) can make withdrawal more manageable, we'll talk through it together and decide what's right for you.
-                    <br /><br />
-                    Throughout your stay, our care team is with you around the clock — watching, adjusting, and making sure you're never navigating this alone.
-                    <br /><br />
-                    Most people stay between 5 and 14 days, though we tailor that entirely to your health, your history, and how your body responds.
+                    When you arrive, one of our physicians evaluates you personally to understand exactly what you need, and if Medication-Assisted Treatment (MAT) can ease withdrawal, we decide together what's right for you. Our care team is with you around the clock, and most people stay between 5 and 14 days, tailored to your health and how your body responds.
                   </p>
                 </div>
               </div>
@@ -1038,13 +1019,7 @@ export default function Page() {
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Inpatient Residential Treatment Program</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
-                    Once you're stable, our team of therapists, counselors, and experiential instructors work with you to build a recovery plan that's truly yours.
-                    <br /><br />
-                    Our residential program focuses on healing the mind, body, and spirit through a structured daily schedule that includes clinical therapy, experiential work, and consistent support.
-                    <br /><br />
-                    Located in the hills of Santa Clarita, our residential setting provides a calm, private environment where clients can focus fully on treatment.
-                    <br /><br />
-                    Most residential stays range from 1 to 3 months, depending on individual progress and treatment needs.
+                    Once you're stable, our therapists, counselors, and experiential instructors build a recovery plan that's truly yours — healing the mind, body, and spirit through a structured daily schedule in the calm, private hills of Santa Clarita. Most residential stays range from 1 to 3 months, depending on your progress and treatment needs.
                   </p>
                 </div>
               </div>
@@ -1059,11 +1034,7 @@ export default function Page() {
                 <div style={{ flex: 1, paddingLeft: 20 }}>
                   <h3 style={{ fontSize: 18, fontWeight: 500, color: N, marginBottom: 16, lineHeight: '22px' }}>Aftercare Planning, Ongoing Care, & Alumni</h3>
                   <p style={{ color: '#000', fontSize: 16, lineHeight: 1.7 }}>
-                    Recovery is a lifelong journey, and the work doesn't stop after completing residential treatment. We ensure you have the resources and support to maintain sobriety and continue healing.
-                    <br /><br />
-                    We connect you with outpatient and sober living services in Santa Clarita and Los Angeles to provide ongoing care and prevent relapse as you transition back to daily life.
-                    <br /><br />
-                    Our alumni program provides both online support groups and monthly in-person meetings, creating a community of people who understand your journey and can support you through it.
+                    Recovery is a lifelong journey, so we make sure you leave with a plan — connecting you to outpatient and sober living services across Santa Clarita and Los Angeles, plus an alumni program with online support groups and monthly in-person meetings to keep you connected long after treatment.
                   </p>
                 </div>
               </div>
@@ -1100,7 +1071,7 @@ export default function Page() {
       </section>
 
       {/* ════ TEAM ═══════════════════════════════════════════════════════ */}
-      <section style={{ background: BG, padding: '80px 0' }}>
+      <section id="team" style={{ background: BG, padding: '80px 0' }}>
         <div className="lp-wide">
           <FadeUp style={{ textAlign: 'center', marginBottom: 48 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>The Medical Team Behind Your Recovery</h2>
@@ -1133,25 +1104,22 @@ export default function Page() {
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, marginBottom: 14 }}>We Are In Network with Blue Shield and Major Insurance Companies</h2>
             <p style={{ color: '#222', fontSize: 16, maxWidth: 860, margin: '0 auto', lineHeight: 1.65 }}>We accept all PPO insurance plans and private pay. Call our admissions team and we'll walk you through your benefits so you know exactly what's covered before you commit to anything.</p>
           </FadeUp>
-          <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
-            {/* Desktop: marquee of individual logos — Ellie's Figma shows them extending beyond frame */}
-            <div className="ins-logos-desktop" aria-label="Insurance logos">
-              <div className="marquee-track">
-                {[...INS_LOGOS, ...INS_LOGOS].map((logo, idx) => (
-                  <OptImg loading="lazy" key={idx} src={logo.src} alt={idx < INS_LOGOS.length ? logo.alt : ''}
-                    aria-hidden={idx >= INS_LOGOS.length}
-                    style={{ height: 50, width: 'auto', maxWidth: logo.width, flexShrink: 0, objectFit: 'contain' }} />
-                ))}
-              </div>
+        </div>
+        {/* Full-width marquee — sits OUTSIDE the centered container so the logo
+            strip spans edge to edge. Auto-scrolling = the mobile slider too. */}
+        <FadeUp delay={0.1} style={{ marginBottom: 36 }}>
+          <div className="ins-logos" aria-label="Insurance logos">
+            <div className="marquee-track">
+              {[...INS_LOGOS, ...INS_LOGOS].map((logo, idx) => (
+                <OptImg loading="lazy" key={idx} src={logo.src} alt={idx < INS_LOGOS.length ? logo.alt : ''}
+                  aria-hidden={idx >= INS_LOGOS.length}
+                  width={logo.width} height={logo.height}
+                  className="ins-logo-img" />
+              ))}
             </div>
-            {/* Mobile: original composite marquee — unchanged */}
-            <div className="ins-logos-mobile" aria-hidden="true">
-              <div className="marquee-track">
-                <OptImg loading="lazy" src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
-                <OptImg loading="lazy" src={INS_STRIP} alt="" style={{ height: 44, flexShrink: 0 }} />
-              </div>
-            </div>
-          </FadeUp>
+          </div>
+        </FadeUp>
+        <div className="lp-inner">
           <FadeUp style={{ display: 'flex', justifyContent: 'center' }}>
             <motion.button onClick={() => setShowInsModal(true)}
               whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
@@ -1192,7 +1160,7 @@ export default function Page() {
       </section>
 
       {/* ════ TESTIMONIALS ═══════════════════════════════════════════════ */}
-      <section style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
+      <section id="reviews" style={{ background: BG, padding: '70px 0', position: 'relative', overflow: 'hidden' }}>
         <div className="lp-inner reviews-layout" style={{ display: 'flex', gap: 32, alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
           <FadeUp className="reviews-title-col" style={{ width: 360, flexShrink: 0 }}>
             <h2 style={{ fontSize: 40, fontWeight: 600, color: N, lineHeight: 1.15, marginBottom: 18, letterSpacing: '-0.01em' }}>
@@ -1226,7 +1194,7 @@ export default function Page() {
                   {/* Card — rectangular per Figma 255x127 inner */}
                   <div style={{ background: BG, borderRadius: 8, padding: '36px 14px 18px', textAlign: 'center', minHeight: 127 }}>
                     <div style={{ fontSize: 32, fontWeight: 600, color: N, marginBottom: 6, lineHeight: 1.1 }}>
-                      <CountUp target={s.val} suffix={s.suffix} />
+                      {s.val}{s.suffix}
                     </div>
                     <p style={{ color: '#000', fontSize: 13, lineHeight: 1.4 }}>{s.label}</p>
                   </div>
@@ -1308,9 +1276,9 @@ export default function Page() {
         </div>
         <div className="lp-inner" style={{ position: 'relative', zIndex: 1 }}>
           <FadeUp>
-            <h2 style={{ color: '#fff', fontSize: 40, fontWeight: 600, marginBottom: 16 }}>You Deserve to Actually Live Healthy</h2>
+            <h2 style={{ color: '#fff', fontSize: 40, fontWeight: 600, marginBottom: 16 }}>Your Next Step Takes One Phone Call.</h2>
             <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: 18, lineHeight: 1.6, marginBottom: 36 }}>
-              Our physicians are here to make sure you get well, comfortable and safely.
+              Same-day admissions available. We handle insurance, transportation, and intake &mdash; you just need to call.
             </p>
             <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
               <motion.a href="tel:+16617946992" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
