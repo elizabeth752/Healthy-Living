@@ -155,9 +155,9 @@ const LOCATION_PHOTO = '/assets/1b1d5a28-3422-45a4-994d-25f3377fd21e.jpg';
 /* ── Legal pages on the main site (elev8 standard 4.10 and 4.11) ─────────
    Privacy Policy and Notice of Privacy Practices are separate pages and are
    linked in the footer and next to every form. Update here if the slugs change. */
-const PRIVACY_URL       = 'https://healthylivingresidential.com/privacy-policy/';
-const NOTICE_URL        = 'https://healthylivingresidential.com/notice-of-privacy-practices/';
-const ACCESSIBILITY_URL = 'https://healthylivingresidential.com/accessibility-statement/';
+const PRIVACY_URL       = 'https://healthylivingtreatment.com/privacy-policy/';
+const NOTICE_URL        = 'https://healthylivingtreatment.com/hipaa-privacy-policy/'; // temporary until a dated Notice of Privacy Practices page exists
+const ACCESSIBILITY_URL = 'https://healthylivingtreatment.com/website-accessability-statement/';
 
 /* ── Design tokens ──────────────────────────────────────────────────────── */
 const N     = '#0D3442';   // navy primary
