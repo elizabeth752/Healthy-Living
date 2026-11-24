@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import ConsentBanner, { OPEN_CONSENT_EVENT } from './ConsentBanner';
 
 /* OptImg — renders <picture> with WebP source + JPG fallback. Passes all
    props (including width/height/loading/fetchPriority/className/style) to
@@ -151,9 +152,17 @@ const INS_BTN_IC = '/assets/d9606794-a866-4c8e-adc7-017a9e865ffb.svg';
 // Location section — exterior house photo (from Figma Seccion 10 imgImage20)
 const LOCATION_PHOTO = '/assets/1b1d5a28-3422-45a4-994d-25f3377fd21e.jpg';
 
+/* ── Legal pages on the main site (elev8 standard 4.10 and 4.11) ─────────
+   Privacy Policy and Notice of Privacy Practices are separate pages and are
+   linked in the footer and next to every form. Update here if the slugs change. */
+const PRIVACY_URL       = 'https://healthylivingresidential.com/privacy-policy/';
+const NOTICE_URL        = 'https://healthylivingresidential.com/notice-of-privacy-practices/';
+const ACCESSIBILITY_URL = 'https://healthylivingresidential.com/accessibility-statement/';
+
 /* ── Design tokens ──────────────────────────────────────────────────────── */
 const N     = '#0D3442';   // navy primary
 const T     = '#56B5B7';   // teal
+const T_DARK = '#2B7173';  // darker teal for white text on the top banner (WCAG AA contrast)
 const O     = '#CEA36F';   // gold (subnav active state, dashed dividers)
 const BG    = '#EDF4F4';   // off-white teal
 const DT    = '#174154';   // deep navy (trust banner, conditions)
@@ -215,7 +224,10 @@ function DecorativeBg({
 
 /* ── Insurance form (CTM hosted iframe — 6 fields incl. DOB + insurance dropdown) ── */
 const CTM_FORM_URL = 'https://206076.tctm.co/form/FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C.html';
-function InsuranceForm({ height = 320 }: { height?: number }) {
+function InsuranceForm({ height = 320, autoLoad = false }: { height?: number; autoLoad?: boolean }) {
+  // The CTM form (and the reCAPTCHA inside it) loads only after the visitor
+  // asks for it. The modal passes autoLoad because opening it is already a click.
+  const [loaded, setLoaded] = useState(autoLoad);
   // Tight 320px height with scrolling=auto: form fits cleanly with no whitespace,
   // and when the Insurance Carrier dropdown overflows, browser's native direction
   // detection kicks in (opens up/down based on space) + iframe scrollbar as fallback.
@@ -225,21 +237,60 @@ function InsuranceForm({ height = 320 }: { height?: number }) {
       <p style={{ textAlign: 'center', fontSize: 13, color: '#0D3442', margin: 0, padding: '0 4px 12px', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
         Your information is private and secure. No pressure to commit.
       </p>
-      <iframe
-        className="ctm-call-widget"
-        src={CTM_FORM_URL}
-        style={{ width: '100%', height, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
-        title="Verify Insurance Coverage"
-        scrolling="auto"
-        allow="clipboard-write"
-      />
+      {loaded ? (
+        <iframe
+          className="ctm-call-widget"
+          src={CTM_FORM_URL}
+          style={{ width: '100%', height, border: 'none', display: 'block', background: '#fff', borderRadius: 6 }}
+          title="Verify Insurance Coverage"
+          scrolling="auto"
+          allow="clipboard-write"
+        />
+      ) : (
+        <div style={{ width: '100%', height, background: '#fff', borderRadius: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, padding: '20px 16px', textAlign: 'center' }}>
+          <p style={{ fontSize: 15, color: '#0D3442', margin: 0, lineHeight: 1.5 }}>
+            Check your coverage in about a minute. A member of our admissions team will follow up.
+          </p>
+          <button type="button" onClick={() => setLoaded(true)}
+            style={{ background: '#F9A21C', color: '#132E49', fontWeight: 600, fontSize: 17, padding: '14px 26px', borderRadius: 4, border: 'none', cursor: 'pointer', fontFamily: 'inherit', lineHeight: 1 }}>
+            Start Insurance Verification
+          </button>
+        </div>
+      )}
       {/* Fallback link — for browsers that block 3rd-party iframes (Brave shields, uBlock, etc) */}
       <p style={{ textAlign: 'center', fontSize: 12, color: '#666', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
         Trouble seeing the form? <a href={CTM_FORM_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#0D3442', fontWeight: 600, textDecoration: 'underline' }}>Open it in a new window →</a>
       </p>
-      <p style={{ textAlign: 'center', fontSize: 11, color: '#888', margin: 0, padding: '10px 4px 0', lineHeight: 1.5 }}>
+      <p style={{ textAlign: 'center', fontSize: 11, color: '#595959', margin: 0, padding: '10px 4px 0', lineHeight: 1.5 }}>
         By submitting, I consent to be contacted by Healthy Living Residential Program at the number provided, including via autodialed or prerecorded calls and text messages, regarding treatment options. This consent is not a condition of receiving services.
       </p>
+      <p style={{ textAlign: 'center', fontSize: 12, color: '#595959', margin: 0, padding: '8px 4px 0', lineHeight: 1.5 }}>
+        <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#0D3442', textDecoration: 'underline' }}>Privacy Policy</a>
+        {' | '}
+        <a href={NOTICE_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#0D3442', textDecoration: 'underline' }}>Notice of Privacy Practices</a>
+      </p>
+    </div>
+  );
+}
+
+/* ── Google Map — loads only when the visitor asks for it ───────────────── */
+const MAP_EMBED_URL = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d826!2d-118.5479!3d34.4284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29a4e3d4b9a2b%3A0x0!2s22512+Garzota+Dr%2C+Santa+Clarita%2C+CA+91350!5e0!3m2!1sen!2sus!4v1';
+function MapEmbed() {
+  const [loaded, setLoaded] = useState(false);
+  if (loaded) {
+    return (
+      <iframe src={MAP_EMBED_URL}
+        width="100%" height="398" style={{ border: 0, display: 'block' }} allowFullScreen loading="lazy" title="Healthy Living Location" />
+    );
+  }
+  return (
+    <div style={{ height: 398, background: '#dfe9ea', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24, textAlign: 'center' }}>
+      <p style={{ fontWeight: 600, color: '#0D3442', fontSize: 18, margin: 0 }}>22512 Garzota Drive, Santa Clarita, CA 91350</p>
+      <button type="button" onClick={() => setLoaded(true)}
+        style={{ background: '#0D3442', color: '#fff', fontWeight: 500, fontSize: 16, padding: '12px 24px', borderRadius: 4, border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+        Show Map
+      </button>
+      <p style={{ fontSize: 13, color: '#3d4a4f', margin: 0, maxWidth: 320, lineHeight: 1.5 }}>The map is provided by Google and loads only when you click.</p>
     </div>
   );
 }
@@ -289,7 +340,7 @@ function Carousel() {
           </div>
         ))}
         {[{ fn: prev, side: 'left' as const, rot: 'rotate(180deg)' }, { fn: next, side: 'right' as const, rot: 'none' }].map(({ fn, side, rot }) => (
-          <button key={side} onClick={fn}
+          <button key={side} onClick={fn} aria-label={side === 'left' ? 'Previous photo' : 'Next photo'}
             style={{ position: 'absolute', [side]: 20, top: '50%', transform: 'translateY(-50%)', width: 50, height: 50, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', zIndex: 2 }}>
             <OptImg loading="lazy" src={CAR_ARR} alt="" style={{ width: 20, height: 20, objectFit: 'contain', transform: rot }} />
           </button>
@@ -298,13 +349,13 @@ function Carousel() {
       {/* Dots below photos, not overlaid */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
         {FACILITY.map((_, di) => (
-          <button key={di} onClick={() => setI(di)}
+          <button key={di} onClick={() => setI(di)} aria-label={`Show photo ${di + 1}`} aria-current={di === i ? 'true' : undefined}
             style={{ width: di === i ? 18 : 6, height: 6, borderRadius: 3, background: di === i ? '#fff' : 'rgba(255,255,255,0.45)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
       <div ref={thumbStripRef} style={{ display: 'flex', gap: 10, overflowX: 'auto', scrollSnapType: 'x mandatory', paddingBottom: 4 }}>
         {FACILITY.map((src, idx) => (
-          <button key={idx} onClick={() => setI(idx)}
+          <button key={idx} onClick={() => setI(idx)} aria-label={`Show photo ${idx + 1}`} aria-current={idx === i ? 'true' : undefined}
             style={{
               flexShrink: 0,
               padding: 0,
@@ -499,7 +550,7 @@ function ConditionsCarousel({ conditions }: { conditions: { icon: string; title:
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 22 }}>
         {conditions.map((_, di) => (
-          <button key={di} onClick={() => scrollToIdx(di)}
+          <button key={di} onClick={() => scrollToIdx(di)} aria-label={`Show item ${di + 1}`} aria-current={di === activeIdx ? 'true' : undefined}
             style={{ width: di === activeIdx ? 20 : 8, height: 8, borderRadius: 4, background: di === activeIdx ? O : 'rgba(255,255,255,0.35)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
@@ -569,7 +620,7 @@ function ReviewsCarousel() {
       </AnimatePresence>
       <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
         {REVIEWERS.map((_, di) => (
-          <button key={di} onClick={() => setIdx(di)}
+          <button key={di} onClick={() => setIdx(di)} aria-label={`Show reviews ${di + 1}`} aria-current={di === idx ? 'true' : undefined}
             style={{ width: di === idx ? 20 : 8, height: 8, borderRadius: 4, background: di === idx ? N : 'rgba(0,0,0,0.2)', border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s' }} />
         ))}
       </div>
@@ -595,7 +646,7 @@ function FAQ() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 860, margin: '0 auto' }}>
       {items.map((item, idx) => (
         <div key={idx} style={{ borderRadius: 10, overflow: 'hidden' }}>
-          <button onClick={() => setOpen(open === idx ? null : idx)}
+          <button onClick={() => setOpen(open === idx ? null : idx)} aria-expanded={open === idx}
             style={{ width: '100%', background: open === idx ? '#386376' : N, border: 'none', padding: '18px 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
             <span style={{ color: '#fff', fontSize: 17, fontWeight: 700, textAlign: 'left', lineHeight: 1.35 }}>{item.q}</span>
             <OptImg loading="lazy" src={open === idx ? FAQ_OPEN : FAQ_SHUT} alt="" style={{ width: 26, height: 26, objectFit: 'contain', flexShrink: 0 }} />
@@ -638,7 +689,7 @@ function Header() {
   return (
     <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
       {/* Top banner — ALWAYS visible, does not collapse on scroll */}
-      <div style={{ background: T, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ background: T_DARK, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p style={{ color: '#fff', fontSize: 18, fontWeight: 700, lineHeight: '22px', textAlign: 'center', padding: '0 16px' }}>
           Support Available 24/7 — ⚠️ We do not accept Medicare or Medicaid
         </p>
@@ -1215,8 +1266,7 @@ export default function Page() {
           <div className="location-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'stretch' }}>
             <FadeUp>
               <div style={{ borderRadius: 8, overflow: 'hidden', height: 398 }}>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d826!2d-118.5479!3d34.4284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c29a4e3d4b9a2b%3A0x0!2s22512+Garzota+Dr%2C+Santa+Clarita%2C+CA+91350!5e0!3m2!1sen!2sus!4v1"
-                  width="100%" height="398" style={{ border: 0, display: 'block' }} allowFullScreen loading="lazy" title="Healthy Living Location" />
+                <MapEmbed />
               </div>
             </FadeUp>
             <FadeUp delay={0.1}>
@@ -1299,8 +1349,19 @@ export default function Page() {
 
       {/* ════ FOOTER ═════════════════════════════════════════════════════ */}
       <footer style={{ background: N, padding: '20px 24px', textAlign: 'center' }}>
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>© Copyright 2026 Healthy Living Residential Program | All Rights Reserved</p>
+        <nav aria-label="Legal" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '6px 18px', marginBottom: 10 }}>
+          <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: 13, textDecoration: 'underline' }}>Privacy Policy</a>
+          <a href={NOTICE_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: 13, textDecoration: 'underline' }}>Notice of Privacy Practices</a>
+          <a href={ACCESSIBILITY_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: 13, textDecoration: 'underline' }}>Accessibility Statement</a>
+          <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
+            style={{ background: 'none', border: 'none', padding: 0, color: '#fff', fontSize: 13, textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>
+            Cookie Preferences
+          </button>
+        </nav>
+        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13 }}>© Copyright 2026 Healthy Living Residential Program | All Rights Reserved</p>
       </footer>
+
+      <ConsentBanner />
 
       {/* ════ INSURANCE MODAL ════════════════════════════════════════════ */}
       <AnimatePresence>
@@ -1320,7 +1381,7 @@ export default function Page() {
                 <span style={{ color: N, fontWeight: 600, fontSize: 18 }}>Get Instant Insurance Verification</span>
                 <OptImg loading="lazy" src={FORM_IC} alt="" style={{ height: 24, width: 'auto', maxWidth: 50, objectFit: 'contain', flexShrink: 0 }} />
               </div>
-              <InsuranceForm />
+              <InsuranceForm autoLoad />
             </motion.div>
           </motion.div>
         )}

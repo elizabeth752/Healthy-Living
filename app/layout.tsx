@@ -29,6 +29,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://healthylivingresidential.com/',
   },
+  // Paid landing page: keep it out of search results (elev8 standard 5.1)
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -66,9 +71,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       window.dataLayer.push({
         event: 'ctm_form_submit',
         form_id: 'FRT472ABB2C5B9B141A0D34850A59FA6661E0D33A5F99CB4151874B16424968667C',
-        form_name: 'insurance_verification',
-        ctm_origin: origin,
-        ctm_payload: data
+        form_name: 'insurance_verification'
+        // No form values or CTM payload in the dataLayer (elev8 standard 4.3, step 8)
       });
     }
   });
